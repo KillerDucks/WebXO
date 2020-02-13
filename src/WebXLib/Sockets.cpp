@@ -53,10 +53,12 @@ namespace WebX
         }
 
         // Read in the data from the socket
-        char buffer[1024];
-        int cPos = read(cSocket, buffer, 1024 - 1);
-        buffer[cPos] = '\0';        
-        printf("Incoming Message [%s]\n", buffer);
+        char buffer[2048];
+        int cPos = read(cSocket, buffer, 2048 - 1);
+        buffer[cPos] = '\0';
+        HTTP http;
+        http.ParseRequest(buffer);
+        // printf("Incoming Message [%s]\n", buffer);
         write(cSocket, "OKAY200", 8);
 
         close(cSocket);

@@ -12,7 +12,7 @@
 namespace fs = std::experimental::filesystem;
 using std::string;
 using std::vector;
-using std::regex;
+// using std::regex;
 
 namespace WebX
 {
@@ -24,11 +24,11 @@ namespace WebX
 
         // Data
         string basePath = "./";
-        regex fileExts;
+        std::regex fileExts;
         vector<string> fVector;
     public:
         // Constructors
-        Directory(char* _baseDirectory = (char*)"./", regex _fileExtensions = regex("(.png|.html|.js|.css)"));
+        Directory(char* _baseDirectory = (char*)"./", std::regex _fileExtensions = (std::regex)"\\(.png|.html|.js|.css)\\W");
         ~Directory();
 
         // Directory Operations

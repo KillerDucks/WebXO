@@ -6,9 +6,10 @@
 
 int main()
 {
-    // WebX::Sockets sock;
-    // sock.Listen();
-    WebX::Directory dir((char*)"./");
-    dir.GetWebFiles();
+    WebX::Sockets sock;
+    sock.Listen();
+    // std::regex r("\\.(^[png]|[html]|[js]|[css])+$");
+    // WebX::Directory dir((char*)"./", r);
+    // dir.GetWebFiles();
     return 0;
 }

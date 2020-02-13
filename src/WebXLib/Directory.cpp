@@ -2,7 +2,7 @@
 
 namespace WebX
 {
-    Directory::Directory(char* _baseDirectory, regex _fileExtensions)
+    Directory::Directory(char* _baseDirectory, std::regex _fileExtensions)
     {
         if(strlen(_baseDirectory) != 0)
         {
@@ -26,9 +26,14 @@ namespace WebX
     
     void Directory::GetWebFiles()
     {
+        std::smatch sm;
+
         for(auto file : fs::recursive_directory_iterator(this->basePath))
         {
-            if(regex_search((const char*)file.path().c_str(), this->fileExts))
+            // Convert into a std::string
+            string fPath(file.path());
+            // Run the file against the regex
+            if(std::regex_search(fPath, sm, this->fileExts))
             {
                 // This file is a Web file
                 this->fVector.push_back(file.path());

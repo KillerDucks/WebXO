@@ -3,6 +3,8 @@
 #include <string.h>
 #include <netinet/in.h>
 
+#include "HTTP.hpp"
+
 #ifndef WEBX_SOCKS_H
 #define WEBX_SOCKS_H
 
