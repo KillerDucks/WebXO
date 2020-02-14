@@ -28,11 +28,13 @@ namespace WebX
         vector<string> fVector;
     public:
         // Constructors
+        Directory(int d);
         Directory(char* _baseDirectory = (char*)"./", std::regex _fileExtensions = (std::regex)"\\(.png|.html|.js|.css)\\W");
         ~Directory();
 
         // Directory Operations
         void ScanDir();
+        vector<string> ScanDir(std::regex searchCriteria);
         void GetWebFiles();
 
     };    

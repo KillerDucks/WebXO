@@ -2,9 +2,10 @@
 
 namespace WebX
 {
-    Sockets::Sockets(int _Port)
+    Sockets::Sockets(HTTP _Http, int _Port)
     {
         this->port = _Port;
+        this->_Http = _Http;
     }
 
     Sockets::~Sockets()
@@ -54,12 +55,26 @@ namespace WebX
 
         // Read in the data from the socket
         char buffer[2048];
+        HTTP::HTTPReq hReq;
+        HTTP::HTTPRes hRes;
+        string x, y;
+
         int cPos = read(cSocket, buffer, 2048 - 1);
-        buffer[cPos] = '\0';
-        HTTP http;
-        http.ParseRequest(buffer);
-        // printf("Incoming Message [%s]\n", buffer);
-        write(cSocket, "OKAY200", 8);
+        buffer[cPos] = '\0';                    
+        
+        hReq = this->_Http.ParseRequest(buffer);
+
+        printf("Client is requesting [%s]\n", hReq.requestType.c_str());
+
+        x = this->_Http.GetRequestedFile(hReq);
+
+        hRes = this->_Http.GenerateHTTPResponse((char*)x.c_str());
+
+        y = hRes.ReturnHeader();
+        y += "\r\n";
+        y += x;
+
+        write(cSocket, y.c_str(), strlen(y.c_str()));
 
         close(cSocket);
 

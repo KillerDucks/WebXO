@@ -1,5 +1,10 @@
 {
     "files.associations": {
-        "regex": "cpp"
-    }
+        "regex": "cpp",
+        "iosfwd": "cpp"
+    },
+    "cSpell.words": [
+        "PHTTPREQ"
+    ],
+    "C_Cpp.errorSquiggles": "Enabled"
 }

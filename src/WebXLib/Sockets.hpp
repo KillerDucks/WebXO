@@ -18,11 +18,12 @@ namespace WebX
 
         // Data
         int port = 0;
+        HTTP _Http;
         int socketID = 0;
 
     public:
         // Constructors
-        Sockets(int _Port = 8080);
+        Sockets(HTTP _Http, int _Port = 8080);
         ~Sockets();
 
         // Listening
