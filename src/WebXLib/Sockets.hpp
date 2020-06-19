@@ -1,9 +1,25 @@
 #include <stdio.h>
 #include <unistd.h>
-#include <string.h>
 #include <netinet/in.h>
 
+// Random Support
+#include <random>
+
+// Threading
+#include <thread>
+
+// Non Blocking Control
+#include <fcntl.h>
+
+// Errors
+#include <errno.h>
+
+// Standard Lib
+#include <string>
+
+// LibWebX
 #include "HTTP.hpp"
+#include "Logarithm.hpp"
 
 #ifndef WEBX_SOCKS_H
 #define WEBX_SOCKS_H
@@ -16,19 +32,83 @@ namespace WebX
         // Functions
         void ErrorHandler();
 
+        static std::string random_string()
+        {
+            std::string str("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz");
+
+            std::random_device rd;
+            std::mt19937 generator(rd());
+
+            std::shuffle(str.begin(), str.end(), generator);
+
+            return str.substr(0, 10);    // assumes 32 < number of characters in str         
+        }
+
+        // Internal Thread Handler
+        typedef struct ThreadID
+        {
+            ThreadID() : friendlyName("NOT_SET"), id(random_string()), done(false), moveOut(false) {}
+            std::string     friendlyName;
+            std::string     id;
+            bool            done;
+            bool            moveOut;
+        } THREADID;
+
         // Data
         int port = 0;
         HTTP _Http;
+        Logarithm _Log;
         int socketID = 0;
+        int iSockets = 0;
+
+        // Options Sockets
+        int option = 1;
 
     public:
+        // Settings Structure
+        typedef struct Settings
+        {
+            // Constructor
+            Settings() : thread(false), max_threads(2) {}
+            Settings(bool enThread, int noTheads)
+            {
+                this->thread = enThread;
+                this->max_threads = noTheads;
+            }
+            bool    thread          = false;      // Enable Threading ? [DEFAULT] FALSE
+            int     max_threads     = 2;          // Maximum Threads [DEFAULT] 2
+        } SETTINGS, *PSETTINGS;
+
+        // Public Variables
+        Settings _Settings;
+
         // Constructors
-        Sockets(HTTP _Http, int _Port = 8080);
+        Sockets(HTTP _Http, int _Port = 8080, Settings const _Settings = Settings());
         ~Sockets();
 
         // Listening
-        void Listen();
-        void Example();
+        void    Listen();
+        void    Example();
+        
+        // Request Handling
+        int     RequestHandler(ThreadID *tID);
+
+        // Internal Thread Handler
+        std::vector<std::pair<ThreadID, std::thread>> vThread;
+
+
+        // Helper Function
+        int GetThreadVector(std::string thread_id)
+        {
+            for (size_t i = 0; i < vThread.size(); i++)
+            {
+                if(vThread.at(i).first.id == thread_id)
+                {
+                    return i;
+                }
+            }
+            return -1;
+        }
 
     };    
 }

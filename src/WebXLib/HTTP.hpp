@@ -6,7 +6,9 @@
 #include <regex>
 #include <ctime>
 
+#include "HTTPStatusCodes.hpp"
 #include "Directory.hpp"
+#include "Logarithm.hpp"
 
 #ifndef WEBX_HTTP_H
 #define WEBX_HTTP_H
@@ -30,6 +32,11 @@ namespace WebX
     private:
         // Functions
         void ErrorHandler();
+
+        // Logging
+        Logarithm _Log;
+
+        WebX::HTTPStatusCodes httpCode;
 
         // Data
         typedef struct hGeneral
@@ -97,6 +104,21 @@ namespace WebX
                 return t;
             }
         } HENTITY, *PHENTITY;
+
+        // Content Type
+        enum class  MimeType
+        {
+            HTML,
+            JS,
+            CSS,
+
+            // [CHANGE] This is too generic
+            IMAGE 
+        } MIMETYPE;
+
+        // Helper Functions
+        enum MimeType   GetMIMEType(std::string filePath);
+
     public:
         // Structs
         typedef struct HTTPReq
