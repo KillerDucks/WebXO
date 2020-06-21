@@ -23,7 +23,7 @@ $> sudo make LibWebX
 # Make WebXO
 $> make
 
-# (Optional) Set the LD path if nto already set
+# (Optional) Set the LD path if not already set
 $> export LD_LIBRARY_PATH=/usr/local/lib
 
 # (Optional) Run the server via make
