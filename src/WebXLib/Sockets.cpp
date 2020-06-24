@@ -2,15 +2,13 @@
 
 namespace WebX
 {
-    Sockets::Sockets(HTTP _Http, int _Port, Settings _Settings) : _Log("Socket"), _Settings(Settings())
+    Sockets::Sockets(HTTP _Http, int _Port, Settings _Settings) : _Log("Socket"), _Settings(Settings()), _Http(_Http)
     {
         this->port = _Port;
-        this->_Http = _Http;
+        // this->_Http = _Http;
+        
         // Settings
         this->_Settings = _Settings;
-        // Logarithm LogX((std::string)"SocketServer");
-        // this->_Log = &LogX;
-        // _Log.Log("Allocating Ports to the Server", Logarithm::INFO);
         _Log.iLog("[%z] [%q] Socket Server is Initalizing on Port [%d]\n", Logarithm::NOTICE, _Port);
         _Log.iLog("[%z] [%q] Socket Server Setting: Num of Thread [%d]\n", Logarithm::NOTICE, _Settings.max_threads);
 
