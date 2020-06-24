@@ -3,6 +3,8 @@
 # Complied Library Files
 *.so
 *.so.1.0
-build/obj/libWebX.so.1.0
+libWebX.so.1.0
 # Complied WebXServer
 WebXServer
+# VS Code files
+.vscode
