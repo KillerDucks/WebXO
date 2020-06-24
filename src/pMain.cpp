@@ -1,32 +1,20 @@
-#include <cstdio>
-// #include <thread>
-
 // Includes
 #include "WebXLib/Sockets.hpp"
 #include "WebXLib/HTTP.hpp"
 #include "WebXLib/Directory.hpp"
-#include "WebXLib/Logarithm.hpp"
-// #include "WebXLib/Threading.hpp" // Needs Debugging
 
-int main()
+int main(int argc, char** argv)
 {
 
+    // Setup the Socket Server Settings
     WebX::Sockets::Settings sockSettings(true , 2);
-
-    std::regex r("\\.(^[png]|[html]|[js]|[css])+$");
-    // // Init the Directory class
-    WebX::Directory dir((char*)"./", r);
-    // Init the HTTP class
+    // Init the HTTP class + Set the base path of the HTTP Files
     WebX::HTTP http("./ExampleSite");
-    // // Init the Sockets class
+    // Init the Sockets class
     WebX::Sockets socks(http, (int)8080, sockSettings);
 
+    // Start the Socket Server
     socks.Listen();
-
-    // while (true)
-    // {
-    //     socks.Listen();
-    // }
 
     return 0;
 }
