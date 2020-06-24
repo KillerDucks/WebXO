@@ -1,1 +1,6 @@
+# Object Files
 *.o
+# Complied Library Files
+*.so
+# Complied WebXServer
+WebXServer
