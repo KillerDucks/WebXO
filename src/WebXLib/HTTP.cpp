@@ -150,7 +150,8 @@ namespace WebX
             // Check to see if the directory exists
             if(!iDirectory.doesExist(parentPath))
             {
-                filePath = "-1";
+                // Set the HTTP Status code
+                httpCode = WebX::HTTPStatusCodes::NOT_FOUND;
             }
             else
             {
@@ -173,10 +174,8 @@ namespace WebX
             // Check if the file exists
             if(!iDirectory.doesExist(parentPath))
             {
-                // Set the path path to the 404 page
-                filePath.clear();
-                filePath += iDirectory.GetBasePath();
-                filePath += "/404.html";
+                // Log for debugging
+                _Log.iLog("[%z] [%q] File [%s] does not exist\n",Logarithm::CRITICAL, file.c_str());
                 // Set the MIME Type
                 this->MIMETYPE = MimeType::HTML;
                 // Set the HTTP Status code
@@ -187,7 +186,7 @@ namespace WebX
                 // Use the relative path 
                 if(iDirectory.szFile(parentPath) == 0)
                 {
-                    filePath = "-1";
+                    // filePath = "-1";
                     // Log for debugging
                     _Log.iLog("[%z] [%q] File [%s] is empty\n",Logarithm::CRITICAL, file.c_str());
                     // Set the HTTP Status Code
@@ -207,6 +206,36 @@ namespace WebX
             
         }
         
+        // Check if any HTTP Error codes have been rasied
+        switch (httpCode)
+        {
+        case WebX::HTTPStatusCodes::NOT_FOUND:            
+            {
+                filePath.clear();
+                filePath += iDirectory.GetBasePath();
+                filePath += "/204.html";
+                break;
+            }
+        case WebX::HTTPStatusCodes::INTERNAL_SERVER_ERROR:            
+            {
+                filePath.clear();
+                filePath += iDirectory.GetBasePath();
+                filePath += "/500.html";
+                break;
+            }
+        case WebX::HTTPStatusCodes::NO_CONTENT:            
+            {
+                filePath.clear();
+                filePath += iDirectory.GetBasePath();
+                filePath += "/204.html";
+                break;
+            }
+            
+        
+        default:
+            break;
+        }
+
         // Final Checks to see if we have a vaild file path
         if(filePath == "-1")
         {
