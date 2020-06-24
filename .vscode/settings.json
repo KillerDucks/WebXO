@@ -43,7 +43,19 @@
         "stdexcept": "cpp",
         "streambuf": "cpp",
         "utility": "cpp",
-        "typeinfo": "cpp"
+        "typeinfo": "cpp",
+        "atomic": "cpp",
+        "bit": "cpp",
+        "condition_variable": "cpp",
+        "cstddef": "cpp",
+        "map": "cpp",
+        "iterator": "cpp",
+        "memory_resource": "cpp",
+        "optional": "cpp",
+        "random": "cpp",
+        "string": "cpp",
+        "string_view": "cpp",
+        "shared_mutex": "cpp"
     },
     "cSpell.words": [
         "PHTTPREQ"
