@@ -65,9 +65,6 @@ $(Objects)/Sockets.o: $(WebXLib)/Sockets.cpp
 $(Objects)/Directory.o: $(WebXLib)/Directory.cpp
 	$(Compiler) $(Flags) -c -fPIC $^ -o $@
 
-$(Objects)/Threading.o: $(WebXLib)/Threading.cpp
-	$(Compiler) $(Flags) -c -fPIC $^ -o $@ -pthread
-
 clean: 
 	@echo "Cleaning Build System..."
 	@rm -rf ./build/obj/*
