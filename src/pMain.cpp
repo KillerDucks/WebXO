@@ -17,7 +17,7 @@ int main()
     // // Init the Directory class
     WebX::Directory dir((char*)"./", r);
     // Init the HTTP class
-    WebX::HTTP http;
+    WebX::HTTP http("./ExampleSite");
     // // Init the Sockets class
     WebX::Sockets socks(http, (int)8080, sockSettings);
 
