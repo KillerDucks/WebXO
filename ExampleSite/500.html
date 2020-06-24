@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Title Page</title>
+
+        <!-- Bootstrap CSS -->
+        <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css" rel="stylesheet">
+
+        <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
+        <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
+        <!--[if lt IE 9]>
+            <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.3/html5shiv.js"></script>
+            <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
+        <![endif]-->
+        <style>
+            html, body {
+                height: 100%;
+            }
+
+            .jumbotron.vertical-center {
+                margin-bottom: 0; /* Remove the default bottom margin of .jumbotron */
+                background: rgb(238,174,202);
+                background: linear-gradient(180deg, rgba(238,174,202,1) 0%, rgba(148,187,233,1) 100%);
+            }
+
+            .vertical-center {
+                min-height: 100%;  /* Fallback for vh unit */
+                min-height: 100vh; /* You might also want to use
+                                    'height' property instead.
+                                    
+                                    Note that for percentage values of
+                                    'height' or 'min-height' properties,
+                                    the 'height' of the parent element
+                                    should be specified explicitly.
+            
+                                    In this case the parent of '.vertical-center'
+                                    is the <body> element */
+
+                /* Make it a flex container */
+                display: -webkit-box;
+                display: -moz-box;
+                display: -ms-flexbox;
+                display: -webkit-flex;
+                display: flex; 
+                
+                /* Align the bootstrap's container vertically */
+                    -webkit-box-align : center;
+                -webkit-align-items : center;
+                    -moz-box-align : center;
+                    -ms-flex-align : center;
+                        align-items : center;
+                
+                /* In legacy web browsers such as Firefox 9
+                    we need to specify the width of the flex container */
+                width: 100%;
+                
+                /* Also 'margin: 0 auto' doesn't have any effect on flex items in such web browsers
+                    hence the bootstrap's container won't be aligned to the center anymore.
+                
+                    Therefore, we should use the following declarations to get it centered again */
+                        -webkit-box-pack : center;
+                            -moz-box-pack : center;
+                            -ms-flex-pack : center;
+                -webkit-justify-content : center;
+                        justify-content : center;
+            }
+
+            .container {
+                /* background-color: white;             */
+                color: white;
+            }
+        </style>
+    </head>
+    <body>
+        
+        <div class="jumbotron vertical-center">
+      
+            <div class="container text-center">
+                <h1>500</h1>            
+                <p>Internal Server Error</p>
+                <p>Powered by: WebXO</p>
+            </div>
+        </div>
+        <!-- jQuery -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+        <!-- Bootstrap JavaScript -->
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </body>
+</html>
