@@ -40,7 +40,6 @@ namespace WebX
 
         // Directory Operations
         void ScanDir();
-        vector<string> ScanDir(std::regex searchCriteria);
         vector<string> ScanDir(std::regex searchCriteria, std::string directoryLevel);
         void GetWebFiles();
 

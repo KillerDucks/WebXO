@@ -32,33 +32,6 @@ namespace WebX
         }
     }
 
-    vector<string> Directory::ScanDir(std::regex searchCriteria)
-    {
-        std::smatch sm;
-        vector<string> files;
-        // _Log.Log("Scanning Directory for Queried File", Logarithm::INFO);
-        for(auto file : fs::recursive_directory_iterator(this->basePath))
-        {
-            // Convert into a std::string
-            string fPath(file.path());
-            // Run the file against the regex
-            if(std::regex_search(fPath, sm, searchCriteria))
-            {
-                _Log.iLog("[%z] [%q] Directory Base Path: [%s]\n",Logarithm::INFO, this->basePath.c_str());
-                _Log.iLog("[%z] [%q] Requested File Parent Path: [%s]\n",Logarithm::INFO, file.path().parent_path().c_str());
-                _Log.iLog("[%z] [%q] Requested File Relative Path: [%s]\n",Logarithm::INFO, file.path().relative_path().c_str());
-                _Log.iLog("[%z] [%q] Requested File Stem: [%s]\n",Logarithm::INFO, file.path().stem().c_str());
-                _Log.iLog("[%z] [%q] Requested File Extension: [%s]\n",Logarithm::INFO, file.path().extension().c_str());
-                // This file is a Web file
-                files.push_back(file.path());
-                // printf("File found [%s]\n", file.path().c_str());
-                _Log.iLog("[%z] [%q] Requested File was found @ [%s]\n\n",Logarithm::INFO, file.path().c_str());
-            }
-        }
-
-        return files;
-    }
-
     // @ This is useful when looking for files outside the root directory
     vector<string> Directory::ScanDir(std::regex searchCriteria, std::string directoryLevel)
     {
@@ -78,11 +51,12 @@ namespace WebX
                 // Check if the file needs to be from the root
                 if(directoryLevel == file.path().parent_path())
                 {
-                    _Log.iLog("[%z] [%q] Directory Base Path: [%s]\n",Logarithm::INFO, this->basePath.c_str());
-                    _Log.iLog("[%z] [%q] Requested File Parent Path: [%s]\n",Logarithm::INFO, file.path().parent_path().c_str());
-                    _Log.iLog("[%z] [%q] Requested File Relative Path: [%s]\n",Logarithm::INFO, file.path().relative_path().c_str());
-                    _Log.iLog("[%z] [%q] Requested File Stem: [%s]\n",Logarithm::INFO, file.path().stem().c_str());
-                    _Log.iLog("[%z] [%q] Requested File Extension: [%s]\n",Logarithm::INFO, file.path().extension().c_str());
+                    // Log for debugging
+                    // _Log.iLog("[%z] [%q] Directory Base Path: [%s]\n",Logarithm::INFO, this->basePath.c_str());
+                    // _Log.iLog("[%z] [%q] Requested File Parent Path: [%s]\n",Logarithm::INFO, file.path().parent_path().c_str());
+                    // _Log.iLog("[%z] [%q] Requested File Relative Path: [%s]\n",Logarithm::INFO, file.path().relative_path().c_str());
+                    // _Log.iLog("[%z] [%q] Requested File Stem: [%s]\n",Logarithm::INFO, file.path().stem().c_str());
+                    // _Log.iLog("[%z] [%q] Requested File Extension: [%s]\n",Logarithm::INFO, file.path().extension().c_str());
                     files.push_back(file.path());
                     _Log.iLog("[%z] [%q] Requested File was found @ [%s]\n\n",Logarithm::INFO, file.path().c_str());
                 }
@@ -231,8 +205,9 @@ namespace WebX
 
     size_t Directory::szFile(std::string filePath)
     {
-        _Log.iLog("[%z] [%q] szFile() filePath: [%s]\n", filePath.c_str());
-        printf("[%ld]\n", fs::file_size(filePath));
+        // Log for debugging
+        // _Log.iLog("[%z] [%q] szFile() filePath: [%s]\n", filePath.c_str());
+        // printf("[%ld]\n", fs::file_size(filePath));
         return fs::file_size(filePath);
     }
 
