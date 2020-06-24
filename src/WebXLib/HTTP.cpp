@@ -2,7 +2,7 @@
 
 namespace WebX
 {
-    HTTP::HTTP() : _Log("HTTP"), httpCode(WebX::HTTPStatusCodes::OK), MIMETYPE(MimeType::HTML)
+    HTTP::HTTP(std::string httpPath) : _Log("HTTP"), httpCode(WebX::HTTPStatusCodes::OK), MIMETYPE(MimeType::HTML), iDirectory(httpPath)
     {}
     HTTP::~HTTP()
     {}
@@ -129,125 +129,88 @@ namespace WebX
         fstream ssFileReader;
         std::vector<std::string> dirLookup;
         std::regex findFile;
-        Directory iDirectory(54);
+        // Directory iDirectory(54);
 
         // Get the web path request needed from the HTTP Request
         string file(hReq.requestType.substr(hReq.requestType.find(' ') + 1, hReq.requestType.size()));
+
         // Convert the requested web path into a meaningful file path
-        // First check if the request wants the root '/'
-        if(file == string("/"))
+
+        // Determine the Path of the requested file    
+        std::string relativePath(iDirectory.GetBasePath());
+        relativePath += file.substr(0, file.rfind('/'));
+        std::string parentPath(iDirectory.GetBasePath());
+        parentPath += file;
+
+        _Log.iLog("[%z] [%q] Calulcated Relative Path: [%s]\n",Logarithm::INFO, relativePath.c_str());
+
+        // Check if are given a absolute path (eg: [GET /])
+        if(file.find('.') == std::string::npos)
         {
-            // Check for the index file of any extension
-            std::regex findFile("(index.html)");
-            // [TODO] Change this to find any index file not just a html one
+            // There is no '.' found, assume this is a root path of a sub/directory
+            std::regex rgx("(index.html)");
+            // Log for debugging
             _Log.Log("Root path detected", Logarithm::INFO);
+            // Set the MIME Type
             this->MIMETYPE = MimeType::HTML;
-            for(auto file : iDirectory.ScanDir(findFile))
-            {
-                int tmp = 0;
-                for(char c : file)
-                {
-                    if(c == '/')
-                    {
-                        tmp++;
-                    }
-                }
-                if(tmp >= 3)
-                {
-                    continue;
-                }
-                else
-                {
-                    filePath = file;
-                    break;
-                }
-                
-            }
-            // filePath = iDirectory.ScanDir(findFile).at(0);
+            // Scan the directories for this file
+            filePath = iDirectory.ScanDir(rgx, relativePath).at(0); // [CHANGE] Assume this is the first given file
+            // Set the HTTP Status code
+            httpCode = WebX::HTTPStatusCodes::OK;
         }
         else
         {
-            // Check if the request is to a root of a directory
-            if(!iDirectory.isFile(file))
-            {
-                // Check if there is a file but with an extension
-                std::string altPath = "(";
-                altPath.append(file);
-                // findFile = file;
-                
-                // Assume the Root file of that directory                    
-                if(file.back() != '/')
-                {
-                    altPath.append("/index.html)");
-                }
-                else
-                {
-                    altPath.append("index.html)");
-                }
-                
-                findFile = altPath;
-                // _Log.iLog("[%z] [%q] Scanning Directory for [%s]\n",Logarithm::INFO, altPath.c_str()); // [DEBUG]
-                _Log.Log("Alternate Root Path Located", Logarithm::NOTICE);
-                
-            }
-            else
-            {
-                // All other files
-                findFile = file;
-            }
-                        
-            // Scan the Directory Once !!!
-            _Log.iLog("[%z] [%q] Scanning Directory for [%s]\n",Logarithm::INFO, file.c_str());
-            dirLookup = iDirectory.ScanDir(findFile);
+            // This is not a root path so handle as a normal absolute path file
 
-            if(dirLookup.size() <= 0)
+            // Check if the file exists
+            if(!iDirectory.doesExist(parentPath))
             {
-                // 404 Message
-                _Log.iLog("[%z] [%q] File not found !!! Sending a 404 back to the Client\n", Logarithm::NOTICE);
-                std::regex findFile("(404.html)");
-                filePath = iDirectory.ScanDir(findFile).at(0);
+                // Vectory is empty, send a 404 back
+
+                // Set the path path to the 404 page
+                filePath.clear();
+                filePath += iDirectory.GetBasePath();
+                filePath += "/404.html";
                 // Set the MIME Type
                 this->MIMETYPE = MimeType::HTML;
-                // Set the HTTP status code
+                // Set the HTTP Status code
                 httpCode = WebX::HTTPStatusCodes::NOT_FOUND;
             }
             else
             {
-                // Out of the files found check to see if any are directories
-                for(size_t i = 0; i < dirLookup.size(); i++)
+                // Use the relative path 
+                if(iDirectory.szFile(parentPath) == 0)
                 {
-                    if(iDirectory.isFile(dirLookup.at(i)))
-                    {
-                        // This is a file [CHANGE] This will only use the first item that is a file 
-                        filePath = dirLookup.at(i);
-
-                        // _Log.iLog("[%z] [%q] [%s] is a File, Responding with this file!!!\n", Logarithm::NOTICE, dirLookup.at(i).c_str()); // [DEBUG] Print
-
-                        // Check if the file is not 0 in length
-                        if(iDirectory.GetFileSize(filePath) == 0)
-                        {
-                            // 204
-                            _Log.iLog("[%z] [%q] File is empty !!! Sending a 404 back to the Client\n", Logarithm::NOTICE);
-                            std::regex findFile("(404.html)");
-                            filePath = iDirectory.ScanDir(findFile).at(0);
-                            // Set the MIME Type
-                            this->MIMETYPE = MimeType::HTML;
-                            // Set the HTTP status code
-                            httpCode = WebX::HTTPStatusCodes::NOT_FOUND;
-                        }
-                        else
-                        {
-                            // Detect the MIME Type via file extension + set the MIME type
-                            this->MIMETYPE = GetMIMEType(filePath);
-
-                            // Set the HTTP status code
-                            httpCode = WebX::HTTPStatusCodes::OK;
-                        }
-                        break;
-                    }
+                    filePath = "-1";
+                    // Log for debugging
+                    _Log.iLog("[%z] [%q] File [%s] is empty\n",Logarithm::CRITICAL, file.c_str());
+                    // Set the HTTP Status Code
+                    httpCode = WebX::HTTPStatusCodes::NO_CONTENT;
+                }
+                else
+                {
+                    filePath = parentPath;
+                    // Set the HTTP Status Code
+                    httpCode = WebX::HTTPStatusCodes::OK;
+                    // Set the MIME Type
+                    this->MIMETYPE = this->GetMIMEType(filePath);          
                 }                
+            
+                      
             }
             
+        }
+        
+        // Final Checks to see if we have a vaild file path
+        if(filePath == "-1")
+        {
+            // Invalid file
+            filePath.clear();
+            filePath += iDirectory.GetBasePath();
+            filePath += "/204.html";
+
+            // Set the MIME Type
+            this->MIMETYPE = MimeType::HTML;          
         }
         
         // Open a stream and read the file into the buffer
@@ -277,8 +240,13 @@ namespace WebX
         else
         {
             _Log.Log("Invalid File Stream", Logarithm::CRITICAL);        
-            std::regex findFile("(204.html)");
-            filePath = iDirectory.ScanDir(findFile).at(0);
+            // std::regex findFile("(204.html)");
+            // filePath = iDirectory.ScanDir(findFile).at(0);
+            // Set the path path to the 204 page
+            filePath.clear();
+            filePath += iDirectory.GetBasePath();
+            filePath += "/204.html";
+            _Log.iLog("[%z] [%q] File Path 204: [%s]\n", Logarithm::NOTICE, filePath.c_str()); // [DEBUG] Print
             buffer = new char[iDirectory.GetFileSize(filePath)];
             memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
             memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.GetFileSize(filePath));

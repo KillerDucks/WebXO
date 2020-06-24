@@ -36,6 +36,9 @@ namespace WebX
         // Logging
         Logarithm _Log;
 
+        // Directory Services
+        Directory iDirectory;
+
         WebX::HTTPStatusCodes httpCode;
 
         // Data
@@ -189,7 +192,7 @@ namespace WebX
         } HTTPRES, *PHTTPRES;
 
         // Constructors
-        HTTP();
+        HTTP(std::string httpPath);
         ~HTTP();
 
         // Parse HTTP Requests
