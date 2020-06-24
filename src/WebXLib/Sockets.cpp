@@ -2,7 +2,7 @@
 
 namespace WebX
 {
-    Sockets::Sockets(HTTP _Http, int _Port, Settings _Settings) : _Log("Socket"), _Settings(Settings()), _Http(_Http)
+    Sockets::Sockets(HTTP _Http, int _Port, Settings _Settings) : _Http(_Http), _Log("Socket"), _Settings(Settings())
     {
         this->port = _Port;
         // this->_Http = _Http;

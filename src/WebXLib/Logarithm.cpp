@@ -241,7 +241,9 @@ namespace WebX
                 case 'x':
                     {
                         format++;
-                        int temp = (int) va_arg(parameters, int);
+                        int temp = (int) va_arg(parameters, int);                        
+                        buffer = new char[sizeof(int)];
+                        memset(buffer, 0x00, sizeof(int));
                         sprintf(buffer, "%x", temp);
                         // itoa(temp, buffer, 16);
                         if (!print(buffer, sizeof(temp)))

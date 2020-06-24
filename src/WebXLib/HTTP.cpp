@@ -2,7 +2,7 @@
 
 namespace WebX
 {
-    HTTP::HTTP(std::string httpPath) : _Log("HTTP"), httpCode(WebX::HTTPStatusCodes::OK), MIMETYPE(MimeType::HTML), iDirectory(httpPath)
+    HTTP::HTTP(std::string httpPath) : _Log("HTTP"), iDirectory(httpPath), httpCode(WebX::HTTPStatusCodes::OK), MIMETYPE(MimeType::HTML)
     {}
     HTTP::~HTTP()
     {}
@@ -138,7 +138,7 @@ namespace WebX
 
         // Determine the Path of the requested file    
         std::string relativePath(iDirectory.GetBasePath());
-        relativePath += file.substr(0, file.rfind('/'));
+        relativePath += (file.rfind('/') == 0) ? file : file.substr(0, file.rfind('/'));
         std::string parentPath(iDirectory.GetBasePath());
         parentPath += file;
 
@@ -147,16 +147,24 @@ namespace WebX
         // Check if are given a absolute path (eg: [GET /])
         if(file.find('.') == std::string::npos)
         {
-            // There is no '.' found, assume this is a root path of a sub/directory
-            std::regex rgx("(index.html)");
-            // Log for debugging
-            _Log.Log("Root path detected", Logarithm::INFO);
-            // Set the MIME Type
-            this->MIMETYPE = MimeType::HTML;
-            // Scan the directories for this file
-            filePath = iDirectory.ScanDir(rgx, relativePath).at(0); // [CHANGE] Assume this is the first given file
-            // Set the HTTP Status code
-            httpCode = WebX::HTTPStatusCodes::OK;
+            // Check to see if the directory exists
+            if(!iDirectory.doesExist(parentPath))
+            {
+                filePath = "-1";
+            }
+            else
+            {
+                // There is no '.' found, assume this is a root path of a sub/directory
+                std::regex rgx("(index.html)");
+                // Log for debugging
+                _Log.Log("Root path detected", Logarithm::INFO);
+                // Set the MIME Type
+                this->MIMETYPE = MimeType::HTML;
+                // Scan the directories for this file
+                filePath = iDirectory.ScanDir(rgx, (file.size() == 1) ? iDirectory.GetBasePath() : relativePath).at(0); // [CHANGE] Assume this is the first given file
+                // Set the HTTP Status code
+                httpCode = WebX::HTTPStatusCodes::OK;
+            }            
         }
         else
         {
@@ -165,8 +173,6 @@ namespace WebX
             // Check if the file exists
             if(!iDirectory.doesExist(parentPath))
             {
-                // Vectory is empty, send a 404 back
-
                 // Set the path path to the 404 page
                 filePath.clear();
                 filePath += iDirectory.GetBasePath();
@@ -207,10 +213,12 @@ namespace WebX
             // Invalid file
             filePath.clear();
             filePath += iDirectory.GetBasePath();
-            filePath += "/204.html";
+            filePath += "/500.html";
 
             // Set the MIME Type
-            this->MIMETYPE = MimeType::HTML;          
+            this->MIMETYPE = MimeType::HTML;         
+            // Set the HTTP status code
+            httpCode = WebX::HTTPStatusCodes::INTERNAL_SERVER_ERROR; 
         }
         
         // Open a stream and read the file into the buffer
@@ -240,16 +248,12 @@ namespace WebX
         else
         {
             _Log.Log("Invalid File Stream", Logarithm::CRITICAL);        
-            // std::regex findFile("(204.html)");
-            // filePath = iDirectory.ScanDir(findFile).at(0);
-            // Set the path path to the 204 page
             filePath.clear();
             filePath += iDirectory.GetBasePath();
-            filePath += "/204.html";
-            _Log.iLog("[%z] [%q] File Path 204: [%s]\n", Logarithm::NOTICE, filePath.c_str()); // [DEBUG] Print
+            filePath += "/500.html";
             buffer = new char[iDirectory.GetFileSize(filePath)];
             memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
-            memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.GetFileSize(filePath));
+            memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.szFile(filePath));
             // Set the MIME Type
             this->MIMETYPE = MimeType::HTML;
             // Set the HTTP status code

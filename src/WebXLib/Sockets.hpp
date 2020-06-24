@@ -80,7 +80,7 @@ namespace WebX
         } SETTINGS, *PSETTINGS;
 
         // Public Variables
-        Settings _Settings;
+        Settings _Settings = Settings();
 
         // Constructors
         Sockets(HTTP _Http, int _Port = 8080, Settings const _Settings = Settings());
