@@ -2,8 +2,12 @@
 
 namespace WebX
 {
-    Directory::Directory(int d) : _Log("Directory")
+    Directory::Directory(std::string _baseDirectory) : _Log("Directory")
     {
+        if(!_baseDirectory.empty())
+        {
+            this->basePath = _baseDirectory;
+        }
     }
 
     Directory::Directory(char* _baseDirectory, std::regex _fileExtensions) : _Log("Directory")
@@ -40,11 +44,57 @@ namespace WebX
             // Run the file against the regex
             if(std::regex_search(fPath, sm, searchCriteria))
             {
+                _Log.iLog("[%z] [%q] Directory Base Path: [%s]\n",Logarithm::INFO, this->basePath.c_str());
+                _Log.iLog("[%z] [%q] Requested File Parent Path: [%s]\n",Logarithm::INFO, file.path().parent_path().c_str());
+                _Log.iLog("[%z] [%q] Requested File Relative Path: [%s]\n",Logarithm::INFO, file.path().relative_path().c_str());
+                _Log.iLog("[%z] [%q] Requested File Stem: [%s]\n",Logarithm::INFO, file.path().stem().c_str());
+                _Log.iLog("[%z] [%q] Requested File Extension: [%s]\n",Logarithm::INFO, file.path().extension().c_str());
                 // This file is a Web file
                 files.push_back(file.path());
                 // printf("File found [%s]\n", file.path().c_str());
-                _Log.iLog("[%z] [%q] Requested File was found @ [%s]\n",Logarithm::INFO, file.path().c_str());
+                _Log.iLog("[%z] [%q] Requested File was found @ [%s]\n\n",Logarithm::INFO, file.path().c_str());
             }
+        }
+
+        return files;
+    }
+
+    // @ This is useful when looking for files outside the root directory
+    vector<string> Directory::ScanDir(std::regex searchCriteria, std::string directoryLevel)
+    {
+        std::smatch sm;
+        vector<string> files;
+        bool root = this->isRoot(directoryLevel);
+        _Log.iLog("[%z] [%q] Directory Path is Root? : [%d]\n",Logarithm::INFO, root);
+        _Log.iLog("[%z] [%q] Directory Level Path: [%s]\n\n",Logarithm::INFO, directoryLevel.c_str());
+
+        for(auto file : fs::recursive_directory_iterator(directoryLevel))
+        {
+            // Convert into a std::string
+            string fPath(file.path());
+            // Run the file against the regex
+            if(std::regex_search(fPath, sm, searchCriteria))
+            {
+                // Check if the file needs to be from the root
+                if(directoryLevel == file.path().parent_path())
+                {
+                    _Log.iLog("[%z] [%q] Directory Base Path: [%s]\n",Logarithm::INFO, this->basePath.c_str());
+                    _Log.iLog("[%z] [%q] Requested File Parent Path: [%s]\n",Logarithm::INFO, file.path().parent_path().c_str());
+                    _Log.iLog("[%z] [%q] Requested File Relative Path: [%s]\n",Logarithm::INFO, file.path().relative_path().c_str());
+                    _Log.iLog("[%z] [%q] Requested File Stem: [%s]\n",Logarithm::INFO, file.path().stem().c_str());
+                    _Log.iLog("[%z] [%q] Requested File Extension: [%s]\n",Logarithm::INFO, file.path().extension().c_str());
+                    files.push_back(file.path());
+                    _Log.iLog("[%z] [%q] Requested File was found @ [%s]\n\n",Logarithm::INFO, file.path().c_str());
+                }
+            }
+        }
+
+        // Check to see if there are no files (double error checking)
+        if(files.size() == 0)
+        {
+            // There are no files
+            files.push_back((std::string)"-1");
+            _Log.Log("There are no files found, returning -1", Logarithm::CRITICAL);
         }
 
         return files;
@@ -61,9 +111,12 @@ namespace WebX
             // Run the file against the regex
             if(std::regex_search(fPath, sm, this->fileExts))
             {
-                // This file is a Web file
-                this->fVector.push_back(file.path());
-                printf("File found [%s]\n", file.path().c_str());
+                if(!fs::is_directory(file))
+                {
+                    // This file is a Web file
+                    this->fVector.push_back(file.path());
+                    printf("File found [%s]\n", file.path().c_str());
+                }
             }
         }
     }
@@ -150,5 +203,42 @@ namespace WebX
         }
         // This is a file return true
         return true;
+    }
+
+    bool Directory::isDirectory(std::string filePath)
+    {
+        return fs::is_directory(filePath);
+    }
+
+    bool Directory::isRoot(std::string filePath)
+    {
+        if(filePath == this->basePath)
+        {
+            return true;
+        }
+
+        return false;
+    }
+
+    bool Directory::doesExist(std::string filePath)
+    {
+        if(fs::exists(filePath))
+        {
+            return true;
+        }           
+        return false;
+    }
+
+    size_t Directory::szFile(std::string filePath)
+    {
+        _Log.iLog("[%z] [%q] szFile() filePath: [%s]\n", filePath.c_str());
+        printf("[%ld]\n", fs::file_size(filePath));
+        return fs::file_size(filePath);
+    }
+
+    // @ This function will assist when looking for files that are/not in the root directory
+    std::string Directory::getRootPath(std::string filePath)
+    {
+        return "NYI";
     }
 }
