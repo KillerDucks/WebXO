@@ -15,4 +15,3 @@ phases:
     build:
       commands:
         - docker images
-        - docker run webxo-env:latest 
