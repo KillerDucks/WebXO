@@ -2,7 +2,7 @@
 A super simple ~~`but poorly written`~~ web server written in C++.
 
 ## Build Status
-[![AWS CodeBuild](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiUmt5Wmd0ME94YkVYWkovVyt1UzB2bjVDQ2RXUmVJK2xxYW5vbjJGZmQ0WkpCbHoxTlhFSnRIbjlGb1BhcVZBWGNLRHQvdG04cjBQcFkvT1NHckZ5c0wwPSIsIml2UGFyYW1ldGVyU3BlYyI6ImZGcTZHUjNUMG9Kakt3VVEiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)]()
+![AWS CodeBuild](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiUmt5Wmd0ME94YkVYWkovVyt1UzB2bjVDQ2RXUmVJK2xxYW5vbjJGZmQ0WkpCbHoxTlhFSnRIbjlGb1BhcVZBWGNLRHQvdG04cjBQcFkvT1NHckZ5c0wwPSIsIml2UGFyYW1ldGVyU3BlYyI6ImZGcTZHUjNUMG9Kakt3VVEiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
 
 ## Info
 
@@ -40,11 +40,11 @@ To get the server up and running run the following commands.
 
 ```sh
 # Pull the docker image from Docker Hub
-$> docker pull killerducks\webxoserver:latest
+$> docker pull killerducks/webxo-env:latest
 
 # This will run the test page
-$> docker run -d -p 8080:8080 killerducks\webxoserver:latest
+$> docker run -d -p 8080:8080 killerducks/webxo-env:latest
 
 # This way will allow you to attach your http folder to the server
-$> docker run -d -v <localfilepath>:/etc/webxo/http -p 8080:8080 killerducks\webxoserver:latest
+$> docker run -d -v <localfilepath>:/etc/webxo/http -p 8080:8080 killerducks/webxo-env:latest
 ```
