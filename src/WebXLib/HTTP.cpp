@@ -213,7 +213,7 @@ namespace WebX
             {
                 filePath.clear();
                 filePath += iDirectory.GetBasePath();
-                filePath += "/204.html";
+                filePath += "/404.html";
                 break;
             }
         case WebX::HTTPStatusCodes::INTERNAL_SERVER_ERROR:            
@@ -264,7 +264,7 @@ namespace WebX
             // _Log.iLog("[%z] [%q] File Size: [%d]\n", Logarithm::NOTICE, fLength); // [DEBUG] Print
 
             // Init the buffer with the file length
-            buffer = new char[fLength];
+            buffer = new char[fLength + 1];
             memset(buffer, 0x00, fLength);
             // Read the file into the buffer
             ssFileReader.read(buffer, fLength);
@@ -272,10 +272,11 @@ namespace WebX
             ssFileReader.close();
 
             // Add a null terminator
-            // buffer[fLength] = '\n';
+            buffer[fLength] = '\0';
         }
         else
         {
+            // [TODO] Move the error checking to above the file read
             _Log.Log("Invalid File Stream", Logarithm::CRITICAL);        
             filePath.clear();
             filePath += iDirectory.GetBasePath();
