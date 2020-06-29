@@ -1,5 +1,5 @@
 # WebXO
-A super simple ~~`but poorly written`~~ web sever written in C++.
+A super simple ~~`but poorly written`~~ web server written in C++.
 
 ## Info
 
@@ -36,6 +36,7 @@ This method is highly recommended and is therefore the prefered way of using the
 To get the server up and running run the following commands.
 
 ```sh
+# Pull the docker image from Docker Hub
 $> docker pull killerducks\webxoserver:latest
 
 # This will run the test page
