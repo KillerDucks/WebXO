@@ -1,0 +1,28 @@
+FROM alpine:latest
+
+# Label
+LABEL come.melissa.version="0.1.0_timy-alpha"
+LABEL vendor="Melissa"
+
+# Get all of the packages we need to build the app
+RUN apk add --no-cache \
+    g++ \
+    make
+
+# Set LDD Library Path
+ENV LD_LIBRARY_PATH="/usr/local/lib"
+
+# Make a Build Directory
+RUN mkdir -p /home/WebXO-Dev/
+
+# Copy in the build files
+COPY . /home/WebXO-Dev/
+
+# Make the server + lib
+RUN cd /home/WebXO-Dev/ && make clean && make LibWebX && make
+
+# Expose the port
+EXPOSE 8080
+
+# Start the webserver
+CMD [ "sh", "./home/WebXO-Dev/exec.sh" ]
