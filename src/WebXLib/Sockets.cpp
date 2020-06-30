@@ -157,6 +157,7 @@ namespace WebX
         HTTP::HTTPReq hReq;
         HTTP::HTTPRes hRes;
         string x, y;
+        std::vector<std::string> vBuffer;
 
         int cPos = read(cSocket, buffer, 2048 - 1);
         buffer[cPos] = '\0';                    
@@ -166,16 +167,46 @@ namespace WebX
         _Log.iLog("[%z] [%q] Serving Client @ [%s] with User-Agent [%s]\n",Logarithm::NOTICE, hReq.host.c_str(), hReq.user_Agent.c_str());
         _Log.iLog("[%z] [%q] Client is requesting [%s]\n",Logarithm::NOTICE, hReq.requestType.c_str());
 
-        x = this->_Http.GetRequestedFile(hReq);
+        // x = this->_Http.GetRequestedFile(hReq);
+        vBuffer = this->_Http.GetRequestedFile(hReq);
 
-        hRes = this->_Http.GenerateHTTPResponse((char*)x.c_str());
+        _Log.iLog("[%z] [%q] vBuffer Size [%d]\n",Logarithm::NOTICE, vBuffer.size());
+
+        // hRes = this->_Http.GenerateHTTPResponse((char*)x.c_str());
+        hRes = this->_Http.GenerateHTTPResponse((std::vector<char*>){});    
+
+        // std::vector<const char*> charVec(vBuffer.size(),nullptr);
+        // for (int i=0; i<vBuffer.size();i++) {
+        //     charVec[i]= vBuffer[i].c_str();
+        // }    
+        char pFixer = '\0';
 
         y = hRes.ReturnHeader();
         y += "\r\n";
-        y += x;
-        y += "\r\n";
-
         write(cSocket, y.c_str(), strlen(y.c_str()));
+        // for(auto c : vBuffer)
+        // {
+        //     write(cSocket, &c, sizeof(c));
+        // }
+        for(auto c : vBuffer)
+        {
+            if(c == "1001")
+            {
+                write(cSocket, &pFixer, 1);
+            }
+            else
+            {
+                write(cSocket, c.c_str(), c.size());
+            }
+            
+        }
+        // write(cSocket, &charVec[0], charVec.size());
+        // y += x;
+        // y += (char*)&vBuffer[0];
+        // y += "\r\n";
+        // write(cSocket, (char*)"\r\n", sizeof((char*)"\r\n"));
+
+        // write(cSocket, y.c_str(), strlen(y.c_str()));
 
 
         shutdown(cSocket, SHUT_RDWR);

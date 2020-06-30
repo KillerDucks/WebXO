@@ -199,10 +199,10 @@ namespace WebX
         HTTPReq ParseRequest(char* request);
 
         // Handle page Requests
-        char*   GetRequestedFile(HTTPReq hReq);
+        std::vector<std::string>   GetRequestedFile(HTTPReq hReq);
 
         // Generate a HTTP Response Header
-        HTTPRes GenerateHTTPResponse(char* message);
+        HTTPRes GenerateHTTPResponse(std::vector<char*> message);
 
     };    
 }

@@ -121,7 +121,7 @@ namespace WebX
         return hRequest;
     }
 
-    char* HTTP::GetRequestedFile(HTTPReq hReq)
+    std::vector<std::string> HTTP::GetRequestedFile(HTTPReq hReq)
     {
         char* buffer;
         int fLength = 0;
@@ -129,7 +129,9 @@ namespace WebX
         fstream ssFileReader;
         std::vector<std::string> dirLookup;
         std::regex findFile;
-        // Directory iDirectory(54);
+        // std::vector<std::string> vBuffer;
+        std::vector<char> vBuffer;
+        std::vector<std::string> vtest;
 
         // Get the web path request needed from the HTTP Request
         string file(hReq.requestType.substr(hReq.requestType.find(' ') + 1, hReq.requestType.size()));
@@ -264,26 +266,51 @@ namespace WebX
             // _Log.iLog("[%z] [%q] File Size: [%d]\n", Logarithm::NOTICE, fLength); // [DEBUG] Print
 
             // Init the buffer with the file length
-            buffer = new char[fLength + 1];
-            memset(buffer, 0x00, fLength);
+            // buffer = new char[fLength + 1];
+            // memset(buffer, 0x00, fLength);
             // Read the file into the buffer
-            ssFileReader.read(buffer, fLength);
+            // ssFileReader.read(buffer, fLength);
+            std::string sBuffer;
+            std::vector<std::string> vtestz;
+            char c;
+            while (ssFileReader.get(c))
+            {
+                // vBuffer.push_back(c);
+                if(c != '\0')
+                {
+                    sBuffer += c;
+                }
+                else
+                {
+                    vtestz.push_back(sBuffer);
+                    vtestz.push_back("1001");
+                    sBuffer.clear();
+                }
+                
+            }
+            if(vtestz.size() == 0)
+            {
+                vtestz.push_back(sBuffer);
+            }
+            printf("vTestz Size [%ld]\n", vtestz.size());
+            vtest = vtestz;
+            // vBuffer.push_back("\0\r\n");
 
             ssFileReader.close();
 
-            // Add a null terminator
-            buffer[fLength] = '\0';
+            // // Add a null terminator
+            // buffer[fLength] = '\0';
         }
         else
         {
             // [TODO] Move the error checking to above the file read
             _Log.Log("Invalid File Stream", Logarithm::CRITICAL);        
-            filePath.clear();
-            filePath += iDirectory.GetBasePath();
-            filePath += "/500.html";
-            buffer = new char[iDirectory.GetFileSize(filePath)];
-            memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
-            memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.szFile(filePath));
+            // filePath.clear();
+            // filePath += iDirectory.GetBasePath();
+            // filePath += "/500.html";
+            // buffer = new char[iDirectory.GetFileSize(filePath)];
+            // memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
+            // memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.szFile(filePath));
             // Set the MIME Type
             this->MIMETYPE = MimeType::HTML;
             // Set the HTTP status code
@@ -293,10 +320,14 @@ namespace WebX
         
 
         _Log.Log("Returning the Buffer", Logarithm::CRITICAL);
-        return buffer;
+
+        _Log.iLog("[%z] [%q] HTTP vBuffer Size [%d]\n",Logarithm::NOTICE, vBuffer.size());
+
+        return vtest;
+        // return buffer;
     }
 
-    HTTP::HTTPRes HTTP::GenerateHTTPResponse(char* message)
+    HTTP::HTTPRes HTTP::GenerateHTTPResponse(std::vector<char*> message)
     {
         HTTPRes httpRes;
         // memset(&httpRes, 0x00, sizeof(httpRes));
@@ -329,6 +360,9 @@ namespace WebX
             break;
         case MimeType::JS:
             httpRes.httpEntityHeader.contentType = "Content-Type: text/javascript;";
+            break;
+        case MimeType::IMAGE:
+            httpRes.httpEntityHeader.contentType = "Content-Type: image/jpeg;";
             break;
         default:
             httpRes.httpEntityHeader.contentType = "Content-Type: text/plain;";
@@ -364,6 +398,11 @@ namespace WebX
         {
             _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "JS");
             return MimeType::JS;
+        }
+        if(fExt == std::string("png") || fExt == std::string("jpg") || fExt == std::string("gif") || fExt == std::string("jpeg") || fExt == std::string("svg"))
+        {
+            _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "JS");
+            return MimeType::IMAGE;
         }
         _Log.iLog("[%z] [%q] Failed to Detected a MIME Type\n", Logarithm::CRITICAL);
         return MimeType::HTML;
