@@ -71,6 +71,7 @@ namespace WebX
 
         while (true)
         {            
+            // Create as many threads as the user requested
             if(this->vThread.size() != (size_t)this->_Settings.max_threads)
             {
                 // Kick off into a thread to handle the client
@@ -82,8 +83,10 @@ namespace WebX
                     // Twice for good luck
                     tID.id = random_string(10);
 
-                    _Log.iLog("[%z] [%q] Kicking off Thread ID: [%s]\n", Logarithm::CRITICAL, tID.id.c_str());
+                    // [INFO] Possibly un-needed Log
+                    // _Log.iLog("[%z] [%q] Kicking off Thread ID: [%s]\n", Logarithm::CRITICAL, tID.id.c_str());
 
+                    // Set the inital threads off
                     this->vThread.emplace_back(std::make_pair(tID, std::thread(&WebX::Sockets::RequestHandler, std::ref(*this), tID)));
 
                     iSockets++;
@@ -94,13 +97,18 @@ namespace WebX
                 // Reuse old threads
                 for (int i = 0; i < iSockets; i++)
                 {
+                    // Check if the threaded function has decleared that it is finished
                     if(this->vThread.at(i).first.done)
                     {
+                        // Check if the thread is joinable
                         if(this->vThread.at(i).second.joinable())
                         {
+                            // Join the thread back to the main thread
                             this->vThread.at(i).second.join();
+                            // Set the thread status back to `false`
                             this->vThread.at(i).first.done = false;
                             _Log.iLog("[%z] [%q] [%s] Reloading the thread\n", Logarithm::NOTICE, this->vThread.at(i).first.id.c_str());
+                            // Reset the thread and spawn a new thread
                             this->vThread.at(i).second = std::move(std::thread(&WebX::Sockets::RequestHandler, std::ref(*this), this->vThread.at(i).first));
                         }
                     }
@@ -110,12 +118,14 @@ namespace WebX
         }
         
 
-        // Join back the threads
+        // Join back the threads [INFO] Unsure why to join the threads if we keep re-using them
         _Log.Log("Joining all threads", Logarithm::CRITICAL);
         for(auto & socTh : this->vThread)
         {
+            // Check if the thread is joinable
             if(socTh.second.joinable())
             {
+                // Join the thread back to the main thread
                 socTh.second.join();
             }
         }
@@ -128,12 +138,18 @@ namespace WebX
 
     int Sockets::RequestHandler(ThreadID const &tID)
     {
-        // Check if we are in a thread
+        char buffer[2048];
+        HTTP::HTTPReq hReq;
+        HTTP::HTTPRes hRes;
+        std::string s_httpHeader;
+        std::vector<std::string> vBuffer;
+
+        // Extract the thread id
         ThreadID &a_thread = const_cast<ThreadID&>(tID);
         std::string this_thread_id(a_thread.id);
         _Log.iLog("[%z] [%q] [%s] Now servering a client !!\n",Logarithm::NOTICE, this_thread_id.c_str());
 
-        // Create Client Socket Struct
+        // Create Client Socket Struct + Allocate Memory + Clear Pointer Address
         struct sockaddr cSockAddr;
         socklen_t addr_size = sizeof(cSockAddr);
         memset((char*)&cSockAddr, 0, sizeof(cSockAddr));
@@ -142,9 +158,7 @@ namespace WebX
         // Accept the new client and create a new socket to communicate on         
         int cSocket = accept(this->socketID, (struct sockaddr*)&cSockAddr, &addr_size);
 
-        // // Convert the Socket into a Non-blocking one
-        // fcntl(this->socketID, F_SETFL, O_NONBLOCK);
-        
+        // Error checking on the client socket
         _Log.Log("Attempting to accept a client", Logarithm::INFO);
         if(cSocket == -1)
         {
@@ -152,52 +166,55 @@ namespace WebX
             close(this->socketID);
             // Throw a error
             _Log.Log("Could not accept a Client Socket, FATAL !!!", Logarithm::FATAL);
+            // Fallback printf
             printf("Oh dear, something went wrong with accept()! %s\n", strerror(errno));
             return -1;
         }
         _Log.iLog("[%z] [%q] Connected to Client Socket using FD [%d]\n", Logarithm::INFO, cSocket);
 
         // Read in the data from the socket
-        char buffer[2048];
-        HTTP::HTTPReq hReq;
-        HTTP::HTTPRes hRes;
-        string y;
-        std::vector<std::string> vBuffer;
-
         int cPos = read(cSocket, buffer, 2048 - 1);
         buffer[cPos] = '\0';                    
         
+        // Parse the Incommming HTTP Request (ignore cast error if visible)
         hReq = this->_Http.ParseRequest(buffer);
 
+        // Verbose Logging
         _Log.iLog("[%z] [%q] Serving Client @ [%s] with User-Agent [%s]\n",Logarithm::NOTICE, hReq.host.c_str(), hReq.user_Agent.c_str());
         _Log.iLog("[%z] [%q] Client is requesting [%s]\n",Logarithm::NOTICE, hReq.requestType.c_str());
 
+        // Get the requested file and store into a local container
         vBuffer = this->_Http.GetRequestedFile(hReq);
 
-        _Log.iLog("[%z] [%q] vBuffer Size [%d]\n",Logarithm::NOTICE, vBuffer.size());
-
-        hRes = this->_Http.GenerateHTTPResponse((std::vector<char*>){});    
+        // Generate the HTTP Response Headers (ignore cast error if visible)
+        hRes = this->_Http.GenerateHTTPResponse();    
  
-        char pFixer = '\0';
+        // Construct the HTTP Headers into a string to send back the client (This is done to add the \r\n so the data can follow)
+        s_httpHeader += hRes.ReturnHeader();
+        s_httpHeader += "\r\n";
 
-        y = hRes.ReturnHeader();
-        y += "\r\n";
-        write(cSocket, y.c_str(), strlen(y.c_str()));
+        // Write the HTTP Header to the Client Socket
+        write(cSocket, s_httpHeader.c_str(), s_httpHeader.size());
 
+        // Auto loop over the vector buffer and spit out the content back to the client
         for(auto c : vBuffer)
         {
+            // If there is a space assume this is a null terminator, so send one to the client
             if(c == " ")
             {
-                write(cSocket, &pFixer, 1);
+                // Write to the Client Socket (size is hardcoded to 1)
+                write(cSocket, &"\0", 1);
             }
             else
             {
+                // Write every other line normally to the CLient Socket
                 write(cSocket, c.c_str(), c.size());
-            }
-            
+            }            
         }
 
+        // Shutdown the Socket (Read & Write)
         shutdown(cSocket, SHUT_RDWR);
+        // Close the Socket
         close(cSocket);
 
         // Log we are returing
