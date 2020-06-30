@@ -7,7 +7,7 @@ int main(int argc, char** argv)
 {
 
     // Setup the Socket Server Settings
-    WebX::Sockets::Settings sockSettings(true , 2);
+    WebX::Sockets::Settings sockSettings(true , 4);
     // Init the HTTP class + Set the base path of the HTTP Files
     WebX::HTTP http("./ExampleSite");
     // Init the Sockets class
