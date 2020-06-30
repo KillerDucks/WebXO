@@ -8,3 +8,5 @@ libWebX.so.1.0
 WebXServer
 # VS Code files
 .vscode
+# Custom HTML
+Site/
