@@ -76,11 +76,15 @@ namespace WebX
                 // Kick off into a thread to handle the client
                 for(int i = 0; i < this->_Settings.max_threads; i++)
                 {
-                    _Log.Log("Kicking off: Client Request Handler", Logarithm::CRITICAL);
+                    // Create a Thread
+                    ThreadID tID;
 
-                    ThreadID tID = ThreadID();
+                    // Twice for good luck
+                    tID.id = random_string(10);
 
-                    this->vThread.emplace_back(std::make_pair(tID, std::thread(&WebX::Sockets::RequestHandler, std::ref(*this), &tID)));
+                    _Log.iLog("[%z] [%q] Kicking off Thread ID: [%s]\n", Logarithm::CRITICAL, tID.id.c_str());
+
+                    this->vThread.emplace_back(std::make_pair(tID, std::thread(&WebX::Sockets::RequestHandler, std::ref(*this), tID)));
 
                     iSockets++;
                 }
@@ -97,7 +101,7 @@ namespace WebX
                             this->vThread.at(i).second.join();
                             this->vThread.at(i).first.done = false;
                             _Log.iLog("[%z] [%q] [%s] Reloading the thread\n", Logarithm::NOTICE, this->vThread.at(i).first.id.c_str());
-                            this->vThread.at(i).second = std::move(std::thread(&WebX::Sockets::RequestHandler, std::ref(*this), &this->vThread.at(i).first));
+                            this->vThread.at(i).second = std::move(std::thread(&WebX::Sockets::RequestHandler, std::ref(*this), this->vThread.at(i).first));
                         }
                     }
                 }
@@ -122,10 +126,11 @@ namespace WebX
         return;
     }
 
-    int Sockets::RequestHandler(ThreadID *tID)
+    int Sockets::RequestHandler(ThreadID const &tID)
     {
         // Check if we are in a thread
-        std::string this_thread_id(tID->id);
+        ThreadID &a_thread = const_cast<ThreadID&>(tID);
+        std::string this_thread_id(a_thread.id);
         _Log.iLog("[%z] [%q] [%s] Now servering a client !!\n",Logarithm::NOTICE, this_thread_id.c_str());
 
         // Create Client Socket Struct
@@ -156,7 +161,7 @@ namespace WebX
         char buffer[2048];
         HTTP::HTTPReq hReq;
         HTTP::HTTPRes hRes;
-        string x, y;
+        string y;
         std::vector<std::string> vBuffer;
 
         int cPos = read(cSocket, buffer, 2048 - 1);
@@ -167,30 +172,21 @@ namespace WebX
         _Log.iLog("[%z] [%q] Serving Client @ [%s] with User-Agent [%s]\n",Logarithm::NOTICE, hReq.host.c_str(), hReq.user_Agent.c_str());
         _Log.iLog("[%z] [%q] Client is requesting [%s]\n",Logarithm::NOTICE, hReq.requestType.c_str());
 
-        // x = this->_Http.GetRequestedFile(hReq);
         vBuffer = this->_Http.GetRequestedFile(hReq);
 
         _Log.iLog("[%z] [%q] vBuffer Size [%d]\n",Logarithm::NOTICE, vBuffer.size());
 
-        // hRes = this->_Http.GenerateHTTPResponse((char*)x.c_str());
         hRes = this->_Http.GenerateHTTPResponse((std::vector<char*>){});    
-
-        // std::vector<const char*> charVec(vBuffer.size(),nullptr);
-        // for (int i=0; i<vBuffer.size();i++) {
-        //     charVec[i]= vBuffer[i].c_str();
-        // }    
+ 
         char pFixer = '\0';
 
         y = hRes.ReturnHeader();
         y += "\r\n";
         write(cSocket, y.c_str(), strlen(y.c_str()));
-        // for(auto c : vBuffer)
-        // {
-        //     write(cSocket, &c, sizeof(c));
-        // }
+
         for(auto c : vBuffer)
         {
-            if(c == "1001")
+            if(c == " ")
             {
                 write(cSocket, &pFixer, 1);
             }
@@ -200,14 +196,6 @@ namespace WebX
             }
             
         }
-        // write(cSocket, &charVec[0], charVec.size());
-        // y += x;
-        // y += (char*)&vBuffer[0];
-        // y += "\r\n";
-        // write(cSocket, (char*)"\r\n", sizeof((char*)"\r\n"));
-
-        // write(cSocket, y.c_str(), strlen(y.c_str()));
-
 
         shutdown(cSocket, SHUT_RDWR);
         close(cSocket);
@@ -215,7 +203,7 @@ namespace WebX
         // Log we are returing
         _Log.iLog("[%z] [%q] [%s] Returning thread back to the main thread !!\n", Logarithm::NOTICE, this_thread_id.c_str());    
         // Tell the master thread we are done
-        this->vThread.at(GetThreadVector(tID->id)).first.done = true;
+        this->vThread.at(GetThreadVector(a_thread.id)).first.done = true;
 
         return 1;
     }
