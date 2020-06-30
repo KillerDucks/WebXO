@@ -129,8 +129,6 @@ namespace WebX
         fstream ssFileReader;
         std::vector<std::string> dirLookup;
         std::regex findFile;
-        // std::vector<std::string> vBuffer;
-        std::vector<char> vBuffer;
         std::vector<std::string> vtest;
 
         // Get the web path request needed from the HTTP Request
@@ -263,54 +261,41 @@ namespace WebX
             fLength = ssFileReader.tellg();
             ssFileReader.seekg(0, ssFileReader.beg);
 
-            // _Log.iLog("[%z] [%q] File Size: [%d]\n", Logarithm::NOTICE, fLength); // [DEBUG] Print
+            _Log.iLog("[%z] [%q] File Size: [~%dKB]\n", Logarithm::NOTICE, fLength / 1024); // [DEBUG] Print
 
-            // Init the buffer with the file length
-            // buffer = new char[fLength + 1];
-            // memset(buffer, 0x00, fLength);
-            // Read the file into the buffer
-            // ssFileReader.read(buffer, fLength);
             std::string sBuffer;
-            std::vector<std::string> vtestz;
+            // std::vector<std::string> vtestz;
             char c;
             while (ssFileReader.get(c))
             {
-                // vBuffer.push_back(c);
                 if(c != '\0')
                 {
                     sBuffer += c;
                 }
                 else
                 {
-                    vtestz.push_back(sBuffer);
-                    vtestz.push_back("1001");
+                    vtest.push_back(sBuffer);
+                    vtest.push_back(" ");
                     sBuffer.clear();
-                }
-                
+                }               
             }
-            if(vtestz.size() == 0)
+            if(vtest.size() == 0)
             {
-                vtestz.push_back(sBuffer);
+                vtest.push_back(sBuffer);
             }
-            printf("vTestz Size [%ld]\n", vtestz.size());
-            vtest = vtestz;
-            // vBuffer.push_back("\0\r\n");
-
             ssFileReader.close();
-
-            // // Add a null terminator
-            // buffer[fLength] = '\0';
         }
         else
         {
             // [TODO] Move the error checking to above the file read
             _Log.Log("Invalid File Stream", Logarithm::CRITICAL);        
-            // filePath.clear();
-            // filePath += iDirectory.GetBasePath();
-            // filePath += "/500.html";
-            // buffer = new char[iDirectory.GetFileSize(filePath)];
-            // memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
-            // memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.szFile(filePath));
+            filePath.clear();
+            filePath += iDirectory.GetBasePath();
+            filePath += "/500.html";
+            buffer = new char[iDirectory.GetFileSize(filePath)];
+            memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
+            memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.szFile(filePath));
+            vtest.emplace_back(buffer);
             // Set the MIME Type
             this->MIMETYPE = MimeType::HTML;
             // Set the HTTP status code
@@ -320,8 +305,6 @@ namespace WebX
         
 
         _Log.Log("Returning the Buffer", Logarithm::CRITICAL);
-
-        _Log.iLog("[%z] [%q] HTTP vBuffer Size [%d]\n",Logarithm::NOTICE, vBuffer.size());
 
         return vtest;
         // return buffer;
