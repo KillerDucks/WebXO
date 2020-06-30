@@ -310,7 +310,7 @@ namespace WebX
         // return buffer;
     }
 
-    HTTP::HTTPRes HTTP::GenerateHTTPResponse(std::vector<char*> message)
+    HTTP::HTTPRes HTTP::GenerateHTTPResponse()
     {
         HTTPRes httpRes;
         // memset(&httpRes, 0x00, sizeof(httpRes));

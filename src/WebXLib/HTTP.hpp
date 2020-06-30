@@ -202,7 +202,7 @@ namespace WebX
         std::vector<std::string>   GetRequestedFile(HTTPReq hReq);
 
         // Generate a HTTP Response Header
-        HTTPRes GenerateHTTPResponse(std::vector<char*> message);
+        HTTPRes GenerateHTTPResponse();
 
     };    
 }
