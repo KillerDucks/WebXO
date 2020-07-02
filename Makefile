@@ -1,6 +1,7 @@
 # Compiler Variables
 Compiler = /usr/bin/g++
-Flags = -Wall -g -std=c++14 -O0
+Flags = -Wall -std=c++14 -march=native -O2
+# Flags = -Wall -g -std=c++14 -O2
 
 # Program Variables
 ProgName = WebXServer
