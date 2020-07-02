@@ -180,7 +180,8 @@ namespace WebX
         // Verbose Logging
         _Log.iLog("[%z] [%q] Serving Client @ [%s] with User-Agent [%s]\n",Logarithm::NOTICE, hReq.host.c_str(), hReq.user_Agent.c_str());
         _Log.iLog("[%z] [%q] Client is requesting [%s]\n",Logarithm::NOTICE, hReq.requestType.c_str());
-
+        
+        
         // Get the requested file and store into a local container
         vBuffer = this->_Http.GetRequestedFile(hReq);
 
@@ -201,12 +202,17 @@ namespace WebX
             if(c == " ")
             {
                 // Write to the Client Socket (size is hardcoded to 1)
-                write(cSocket, &"\0", 1);
+                write(cSocket, &"\0", 1);                
             }
             else
             {
-                // Write every other line normally to the CLient Socket
-                write(cSocket, c.c_str(), c.size());
+                // Write every other line normally to the CLient Socket [NOTE] [DEBUG] [CURRENT] Crashes here during siege load testing
+                // write(cSocket, c.c_str(), c.size());             // [NOTE] The program will crash due to any broken pipes
+                if(send(cSocket, c.c_str(), c.size(), MSG_NOSIGNAL) == -1)   // [CURRENT] Look into send flags, this flag (MSG_NOSIGNAL) ignores if the pipe is broken or not
+                {
+                    // Oh no, we have an error !!!                    
+                    _Log.iLog("[%z] [%q] An Error has occured with send(): [%s]\n",Logarithm::NOTICE, strerror(errno));
+                }
             }            
         }
 
