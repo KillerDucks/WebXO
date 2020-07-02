@@ -4,25 +4,18 @@ namespace WebX
 {
     Sockets::Sockets(HTTP _Http, int _Port, Settings _Settings) : _Http(_Http), _Log("Socket"), _Settings(Settings())
     {
-        this->port = _Port;
-        // this->_Http = _Http;
-        
-        // Settings
+        // Set the port [NOTE] Can be moved the the init list
+        this->port = _Port;        
+        // Settings [NOTE] Can be moved the the init list
         this->_Settings = _Settings;
+        // Verbose Logging
         _Log.iLog("[%z] [%q] Socket Server is Initalizing on Port [%d]\n", Logarithm::NOTICE, _Port);
-        _Log.iLog("[%z] [%q] Socket Server Setting: Num of Thread [%d]\n", Logarithm::NOTICE, _Settings.max_threads);
-
-        
+        _Log.iLog("[%z] [%q] Socket Server Setting: Num of Thread [%d]\n", Logarithm::NOTICE, _Settings.max_threads);        
     }
 
     Sockets::~Sockets()
     {
-    }
-
-
-    void Sockets::Example()
-    {
-        printf("Hello World\n");
+        // Nothing to clean up for now :P
     }
 
     void Sockets::Listen()
@@ -130,14 +123,19 @@ namespace WebX
             }
         }
 
+
+        // Shutdown the Listening Thread [NOTE] This code is never reached [CHANGE] Look into this
         shutdown(this->socketID, SHUT_RDWR);
+        // Close the Listening Socket
         close(this->socketID);
 
+        // This is never reached
         return;
     }
 
     int Sockets::RequestHandler(ThreadID const &tID)
     {
+        // Variables !!
         char buffer[2048];
         HTTP::HTTPReq hReq;
         HTTP::HTTPRes hRes;
@@ -222,6 +220,7 @@ namespace WebX
         // Tell the master thread we are done
         this->vThread.at(GetThreadVector(a_thread.id)).first.done = true;
 
+        // Return a 1 (i don't know why this cant be void but oh well)
         return 1;
     }
 };
