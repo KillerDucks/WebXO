@@ -95,7 +95,6 @@ namespace WebX
 
         // Listening
         void    Listen();
-        void    Example();
         
         // Request Handling
         int     RequestHandler(ThreadID const &tID);
