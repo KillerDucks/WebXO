@@ -142,7 +142,8 @@ namespace WebX
         std::string parentPath(iDirectory.GetBasePath());
         parentPath += file;
 
-        _Log.iLog("[%z] [%q] Calulcated Relative Path: [%s]\n",Logarithm::INFO, relativePath.c_str());
+        // Debug Logging
+        // _Log.iLog("[%z] [%q] Calulcated Relative Path: [%s]\n",Logarithm::INFO, relativePath.c_str());
 
         // Check if are given a absolute path (eg: [GET /])
         if(file.find('.') == std::string::npos)
@@ -229,9 +230,7 @@ namespace WebX
                 filePath += iDirectory.GetBasePath();
                 filePath += "/204.html";
                 break;
-            }
-            
-        
+            }        
         default:
             break;
         }
@@ -303,8 +302,8 @@ namespace WebX
             ssFileReader.close();
         }
         
-
-        _Log.Log("Returning the Buffer", Logarithm::CRITICAL);
+        // Verbose Logging
+        _Log.Log("Returning the Buffer", Logarithm::NOTICE);
 
         return vtest;
         // return buffer;
@@ -312,27 +311,25 @@ namespace WebX
 
     HTTP::HTTPRes HTTP::GenerateHTTPResponse()
     {
+        // Structs !!!
         HTTPRes httpRes;
-        // memset(&httpRes, 0x00, sizeof(httpRes));
         hGeneral httpGeneral;
-        // memset(&httpGeneral, 0x00, sizeof(httpGeneral));
         hEntity httpEntity;
-        // memset(&httpEntity, 0x00, sizeof(httpEntity));
 
         httpGeneral.Date = httpGeneral.GetCurrentTime();
         httpEntity.contentLength += "Content-Length: ";
         httpGeneral.Connection = "Connection: close";
 
-
-
+        // Set the Response Code + Phrase
         httpRes.statusCode = (int)httpCode;
-        // httpRes.statusCode = 200;
+        // [TODO] Use the Enum to set the phrase corrently
         httpRes.reasonPhrase = "OKAY";
-        // memcpy(&httpRes.httpGeneralHeader, (char*)httpGeneral, sizeof(httpGeneral));
+
+        //  Set the HTTP Entity Header (ignore the cast issue, will be looked into later on)
         httpRes.httpEntityHeader = httpEntity;
 
         // Set the MIME Type correctly        
-        // [TODO] Possibly break into a helper function that is smaller
+        // [TODO] Possibly break into a helper function that is smaller [NOTE] This is really dumb I should consolidate this with HTTP::GetMINEType
         switch (this->MIMETYPE)
         {
         case MimeType::HTML:
@@ -356,17 +353,21 @@ namespace WebX
 
         httpRes.httpEntityHeader.contentLength = strlen(httpRes.ReturnHeader().c_str());
 
-        // [TODO] Debug Printing
+        // [DEBUG] Debug Printing
         // printf("\n\n%s\n\n", httpRes.ReturnHeader().c_str());
 
         return httpRes;
     }
 
+    // [TODO] I should probs change this :P
     enum HTTP::MimeType HTTP::GetMIMEType(std::string filePath)
     {
         // [NOTE] This is the most basic and most likely the worst way of doing this
         std::string fExt = filePath.substr(filePath.rfind('.') + 1, filePath.length());
-        _Log.iLog("[%z] [%q] Detected a MIME Type using file extension [%s]\n", Logarithm::NOTICE, fExt.c_str());
+        
+        // Debug Logging
+        // _Log.iLog("[%z] [%q] Detected a MIME Type using file extension [%s]\n", Logarithm::NOTICE, fExt.c_str());
+        
         if(fExt == std::string("html"))
         {
             _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "HTML");
@@ -384,9 +385,11 @@ namespace WebX
         }
         if(fExt == std::string("png") || fExt == std::string("jpg") || fExt == std::string("gif") || fExt == std::string("jpeg") || fExt == std::string("svg"))
         {
-            _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "JS");
+            _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "IMAGE");
             return MimeType::IMAGE;
         }
+        // [TODO] Add favicon support
+
         _Log.iLog("[%z] [%q] Failed to Detected a MIME Type\n", Logarithm::CRITICAL);
         return MimeType::HTML;
     }
