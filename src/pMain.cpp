@@ -2,6 +2,7 @@
 #include "WebXLib/Sockets.hpp"
 #include "WebXLib/HTTP.hpp"
 #include "WebXLib/Directory.hpp"
+#include "WebXLib/Compression.hpp"
 
 typedef struct Options 
 {
@@ -20,6 +21,12 @@ int main(int argc, char* argv[])
     // [TODO] Parse the CLI Args
     std::vector<std::string> vArgs(argv + 1, argv + argc + ! argc);
     Options optsCLI = ParseCLIOptions(vArgs);
+
+
+    // // [DEBUG] [CURRENT] Testing Compression
+    // WebX::Compression zippy;
+    // zippy.gzipTest();
+    // zippy.gzInflate();
     // std::terminate();
 
     // Setup the Socket Server Settings

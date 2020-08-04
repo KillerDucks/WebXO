@@ -181,7 +181,6 @@ namespace WebX
         _Log.iLog("[%z] [%q] Serving Client @ [%s] with User-Agent [%s]\n",Logarithm::NOTICE, hReq.host.c_str(), hReq.user_Agent.c_str());
         _Log.iLog("[%z] [%q] Client is requesting [%s]\n",Logarithm::NOTICE, hReq.requestType.c_str());
         
-        
         // Get the requested file and store into a local container
         vBuffer = this->_Http.GetRequestedFile(hReq);
 
@@ -215,6 +214,8 @@ namespace WebX
                 }
             }            
         }
+
+        // send(cSocket, std::string("\r\n").c_str(), std::string("\r\n").size(), MSG_NOSIGNAL);
 
         // Shutdown the Socket (Read & Write)
         shutdown(cSocket, SHUT_RDWR);

@@ -367,6 +367,7 @@ namespace WebX
         
         // Debug Logging
         // _Log.iLog("[%z] [%q] Detected a MIME Type using file extension [%s]\n", Logarithm::NOTICE, fExt.c_str());
+        printf("Detected a MIME Type using file extension [%s] for the file [%s]\n", fExt.c_str(), filePath.c_str());
         
         if(fExt == std::string("html"))
         {
