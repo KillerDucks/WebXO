@@ -1,6 +1,13 @@
 # Compiler Variables
 Compiler = /usr/bin/g++
-Flags = -Wall -g -std=c++14 -march=native -O2
+
+DEBUG ?= 1
+ifeq ($(DEBUG), 1)
+    Flags = -Wall -g -std=c++14 -march=native -O2
+else
+    Flags = -Wall -std=c++14 -march=native -O2
+endif
+# Flags = -Wall -g -std=c++14 -march=native -O2
 # Flags = -Wall -g -std=c++14 -O2
 
 # Program Variables
@@ -24,17 +31,6 @@ Object_Files := $(patsubst $(SRC_DIR)/%.cpp,$(Objects)/%.o,$(Source_Files))
 # Debug
 debug: $(Build)/$(ProgName)
 
-# $(Objects)/pMain.o $(Objects)/WebX_Sockets_Obj.o
-
-# Make the Debug Build
-$(Build_Debug)/$(ProgName): $(Objects)/pMain.o WebXLib
-	$(Compiler) $(Flags) -o $(Build_Debug)/$(ProgName) $^ -lstdc++fs
-	
-# WebXLib
-rad: $(Object_Files)
-	$(Compiler) $(Flags) -o $(Build_Debug)/$(ProgName) $^ -lstdc++fs
-
-
 $(Build)/$(ProgName): $(Objects)/libWebX.so.1.0 $(Objects)/pMain.o
 	$(Compiler) $(Flags) -o $(Build_Debug)/$(ProgName) $^ -L/usr/local/lib -lWebX -lpthread -lz
 
@@ -51,7 +47,7 @@ moveLib:
 	$(shell  ln -sf /usr/local/lib/libWebX.so.1.0 /usr/local/lib/libWebX.so)
 
 # Make the object files
-$(Objects)/libWebX.so.1.0: $(Objects)/Logarithm.o $(Objects)/HTTP.o $(Objects)/Sockets.o $(Objects)/Directory.o  $(Objects)/Compression.o
+$(Objects)/libWebX.so.1.0: $(Objects)/Logarithm.o $(Objects)/HTTP.o $(Objects)/Sockets.o $(Objects)/Directory.o  $(Objects)/Compression.o $(Objects)/Interception.o
 	$(Compiler) $(Flags) -shared -Wl,-soname,libWebX.so.1 $^ -o $@ -lstdc++fs
 
 $(Objects)/Logarithm.o: $(WebXLib)/Logarithm.cpp	
@@ -68,6 +64,9 @@ $(Objects)/Directory.o: $(WebXLib)/Directory.cpp
 
 $(Objects)/Compression.o: $(WebXLib)/Compression.cpp
 	$(Compiler) $(Flags) -c -fPIC $^ -o $@ -lz
+
+$(Objects)/Interception.o: $(WebXLib)/Interception.cpp
+	$(Compiler) $(Flags) -c -fPIC $^ -o $@
 
 clean: 
 	@echo "Cleaning Build System..."
