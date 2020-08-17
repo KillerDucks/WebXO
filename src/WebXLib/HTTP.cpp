@@ -2,18 +2,17 @@
 
 namespace WebX
 {
-    HTTP::HTTP(std::string httpPath) : _Log("HTTP"), iDirectory(httpPath), httpCode(WebX::HTTPStatusCodes::OK), MIMETYPE(MimeType::HTML)
+    HTTP::HTTP(std::string httpPath, InterceptSettings interceptSettings) : _Log("HTTP"), iDirectory(httpPath), httpCode(WebX::HTTPStatusCodes::OK), _interceptionSettings(interceptSettings), MIMETYPE(MimeType::HTML)
     {}
     HTTP::~HTTP()
     {}
 
-    HTTP::HTTPReq HTTP::ParseRequest(char* request)
+    HTTPReq HTTP::ParseRequest(char* request)
     {
         vector<std::pair<string, string>> reqOpts;
         string t;
         bool requestLine = true;
-        HTTP::HTTPReq hRequest;
-        // memset(&hRequest, 0x00, sizeof(hRequest));
+        HTTPReq hRequest;
 
         // Look through the request and fill in the struct
         for (size_t i = 0; i < strlen(request); i++)
@@ -121,18 +120,38 @@ namespace WebX
         return hRequest;
     }
 
-    std::vector<std::string> HTTP::GetRequestedFile(HTTPReq hReq)
+    std::pair<char*, int> HTTP::GetRequestedFile(HTTPReq hReq)
     {
         char* buffer;
         int fLength = 0;
         string filePath;
+        string urlData;
         fstream ssFileReader;
         std::vector<std::string> dirLookup;
         std::regex findFile;
-        std::vector<std::string> vtest;
+
+        // Interception Hooking [DEBUG] [NOTE] Might be moved to a diffrent place
+        // _interception.HookSync(hReq, _interceptionSettings.callback);
+        // if(_interceptionSettings.isBlocking)
+        // {
+        //     _interception.HookSync();
+        // }
+        // else
+        // {
+        //     _interception.HookAsync();
+        // }
 
         // Get the web path request needed from the HTTP Request
         string file(hReq.requestType.substr(hReq.requestType.find(' ') + 1, hReq.requestType.size()));
+
+        // Decode any URL parameters if any
+        if(file.find('?') != std::string::npos)
+        {
+            // Capture the URL Data (After the '?')
+            urlData = file.substr(file.find('?'), file.size());
+            // Change the file to prevent failed lookups
+            file = file.substr(0, file.find('?'));
+        }
 
         // Convert the requested web path into a meaningful file path
 
@@ -207,7 +226,7 @@ namespace WebX
             
         }
         
-        // Check if any HTTP Error codes have been rasied
+        // Check if any HTTP Error codes have been raised
         switch (httpCode)
         {
         case WebX::HTTPStatusCodes::NOT_FOUND:            
@@ -262,26 +281,8 @@ namespace WebX
 
             _Log.iLog("[%z] [%q] File Size: [~%dKB]\n", Logarithm::NOTICE, fLength / 1024); // [DEBUG] Print
 
-            std::string sBuffer;
-            // std::vector<std::string> vtestz;
-            char c;
-            while (ssFileReader.get(c))
-            {
-                if(c != '\0')
-                {
-                    sBuffer += c;
-                }
-                else
-                {
-                    vtest.push_back(sBuffer);
-                    vtest.push_back(" ");
-                    sBuffer.clear();
-                }               
-            }
-            if(vtest.size() == 0)
-            {
-                vtest.push_back(sBuffer);
-            }
+            buffer = new char[fLength + 1];
+            ssFileReader.read(buffer, fLength);
             ssFileReader.close();
         }
         else
@@ -294,7 +295,6 @@ namespace WebX
             buffer = new char[iDirectory.GetFileSize(filePath)];
             memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
             memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.szFile(filePath));
-            vtest.emplace_back(buffer);
             // Set the MIME Type
             this->MIMETYPE = MimeType::HTML;
             // Set the HTTP status code
@@ -305,11 +305,11 @@ namespace WebX
         // Verbose Logging
         _Log.Log("Returning the Buffer", Logarithm::NOTICE);
 
-        return vtest;
+        return std::pair<char*, int>(buffer, fLength);
         // return buffer;
     }
 
-    HTTP::HTTPRes HTTP::GenerateHTTPResponse()
+    HTTPRes HTTP::GenerateHTTPResponse()
     {
         // Structs !!!
         HTTPRes httpRes;
