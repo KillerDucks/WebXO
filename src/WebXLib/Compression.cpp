@@ -35,11 +35,11 @@ namespace WebX
         {
             printf("File to Compress is good !!!\n");
             // File Stream is good
-            fsFileStreamer.seekg(fsFileStreamer.end);
+            fsFileStreamer.seekg(0, fsFileStreamer.end);
             szFileIN = fsFileStreamer.tellg();
-            fsFileStreamer.seekg(fsFileStreamer.beg); 
+            fsFileStreamer.seekg(0, fsFileStreamer.beg); 
             
-            cBuffer = new char[szFileIN];
+            cBuffer = new char[szFileIN + 1];
             fsFileStreamer.read(cBuffer, szFileIN);
 
             fsFileStreamer.close();
@@ -66,14 +66,13 @@ namespace WebX
         do
         {            
             gstream.next_out = reinterpret_cast<Bytef*>(pBuffer);
-            gstream.avail_out = sizeof(pBuffer);
+            gstream.avail_out = szFileIN;
 
             zResult = deflate(&gstream, Z_FINISH);  
-            for (size_t i = 0; i < sizeof(pBuffer); i++)
+            for (size_t i = 0; i < szFileIN; i++)
             {
                 if(pBuffer[i] == '\0')
                 {
-                    printf("HIT!!\n");
                     vBuffer.push_back(' ');
                 }
                 else
@@ -143,9 +142,9 @@ namespace WebX
         {
             printf("File to Inflate is good !!!\n");
             // File Stream is good
-            fsFileStreamer.seekg(fsFileStreamer.end);
+            fsFileStreamer.seekg(0, fsFileStreamer.end);
             szFileIN = fsFileStreamer.tellg();
-            fsFileStreamer.seekg(fsFileStreamer.beg); 
+            fsFileStreamer.seekg(0, fsFileStreamer.beg); 
             
             cBuffer = new char[szFileIN];
             fsFileStreamer.read(cBuffer, szFileIN);
@@ -208,5 +207,152 @@ namespace WebX
         printf("DONE !!!\n");
 
         return;
+    }
+
+
+    void Compression::simple()
+    {
+        // Variables !!!
+        std::string fileIN  = "./gzip/sample.html";
+        std::string fileOUT = "./gzip/sample.gz";
+
+        std::vector<uint8_t> vBuffer;
+
+        char* sBuffer;
+        char* dBuffer;
+        std::fstream fsFileStreamer;
+        size_t szFileIN = 0;
+ 
+        // Open a File Stream
+        printf("Opening File to Compress\n");
+        fsFileStreamer.open(fileIN, std::ios::binary | std::ios::in);
+        if(fsFileStreamer.good())
+        {
+            printf("File to Compress is good !!!\n");
+            // File Stream is good
+            fsFileStreamer.seekg(0, fsFileStreamer.end);
+            szFileIN = fsFileStreamer.tellg();
+            fsFileStreamer.seekg(0, fsFileStreamer.beg); 
+            
+            sBuffer = new char[szFileIN + 1];
+            fsFileStreamer.read(sBuffer, szFileIN);
+
+            fsFileStreamer.close();
+        }
+
+        dBuffer = new char[szFileIN + 1];
+        uLong cSize = compressBound((uLong) szFileIN + 1);
+        uLong dSize = cSize;
+        // compress((Bytef*)dBuffer, &cSize, (Bytef*)sBuffer, szFileIN);
+        compress2((Bytef*)dBuffer, &dSize, (Bytef*)sBuffer, szFileIN, Z_BEST_COMPRESSION);
+
+        printf("Uncompressed Size [%ld] !!!\n", szFileIN);
+        printf("Uncompressed Data [%s] !!!\n", sBuffer);
+        printf("Compressed Size [%ld] !!!\n", sizeof(dBuffer));
+        printf("Compressed Size [%ld] !!!\n", cSize);
+
+        fsFileStreamer.open(fileOUT, std::ios::binary | std::ios::out);
+        if(fsFileStreamer.good())
+        {
+            printf("File stream OUT is good !!!\n");
+            // File Stream is good
+        
+            fsFileStreamer.write(dBuffer, cSize);
+
+            fsFileStreamer.close();
+        }
+        printf("DONE !!!\n");
+    }
+
+    void Compression::test()
+    {
+        // Variables !!!
+        std::string fileIN  = "./gzip/sample.html";
+        std::string fileOUT = "./gzip/sample.gz";
+
+        std::vector<uint8_t> vBuffer;
+
+        char* cBuffer;
+        std::fstream fsFileStreamer;
+        size_t szFileIN = 0;
+ 
+        // Open a File Stream
+        printf("Opening File to Compress\n");
+        fsFileStreamer.open(fileIN, std::ios::binary | std::ios::in);
+        if(fsFileStreamer.good())
+        {
+            printf("File to Compress is good !!!\n");
+            // File Stream is good
+            fsFileStreamer.seekg(0, fsFileStreamer.end);
+            szFileIN = fsFileStreamer.tellg();
+            fsFileStreamer.seekg(0, fsFileStreamer.beg); 
+            
+            cBuffer = new char[szFileIN + 1];
+            fsFileStreamer.read(cBuffer, szFileIN);
+
+            fsFileStreamer.close();
+        }
+
+        this->compress_memory(cBuffer, szFileIN, vBuffer);
+
+        fsFileStreamer.open(fileOUT, std::ios::binary | std::ios::out);
+        if(fsFileStreamer.good())
+        {
+            printf("File stream OUT is good !!!\n");
+            // File Stream is good
+        
+            fsFileStreamer.write((char*)&vBuffer[0], vBuffer.size());
+
+            fsFileStreamer.close();
+        }
+        printf("DONE !!!\n");
+    }
+
+    void Compression::compress_memory(void *in_data, size_t in_data_size, std::vector<uint8_t> &out_data)
+    {
+    std::vector<uint8_t> buffer;
+
+    const size_t BUFSIZE = 128 * 1024;
+    uint8_t temp_buffer[BUFSIZE];
+
+    z_stream strm;
+    strm.zalloc = 0;
+    strm.zfree = 0;
+    strm.next_in = reinterpret_cast<uint8_t *>(in_data);
+    strm.avail_in = in_data_size;
+    strm.next_out = temp_buffer;
+    strm.avail_out = BUFSIZE;
+
+    deflateInit(&strm, Z_BEST_COMPRESSION);
+
+    while (strm.avail_in != 0)
+    {
+    int res = deflate(&strm, Z_NO_FLUSH);
+    assert(res == Z_OK);
+    if (strm.avail_out == 0)
+    {
+    buffer.insert(buffer.end(), temp_buffer, temp_buffer + BUFSIZE);
+    strm.next_out = temp_buffer;
+    strm.avail_out = BUFSIZE;
+    }
+    }
+
+    int deflate_res = Z_OK;
+    while (deflate_res == Z_OK)
+    {
+    if (strm.avail_out == 0)
+    {
+    buffer.insert(buffer.end(), temp_buffer, temp_buffer + BUFSIZE);
+    strm.next_out = temp_buffer;
+    strm.avail_out = BUFSIZE;
+    }
+    deflate_res = deflate(&strm, Z_FINISH);
+    }
+
+    assert(deflate_res == Z_STREAM_END);
+    buffer.insert(buffer.end(), temp_buffer, temp_buffer + BUFSIZE - strm.avail_out);
+    deflateEnd(&strm);
+
+    out_data.swap(buffer);
     }
 }

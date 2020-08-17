@@ -3,6 +3,8 @@
 #include "WebXLib/HTTP.hpp"
 #include "WebXLib/Directory.hpp"
 #include "WebXLib/Compression.hpp"
+#include "WebXLib/HTTPHeaders.hpp"
+#include "WebXLib/Interception.hpp"
 
 typedef struct Options 
 {
@@ -16,6 +18,12 @@ typedef struct Options
 
 Options ParseCLIOptions(std::vector<std::string> const vec);
 
+void PrintHello(std::map<std::string, char*> info)
+{
+    printf("Hello World\n");
+    printf("MAP Value [ExampleKey]: %s\n", info.at("ExampleKey"));
+}
+
 int main(int argc, char* argv[])
 {
     // [TODO] Parse the CLI Args
@@ -23,10 +31,15 @@ int main(int argc, char* argv[])
     Options optsCLI = ParseCLIOptions(vArgs);
 
 
-    // // [DEBUG] [CURRENT] Testing Compression
+    // // [DEBUG] [HALT] Testing Compression
     // WebX::Compression zippy;
+    // zippy.simple();
+    // zippy.test();
     // zippy.gzipTest();
     // zippy.gzInflate();
+    // std::terminate();
+
+    // [DEBUG] [CURRENT] Testing Interception
     // std::terminate();
 
     // Setup the Socket Server Settings
@@ -77,6 +90,22 @@ Options ParseCLIOptions(std::vector<std::string> const vec)
         else if(tmpOpt == "--port")
         {
             optsCLI.port = atoi(tmpValue.c_str());
+        }
+        else if(tmpOpt == "--help")
+        {
+            printf("WebXOServer [Options]....\n");
+            printf("Options:\n");
+            printf("\t--thread\n");
+            printf("\t\tIf set this will enable multithreading support where avaliable\n");
+            printf("\n\t--nthreads\n");
+            printf("\t\tSets the number threads that the server will try to use if --thread is used\n");
+            printf("\n\t--basepath\n");
+            printf("\t\tIf set this will see the root path to server HTTP requests from\n");
+            printf("\n\t--port\n");
+            printf("\t\tSets the port of the server to listen for clients on, (Default: 8080)\n");
+            printf("\n\t--help\n");
+            printf("\t\tShows this message :P\n");
+            exit(1);
         }
     }
 
