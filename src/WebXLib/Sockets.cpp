@@ -137,10 +137,11 @@ namespace WebX
     {
         // Variables !!
         char buffer[2048];
-        HTTP::HTTPReq hReq;
-        HTTP::HTTPRes hRes;
+        HTTPReq hReq;
+        HTTPRes hRes;
         std::string s_httpHeader;
-        std::vector<std::string> vBuffer;
+        // std::vector<std::string> vBuffer;
+        std::pair<char*, int> vBuffer;
 
         // Extract the thread id
         ThreadID &a_thread = const_cast<ThreadID&>(tID);
@@ -174,7 +175,7 @@ namespace WebX
         int cPos = read(cSocket, buffer, 2048 - 1);
         buffer[cPos] = '\0';                    
         
-        // Parse the Incommming HTTP Request (ignore cast error if visible)
+        // Parse the Incoming HTTP Request (ignore cast error if visible)
         hReq = this->_Http.ParseRequest(buffer);
 
         // Verbose Logging
@@ -194,25 +195,33 @@ namespace WebX
         // Write the HTTP Header to the Client Socket
         write(cSocket, s_httpHeader.c_str(), s_httpHeader.size());
 
-        // Auto loop over the vector buffer and spit out the content back to the client
-        for(auto c : vBuffer)
+        // // Auto loop over the vector buffer and spit out the content back to the client
+        // for(auto c : vBuffer)
+        // {
+        //     // If there is a space assume this is a null terminator, so send one to the client
+        //     if(c == " ")
+        //     {
+        //         // Write to the Client Socket (size is hardcoded to 1)
+        //         write(cSocket, &"\0", 1);                
+        //     }
+        //     else
+        //     {
+        //         // Write every other line normally to the CLient Socket [NOTE] [DEBUG] [CURRENT] Crashes here during siege load testing
+        //         // write(cSocket, c.c_str(), c.size());             // [NOTE] The program will crash due to any broken pipes
+        //         if(send(cSocket, c.c_str(), c.size(), MSG_NOSIGNAL) == -1)   // [CURRENT] Look into send flags, this flag (MSG_NOSIGNAL) ignores if the pipe is broken or not
+        //         {
+        //             // Oh no, we have an error !!!                    
+        //             _Log.iLog("[%z] [%q] An Error has occurred with send(): [%s]\n",Logarithm::NOTICE, strerror(errno));
+        //         }
+        //     }            
+        // }
+
+        // Write every other line normally to the CLient Socket [NOTE] [DEBUG] [CURRENT] Crashes here during siege load testing
+        
+        if(send(cSocket, vBuffer.first, vBuffer.second, MSG_NOSIGNAL) == -1)   // [CURRENT] Look into send flags, this flag (MSG_NOSIGNAL) ignores if the pipe is broken or not
         {
-            // If there is a space assume this is a null terminator, so send one to the client
-            if(c == " ")
-            {
-                // Write to the Client Socket (size is hardcoded to 1)
-                write(cSocket, &"\0", 1);                
-            }
-            else
-            {
-                // Write every other line normally to the CLient Socket [NOTE] [DEBUG] [CURRENT] Crashes here during siege load testing
-                // write(cSocket, c.c_str(), c.size());             // [NOTE] The program will crash due to any broken pipes
-                if(send(cSocket, c.c_str(), c.size(), MSG_NOSIGNAL) == -1)   // [CURRENT] Look into send flags, this flag (MSG_NOSIGNAL) ignores if the pipe is broken or not
-                {
-                    // Oh no, we have an error !!!                    
-                    _Log.iLog("[%z] [%q] An Error has occured with send(): [%s]\n",Logarithm::NOTICE, strerror(errno));
-                }
-            }            
+            // Oh no, we have an error !!!                    
+            _Log.iLog("[%z] [%q] An Error has occurred with send(): [%s]\n",Logarithm::NOTICE, strerror(errno));
         }
 
         // send(cSocket, std::string("\r\n").c_str(), std::string("\r\n").size(), MSG_NOSIGNAL);
