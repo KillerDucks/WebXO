@@ -7,6 +7,7 @@
 #include "Directory.hpp"
 #include "Logarithm.hpp"
 #include "Interception.hpp"
+#include "Compression.hpp"
 
 #ifndef WEBX_HTTP_H
 #define WEBX_HTTP_H

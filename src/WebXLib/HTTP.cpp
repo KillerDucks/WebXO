@@ -269,43 +269,46 @@ namespace WebX
         }
         
         // Open a stream and read the file into the buffer
-        ssFileReader.open(filePath, std::ios::binary | std::ios::in);
+        // ssFileReader.open(filePath, std::ios::binary | std::ios::in);
 
-        // Check if the stream is okay to work with
-        if(ssFileReader.good())
-        {
-            // Get the file length
-            ssFileReader.seekg(0, ssFileReader.end);
-            fLength = ssFileReader.tellg();
-            ssFileReader.seekg(0, ssFileReader.beg);
+        // // Check if the stream is okay to work with
+        // if(ssFileReader.good())
+        // {
+        //     // Get the file length
+        //     ssFileReader.seekg(0, ssFileReader.end);
+        //     fLength = ssFileReader.tellg();
+        //     ssFileReader.seekg(0, ssFileReader.beg);
 
-            _Log.iLog("[%z] [%q] File Size: [~%dKB]\n", Logarithm::NOTICE, fLength / 1024); // [DEBUG] Print
+        //     _Log.iLog("[%z] [%q] File Size: [~%dKB]\n", Logarithm::NOTICE, fLength / 1024); // [DEBUG] Print
 
-            buffer = new char[fLength + 1];
-            ssFileReader.read(buffer, fLength);
-            ssFileReader.close();
-        }
-        else
-        {
-            // [TODO] Move the error checking to above the file read
-            _Log.Log("Invalid File Stream", Logarithm::CRITICAL);        
-            filePath.clear();
-            filePath += iDirectory.GetBasePath();
-            filePath += "/500.html";
-            buffer = new char[iDirectory.GetFileSize(filePath)];
-            memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
-            memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.szFile(filePath));
-            // Set the MIME Type
-            this->MIMETYPE = MimeType::HTML;
-            // Set the HTTP status code
-            httpCode = WebX::HTTPStatusCodes::INTERNAL_SERVER_ERROR;
-            ssFileReader.close();
-        }
+        //     buffer = new char[fLength + 1];
+        //     ssFileReader.read(buffer, fLength);
+        //     ssFileReader.close();
+        // }
+        // else
+        // {
+        //     // [TODO] Move the error checking to above the file read
+        //     _Log.Log("Invalid File Stream", Logarithm::CRITICAL);        
+        //     filePath.clear();
+        //     filePath += iDirectory.GetBasePath();
+        //     filePath += "/500.html";
+        //     buffer = new char[iDirectory.GetFileSize(filePath)];
+        //     memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
+        //     memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.szFile(filePath));
+        //     // Set the MIME Type
+        //     this->MIMETYPE = MimeType::HTML;
+        //     // Set the HTTP status code
+        //     httpCode = WebX::HTTPStatusCodes::INTERNAL_SERVER_ERROR;
+        //     ssFileReader.close();
+        // }
+
+        Compression zippy;
         
         // Verbose Logging
         _Log.Log("Returning the Buffer", Logarithm::NOTICE);
 
-        return std::pair<char*, int>(buffer, fLength);
+        // return std::pair<char*, int>(buffer, fLength);
+        return zippy.DeflateFile(filePath); 
         // return buffer;
     }
 
@@ -351,10 +354,13 @@ namespace WebX
 
         httpRes.httpGeneralHeader = httpGeneral;
 
+        httpRes.httpEntityHeader.contentEncoding = "Content-Encoding: deflate";
+
         httpRes.httpEntityHeader.contentLength = strlen(httpRes.ReturnHeader().c_str());
 
         // [DEBUG] Debug Printing
-        // printf("\n\n%s\n\n", httpRes.ReturnHeader().c_str());
+        printf("\n\n%s\n\n", httpRes.ReturnHeader().c_str());
+
 
         return httpRes;
     }
@@ -367,7 +373,7 @@ namespace WebX
         
         // Debug Logging
         // _Log.iLog("[%z] [%q] Detected a MIME Type using file extension [%s]\n", Logarithm::NOTICE, fExt.c_str());
-        printf("Detected a MIME Type using file extension [%s] for the file [%s]\n", fExt.c_str(), filePath.c_str());
+        // printf("Detected a MIME Type using file extension [%s] for the file [%s]\n", fExt.c_str(), filePath.c_str());
         
         if(fExt == std::string("html"))
         {
