@@ -45,6 +45,7 @@ namespace WebX
     {
         std::string      Allow                       = "Allow: GET, POST";
         // std::string      contentEncoding;         Currently not in use
+        std::string      contentEncoding;                
         std::string      contentLanguage             = "Content-Language: en-GB, en-US";
         std::string      contentLength;
         // std::string      contentLocation;         Currently not in use
@@ -66,6 +67,8 @@ namespace WebX
             t += Allow;
             t += "\r\n";
             t += contentLanguage;
+            t += "\r\n";
+            t += contentEncoding;
             t += "\r\n";
             t += contentLength;
             t += "\r\n";
@@ -96,7 +99,7 @@ namespace WebX
         {
             // Status Header
             std::string      httpVersion             = HTTP_VERSION;
-            int         statusCode;
+            int              statusCode;
             std::string      reasonPhrase;
             // General Header
             hGeneral    httpGeneralHeader;
