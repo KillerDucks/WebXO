@@ -33,10 +33,7 @@ int main(int argc, char* argv[])
 
     // // [DEBUG] [HALT] Testing Compression
     // WebX::Compression zippy;
-    // zippy.simple();
-    // zippy.test();
-    // zippy.gzipTest();
-    // zippy.gzInflate();
+    // zippy.DeflateFile("./gzip/sample.html");
     // std::terminate();
 
     // [DEBUG] [CURRENT] Testing Interception
