@@ -80,7 +80,7 @@ namespace WebX
                     // _Log.iLog("[%z] [%q] Kicking off Thread ID: [%s]\n", Logarithm::CRITICAL, tID.id.c_str());
 
                     // Set the inital threads off
-                    this->vThread.emplace_back(std::make_pair(tID, std::thread(&WebX::Sockets::RequestHandler, std::ref(*this), tID)));
+                    this->vThread.emplace_back(std::make_pair(tID, std::thread(&WebX::Sockets::RequestHandler, this, tID)));
 
                     iSockets++;
                 }
@@ -102,7 +102,7 @@ namespace WebX
                             this->vThread.at(i).first.done = false;
                             _Log.iLog("[%z] [%q] [%s] Reloading the thread\n", Logarithm::NOTICE, this->vThread.at(i).first.id.c_str());
                             // Reset the thread and spawn a new thread
-                            this->vThread.at(i).second = std::move(std::thread(&WebX::Sockets::RequestHandler, std::ref(*this), this->vThread.at(i).first));
+                            this->vThread.at(i).second = std::move(std::thread(&WebX::Sockets::RequestHandler, this, this->vThread.at(i).first));
                         }
                     }
                 }
