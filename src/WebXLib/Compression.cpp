@@ -36,18 +36,18 @@ namespace WebXO
         }
 
         // Calculate the deflate size
-        uLong cSize = compressBound((uLong) szFileIN + 1);
+        uLong cSize = compressBound((uLong) szFileIN);
         uLong dSize = cSize;
 
         // Allocate the Destination Buffer
-        dBuffer = new char[cSize + 1];
+        dBuffer = new char[cSize];
 
 
         // Check if the source buffer is not garbage
         if(strlen(sBuffer) != (szFileIN + 1))
         {
             // Deflate the file
-            compress2((Bytef*)dBuffer, &dSize, (Bytef*)sBuffer, szFileIN + 1, Z_BEST_COMPRESSION);
+            compress2((Bytef*)dBuffer, &dSize, (Bytef*)sBuffer, szFileIN, Z_BEST_COMPRESSION);
         }
         else
         {
