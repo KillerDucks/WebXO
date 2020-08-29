@@ -19,7 +19,7 @@ namespace WebXO
         Compression(/* args */);
         ~Compression();
         
-        // Deflate a buffer via a ptr [ERROR] [FAILING] Compression of JS files is leaving an "unexpected token"
+        // Deflate a buffer via a ptr
         CompBuffer DeflateFile(std::string filename);
     };    
 }
