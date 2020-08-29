@@ -13,7 +13,7 @@
 #ifndef WEBX_INTERCEPTION_H
 #define WEBX_INTERCEPTION_H
 
-namespace WebX
+namespace WebXO
 {
     // Interception Settings [TODO] Move into a separate file after testing
     typedef struct InterceptSettings{
@@ -48,6 +48,7 @@ namespace WebX
         {
             // Something
             func(info);
+            return std::tuple<HTTPReq, char*>(info, (char*)"-1");
         }
 
         void HookAsync(std::function<void()> func);

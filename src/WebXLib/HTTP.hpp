@@ -9,8 +9,8 @@
 #include "Interception.hpp"
 #include "Compression.hpp"
 
-#ifndef WEBX_HTTP_H
-#define WEBX_HTTP_H
+#ifndef WEBXO_HTTP_H
+#define WEBXO_HTTP_H
 
 constexpr unsigned int hash(const char *s, int off = 0) {                        
     return !s[off] ? 5381 : (hash(s, off+1)*33) ^ s[off];                           
@@ -21,7 +21,7 @@ using std::string;
 using std::vector;
 using std::fstream;
 
-namespace WebX
+namespace WebXO
 {
     class HTTP
     {
@@ -36,7 +36,7 @@ namespace WebX
         Directory iDirectory;
 
         // HTTP Status Codes
-        WebX::HTTPStatusCodes httpCode;
+        WebXO::HTTPStatusCodes httpCode;
 
         // Interception
         bool isIntercept;

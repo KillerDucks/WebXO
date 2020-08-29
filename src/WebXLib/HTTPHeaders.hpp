@@ -5,7 +5,7 @@
 #ifndef WEBX_HTTPHEADERS_H
 #define WEBX_HTTPHEADERS_H
 
-namespace WebX
+namespace WebXO
 {
 
     typedef struct hGeneral

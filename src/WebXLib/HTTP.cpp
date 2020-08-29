@@ -1,8 +1,8 @@
 #include "HTTP.hpp"
 
-namespace WebX
+namespace WebXO
 {
-    HTTP::HTTP(std::string httpPath, InterceptSettings interceptSettings) : _Log("HTTP"), iDirectory(httpPath), httpCode(WebX::HTTPStatusCodes::OK), _interceptionSettings(interceptSettings), MIMETYPE(MimeType::HTML)
+    HTTP::HTTP(std::string httpPath, InterceptSettings interceptSettings) : _Log("HTTP"), iDirectory(httpPath), httpCode(WebXO::HTTPStatusCodes::OK), _interceptionSettings(interceptSettings), MIMETYPE(MimeType::HTML)
     {}
     HTTP::~HTTP()
     {}
@@ -122,8 +122,11 @@ namespace WebX
 
     std::pair<char*, int> HTTP::GetRequestedFile(HTTPReq hReq)
     {
-        char* buffer;
-        int fLength = 0;
+        // [DEBUG] [IMPL] [TEST] Will compress all files regardless of Client Accept Ranges
+        // char* buffer;
+        // int fLength = 0;
+
+
         string filePath;
         string urlData;
         fstream ssFileReader;
@@ -162,7 +165,7 @@ namespace WebX
         parentPath += file;
 
         // Debug Logging
-        // _Log.iLog("[%z] [%q] Calulcated Relative Path: [%s]\n",Logarithm::INFO, relativePath.c_str());
+        // _Log.iLog("[%z] [%q] Calculated Relative Path: [%s]\n",Logarithm::INFO, relativePath.c_str());
 
         // Check if are given a absolute path (eg: [GET /])
         if(file.find('.') == std::string::npos)
@@ -171,7 +174,7 @@ namespace WebX
             if(!iDirectory.doesExist(parentPath))
             {
                 // Set the HTTP Status code
-                httpCode = WebX::HTTPStatusCodes::NOT_FOUND;
+                httpCode = WebXO::HTTPStatusCodes::NOT_FOUND;
             }
             else
             {
@@ -184,7 +187,7 @@ namespace WebX
                 // Scan the directories for this file
                 filePath = iDirectory.ScanDir(rgx, (file.size() == 1) ? iDirectory.GetBasePath() : relativePath).at(0); // [CHANGE] Assume this is the first given file
                 // Set the HTTP Status code
-                httpCode = WebX::HTTPStatusCodes::OK;
+                httpCode = WebXO::HTTPStatusCodes::OK;
             }            
         }
         else
@@ -199,7 +202,7 @@ namespace WebX
                 // Set the MIME Type
                 this->MIMETYPE = MimeType::HTML;
                 // Set the HTTP Status code
-                httpCode = WebX::HTTPStatusCodes::NOT_FOUND;
+                httpCode = WebXO::HTTPStatusCodes::NOT_FOUND;
             }
             else
             {
@@ -210,13 +213,13 @@ namespace WebX
                     // Log for debugging
                     _Log.iLog("[%z] [%q] File [%s] is empty\n",Logarithm::CRITICAL, file.c_str());
                     // Set the HTTP Status Code
-                    httpCode = WebX::HTTPStatusCodes::NO_CONTENT;
+                    httpCode = WebXO::HTTPStatusCodes::NO_CONTENT;
                 }
                 else
                 {
                     filePath = parentPath;
                     // Set the HTTP Status Code
-                    httpCode = WebX::HTTPStatusCodes::OK;
+                    httpCode = WebXO::HTTPStatusCodes::OK;
                     // Set the MIME Type
                     this->MIMETYPE = this->GetMIMEType(filePath);          
                 }                
@@ -229,21 +232,21 @@ namespace WebX
         // Check if any HTTP Error codes have been raised
         switch (httpCode)
         {
-        case WebX::HTTPStatusCodes::NOT_FOUND:            
+        case WebXO::HTTPStatusCodes::NOT_FOUND:            
             {
                 filePath.clear();
                 filePath += iDirectory.GetBasePath();
                 filePath += "/404.html";
                 break;
             }
-        case WebX::HTTPStatusCodes::INTERNAL_SERVER_ERROR:            
+        case WebXO::HTTPStatusCodes::INTERNAL_SERVER_ERROR:            
             {
                 filePath.clear();
                 filePath += iDirectory.GetBasePath();
                 filePath += "/500.html";
                 break;
             }
-        case WebX::HTTPStatusCodes::NO_CONTENT:            
+        case WebXO::HTTPStatusCodes::NO_CONTENT:            
             {
                 filePath.clear();
                 filePath += iDirectory.GetBasePath();
@@ -265,7 +268,7 @@ namespace WebX
             // Set the MIME Type
             this->MIMETYPE = MimeType::HTML;         
             // Set the HTTP status code
-            httpCode = WebX::HTTPStatusCodes::INTERNAL_SERVER_ERROR; 
+            httpCode = WebXO::HTTPStatusCodes::INTERNAL_SERVER_ERROR; 
         }
         
         // Open a stream and read the file into the buffer

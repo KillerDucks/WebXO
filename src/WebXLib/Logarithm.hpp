@@ -13,7 +13,7 @@
 #ifndef LOGARITHM_H
 #define LOGARITHM_H
 
-namespace WebX
+namespace WebXO
 {
     class Logarithm
     {

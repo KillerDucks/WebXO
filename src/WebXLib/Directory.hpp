@@ -17,7 +17,7 @@ using std::string;
 using std::vector;
 // using std::regex;
 
-namespace WebX
+namespace WebXO
 {
     class Directory
     {

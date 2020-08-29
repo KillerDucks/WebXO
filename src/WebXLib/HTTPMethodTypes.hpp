@@ -1,7 +1,7 @@
 #ifndef WEBX_HTTPMETHODTYPES_H
 #define WEBX_HTTPMETHODTYPES_H
 
-namespace WebX
+namespace WebXO
 {
     enum class HTTPMethodTypes
     {

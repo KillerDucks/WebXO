@@ -40,11 +40,11 @@ int main(int argc, char* argv[])
     // std::terminate();
 
     // Setup the Socket Server Settings
-    WebX::Sockets::Settings sockSettings(optsCLI.threading , optsCLI.nThreads);
+    WebXO::Sockets::Settings sockSettings(optsCLI.threading , optsCLI.nThreads);
     // Init the HTTP class + Set the base path of the HTTP Files
-    WebX::HTTP http(optsCLI.basePath);
+    WebXO::HTTP http(optsCLI.basePath);
     // Init the Sockets class
-    WebX::Sockets socks(http, optsCLI.port, sockSettings);
+    WebXO::Sockets socks(http, optsCLI.port, sockSettings);
 
     // Start the Socket Server
     socks.Listen();

@@ -1,6 +1,6 @@
 #include "Logarithm.hpp"
 
-namespace WebX
+namespace WebXO
 {
     Logarithm::Logarithm(std::string progName, int defaultLevel) : _program_name("Logarithm")
     {

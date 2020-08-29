@@ -1,6 +1,6 @@
 #include "Interception.hpp"
 
-namespace WebX
+namespace WebXO
 {
     Interception::Interception(InterceptSettings interceptSettings)
     {

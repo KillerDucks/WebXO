@@ -27,7 +27,7 @@
 #ifndef WEBX_SOCKS_H
 #define WEBX_SOCKS_H
 
-namespace WebX
+namespace WebXO
 {
     class Sockets
     {
