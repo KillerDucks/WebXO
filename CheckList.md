@@ -6,9 +6,9 @@
 
 * Ability to **Compress** files before transmission using zlib __Done__ [v1.1.0]
 
-* Simple Directory Listings (Like Apache HTTP) __Assigned__
+* Virtual Hosts __Current__
 
-* Virtual Hosts __Pending__
+* Simple Directory Listings (Like Apache HTTP) __Pending__
 
 * TLS/SSL/HTTPS Support __Pending__
 
