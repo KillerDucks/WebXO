@@ -3,7 +3,7 @@
 // Include the common headers
 #include "Common.hpp"
 
-// zlib for that sweet gzip compession
+// zlib for that sweet gzip compression
 #include <zlib.h>
 
 #ifndef WEBX_COMPRESSION_H
