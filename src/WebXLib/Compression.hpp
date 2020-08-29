@@ -9,7 +9,7 @@
 #ifndef WEBX_COMPRESSION_H
 #define WEBX_COMPRESSION_H
 
-namespace WebX
+namespace WebXO
 {
     class Compression
     {
@@ -19,7 +19,7 @@ namespace WebX
         Compression(/* args */);
         ~Compression();
         
-        // Deflate a buffer via a ptr
+        // Deflate a buffer via a ptr [ERROR] [FAILING] Compression of JS files is leaving an "unexpected token"
         CompBuffer DeflateFile(std::string filename);
     };    
 }
