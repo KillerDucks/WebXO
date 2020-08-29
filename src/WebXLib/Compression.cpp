@@ -1,6 +1,6 @@
 #include "Compression.hpp"
 
-namespace WebX
+namespace WebXO
 {
     Compression::Compression(/* args */)
     {
@@ -13,10 +13,6 @@ namespace WebX
     CompBuffer Compression::DeflateFile(std::string filename)
     {
         // Variables !!!
-
-        // char* outFile = new char[filename.size() + 4];
-        // sprintf(outFile, "%s.gz", filename.c_str());
-
         char* sBuffer;
         char* dBuffer;
         std::fstream fsFileStreamer;
@@ -47,8 +43,23 @@ namespace WebX
         dBuffer = new char[cSize + 1];
 
 
-        // Delfate the file
-        compress2((Bytef*)dBuffer, &dSize, (Bytef*)sBuffer, szFileIN + 1, Z_BEST_COMPRESSION);
+        // Check if the source buffer is not garbage
+        if(strlen(sBuffer) != (szFileIN + 1))
+        {
+            // Deflate the file
+            compress2((Bytef*)dBuffer, &dSize, (Bytef*)sBuffer, szFileIN + 1, Z_BEST_COMPRESSION);
+        }
+        else
+        {
+            printf("SOURCE BUFFER HAS FAILED !! \n\n");
+            std::terminate();
+            return CompBuffer((char*)"NULL", -1);
+        }
+        
+
+        // [DEBUG] [OPTIONAL] Store Compressed files, maybe useful for a cache
+        // char* outFile = new char[filename.size() + 4];
+        // sprintf(outFile, "%s.gz", filename.c_str());
 
         // printf("Uncompressed Size [%ld] !!!\n", szFileIN);
         // printf("Compressed Size [%ld] !!!\n", dSize);
