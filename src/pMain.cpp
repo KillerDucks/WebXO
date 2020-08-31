@@ -5,6 +5,7 @@
 #include "WebXLib/Compression.hpp"
 #include "WebXLib/HTTPHeaders.hpp"
 #include "WebXLib/Interception.hpp"
+#include "WebXLib/VirtualHosts.hpp"
 
 typedef struct Options 
 {
@@ -31,12 +32,11 @@ int main(int argc, char* argv[])
     Options optsCLI = ParseCLIOptions(vArgs);
 
 
-    // // [DEBUG] [HALT] Testing Compression
-    // WebX::Compression zippy;
-    // zippy.DeflateFile("./gzip/sample.html");
-    // std::terminate();
+    // // [DEBUG] [TESTING] Testing Virtual Hosts
+    // WebXO::VirtualHosts vHosts("./vhosts.txt");
+    // printf("Querying api.site.local: %s\n", vHosts.Query("api.site.local").c_str());
 
-    // [DEBUG] [CURRENT] Testing Interception
+    // [DEBUG] [HALT] Testing
     // std::terminate();
 
     // Setup the Socket Server Settings
