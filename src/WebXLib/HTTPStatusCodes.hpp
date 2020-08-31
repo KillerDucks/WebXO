@@ -1,7 +1,7 @@
 #ifndef WEBX_HTTPSTATUSCODES_H
 #define WEBX_HTTPSTATUSCODES_H
 
-namespace WebX
+namespace WebXO
 {
     enum class HTTPStatusCodes
     {

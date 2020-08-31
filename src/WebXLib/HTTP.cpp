@@ -1,19 +1,18 @@
 #include "HTTP.hpp"
 
-namespace WebX
+namespace WebXO
 {
-    HTTP::HTTP(std::string httpPath) : _Log("HTTP"), iDirectory(httpPath), httpCode(WebX::HTTPStatusCodes::OK), MIMETYPE(MimeType::HTML)
+    HTTP::HTTP(std::string httpPath, InterceptSettings interceptSettings) : _Log("HTTP"), iDirectory(httpPath), vHosts("./vhosts.txt"), httpCode(WebXO::HTTPStatusCodes::OK), _interceptionSettings(interceptSettings), MIMETYPE(MimeType::HTML)
     {}
     HTTP::~HTTP()
     {}
 
-    HTTP::HTTPReq HTTP::ParseRequest(char* request)
+    HTTPReq HTTP::ParseRequest(char* request)
     {
         vector<std::pair<string, string>> reqOpts;
         string t;
         bool requestLine = true;
-        HTTP::HTTPReq hRequest;
-        // memset(&hRequest, 0x00, sizeof(hRequest));
+        HTTPReq hRequest;
 
         // Look through the request and fill in the struct
         for (size_t i = 0; i < strlen(request); i++)
@@ -121,28 +120,81 @@ namespace WebX
         return hRequest;
     }
 
-    char* HTTP::GetRequestedFile(HTTPReq hReq)
+    std::pair<char*, int> HTTP::GetRequestedFile(HTTPReq hReq)
     {
+        // [DEBUG] [IMPL] [TEST] Will compress all files regardless of Client Accept Ranges
         char* buffer;
         int fLength = 0;
-        string filePath;
+
+
+        std::string filePath;
+        std::string urlData;
         fstream ssFileReader;
         std::vector<std::string> dirLookup;
         std::regex findFile;
-        // Directory iDirectory(54);
+
+        // Virtual Hosts Redirection [TESTING]
+        // printf("\nQuerying %s: %s\n", hReq.host.substr(0, hReq.host.find(':')).c_str(), this->vHosts.Query(hReq.host.substr(0, hReq.host.find(':'))).c_str());
+        std::string vQuery = this->vHosts.Query(hReq.host.substr(0, hReq.host.find(':')));
+
+        // Interception Hooking [DEBUG] [NOTE] Might be moved to a different place
+        // _interception.HookSync(hReq, _interceptionSettings.callback);
+        // if(_interceptionSettings.isBlocking)
+        // {
+        //     _interception.HookSync();
+        // }
+        // else
+        // {
+        //     _interception.HookAsync();
+        // }
 
         // Get the web path request needed from the HTTP Request
-        string file(hReq.requestType.substr(hReq.requestType.find(' ') + 1, hReq.requestType.size()));
+        std::string file(hReq.requestType.substr(hReq.requestType.find(' ') + 1, hReq.requestType.size()));
+
+        // Decode any URL parameters if any
+        if(file.find('?') != std::string::npos)
+        {
+            // Capture the URL Data (After the '?')
+            urlData = file.substr(file.find('?'), file.size());
+            // Change the file to prevent failed lookups
+            file = file.substr(0, file.find('?'));
+        }
 
         // Convert the requested web path into a meaningful file path
 
         // Determine the Path of the requested file    
         std::string relativePath(iDirectory.GetBasePath());
-        relativePath += (file.rfind('/') == 0) ? file : file.substr(0, file.rfind('/'));
+        // relativePath += (file.rfind('/') == 0) ? file : file.substr(0, file.rfind('/'));
         std::string parentPath(iDirectory.GetBasePath());
-        parentPath += file;
+        // parentPath += file;
 
-        _Log.iLog("[%z] [%q] Calulcated Relative Path: [%s]\n",Logarithm::INFO, relativePath.c_str());
+        if(vQuery != "-1")
+        {
+            relativePath += vQuery;
+            relativePath += (file.rfind('/') == 0) ? file : file.substr(0, file.rfind('/'));
+            parentPath += vQuery;
+            parentPath += file;            
+        }
+        else
+        {
+            relativePath += (file.rfind('/') == 0) ? file : file.substr(0, file.rfind('/'));            
+            parentPath += file;
+        }
+
+        // Debug Logging [REMOVE]
+        // printf("requested accept: %s\n", hReq.accept.c_str());
+        // printf("requested accept encodings: %s\n", hReq.accept_Encoding.c_str());
+        // this->AcceptDeflate(hReq.accept_Encoding);
+        // std::terminate();
+        printf("requested host: %s\n", hReq.host.c_str());
+        printf("requested file: %s\n", file.c_str());
+        // printf("parent path: %s\n", parentPath.c_str());
+        // printf("relative path: %s\n", relativePath.c_str());
+        // printf("relative path root: %s\n", relativePath.substr(0, relativePath.rfind('/')).c_str());
+        
+
+        // Debug Logging
+        // _Log.iLog("[%z] [%q] Calculated Relative Path: [%s]\n",Logarithm::INFO, relativePath.c_str());
 
         // Check if are given a absolute path (eg: [GET /])
         if(file.find('.') == std::string::npos)
@@ -151,7 +203,7 @@ namespace WebX
             if(!iDirectory.doesExist(parentPath))
             {
                 // Set the HTTP Status code
-                httpCode = WebX::HTTPStatusCodes::NOT_FOUND;
+                httpCode = WebXO::HTTPStatusCodes::NOT_FOUND;
             }
             else
             {
@@ -162,9 +214,9 @@ namespace WebX
                 // Set the MIME Type
                 this->MIMETYPE = MimeType::HTML;
                 // Scan the directories for this file
-                filePath = iDirectory.ScanDir(rgx, (file.size() == 1) ? iDirectory.GetBasePath() : relativePath).at(0); // [CHANGE] Assume this is the first given file
+                filePath = iDirectory.ScanDir(rgx, relativePath.substr(0, relativePath.rfind('/')) ).at(0); // [CHANGE] Assume this is the first given file
                 // Set the HTTP Status code
-                httpCode = WebX::HTTPStatusCodes::OK;
+                httpCode = WebXO::HTTPStatusCodes::OK;
             }            
         }
         else
@@ -179,7 +231,7 @@ namespace WebX
                 // Set the MIME Type
                 this->MIMETYPE = MimeType::HTML;
                 // Set the HTTP Status code
-                httpCode = WebX::HTTPStatusCodes::NOT_FOUND;
+                httpCode = WebXO::HTTPStatusCodes::NOT_FOUND;
             }
             else
             {
@@ -190,13 +242,13 @@ namespace WebX
                     // Log for debugging
                     _Log.iLog("[%z] [%q] File [%s] is empty\n",Logarithm::CRITICAL, file.c_str());
                     // Set the HTTP Status Code
-                    httpCode = WebX::HTTPStatusCodes::NO_CONTENT;
+                    httpCode = WebXO::HTTPStatusCodes::NO_CONTENT;
                 }
                 else
                 {
                     filePath = parentPath;
                     // Set the HTTP Status Code
-                    httpCode = WebX::HTTPStatusCodes::OK;
+                    httpCode = WebXO::HTTPStatusCodes::OK;
                     // Set the MIME Type
                     this->MIMETYPE = this->GetMIMEType(filePath);          
                 }                
@@ -206,32 +258,30 @@ namespace WebX
             
         }
         
-        // Check if any HTTP Error codes have been rasied
+        // Check if any HTTP Error codes have been raised
         switch (httpCode)
         {
-        case WebX::HTTPStatusCodes::NOT_FOUND:            
+        case WebXO::HTTPStatusCodes::NOT_FOUND:            
             {
                 filePath.clear();
                 filePath += iDirectory.GetBasePath();
                 filePath += "/404.html";
                 break;
             }
-        case WebX::HTTPStatusCodes::INTERNAL_SERVER_ERROR:            
+        case WebXO::HTTPStatusCodes::INTERNAL_SERVER_ERROR:            
             {
                 filePath.clear();
                 filePath += iDirectory.GetBasePath();
                 filePath += "/500.html";
                 break;
             }
-        case WebX::HTTPStatusCodes::NO_CONTENT:            
+        case WebXO::HTTPStatusCodes::NO_CONTENT:            
             {
                 filePath.clear();
                 filePath += iDirectory.GetBasePath();
                 filePath += "/204.html";
                 break;
-            }
-            
-        
+            }        
         default:
             break;
         }
@@ -247,78 +297,79 @@ namespace WebX
             // Set the MIME Type
             this->MIMETYPE = MimeType::HTML;         
             // Set the HTTP status code
-            httpCode = WebX::HTTPStatusCodes::INTERNAL_SERVER_ERROR; 
+            httpCode = WebXO::HTTPStatusCodes::INTERNAL_SERVER_ERROR; 
         }
         
-        // Open a stream and read the file into the buffer
-        ssFileReader.open(filePath, std::ios::binary | std::ios::in);
-
-        // Check if the stream is okay to work with
-        if(ssFileReader.good())
+        if(!this->AcceptDeflate(hReq.accept_Encoding))
         {
-            // Get the file length
-            ssFileReader.seekg(0, ssFileReader.end);
-            fLength = ssFileReader.tellg();
-            ssFileReader.seekg(0, ssFileReader.beg);
+            // Open a stream and read the file into the buffer
+            ssFileReader.open(filePath, std::ios::binary | std::ios::in);
 
-            // _Log.iLog("[%z] [%q] File Size: [%d]\n", Logarithm::NOTICE, fLength); // [DEBUG] Print
+            // Check if the stream is okay to work with
+            if(ssFileReader.good())
+            {
+                // Get the file length
+                ssFileReader.seekg(0, ssFileReader.end);
+                fLength = ssFileReader.tellg();
+                ssFileReader.seekg(0, ssFileReader.beg);
 
-            // Init the buffer with the file length
-            buffer = new char[fLength + 1];
-            memset(buffer, 0x00, fLength);
-            // Read the file into the buffer
-            ssFileReader.read(buffer, fLength);
+                _Log.iLog("[%z] [%q] File Size: [~%dKB]\n", Logarithm::NOTICE, fLength / 1024); // [DEBUG] Print
 
-            ssFileReader.close();
+                buffer = new char[fLength + 1];
+                ssFileReader.read(buffer, fLength);
+                ssFileReader.close();
+            }
+            else
+            {
+                // [TODO] Move the error checking to above the file read
+                _Log.Log("Invalid File Stream", Logarithm::CRITICAL);        
+                filePath.clear();
+                filePath += iDirectory.GetBasePath();
+                filePath += "/500.html";
+                buffer = new char[iDirectory.GetFileSize(filePath)];
+                memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
+                memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.szFile(filePath));
+                // Set the MIME Type
+                this->MIMETYPE = MimeType::HTML;
+                // Set the HTTP status code
+                httpCode = WebXO::HTTPStatusCodes::INTERNAL_SERVER_ERROR;
+                ssFileReader.close();
+            }
 
-            // Add a null terminator
-            buffer[fLength] = '\0';
+            return std::pair<char*, int>(buffer, fLength);
         }
-        else
-        {
-            // [TODO] Move the error checking to above the file read
-            _Log.Log("Invalid File Stream", Logarithm::CRITICAL);        
-            filePath.clear();
-            filePath += iDirectory.GetBasePath();
-            filePath += "/500.html";
-            buffer = new char[iDirectory.GetFileSize(filePath)];
-            memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
-            memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.szFile(filePath));
-            // Set the MIME Type
-            this->MIMETYPE = MimeType::HTML;
-            // Set the HTTP status code
-            httpCode = WebX::HTTPStatusCodes::INTERNAL_SERVER_ERROR;
-            ssFileReader.close();
-        }
+
+        // Compression Instance
+        Compression zippy;
         
+        // Verbose Logging
+        _Log.Log("Returning the Buffer", Logarithm::NOTICE);
 
-        _Log.Log("Returning the Buffer", Logarithm::CRITICAL);
-        return buffer;
+        return zippy.DeflateFile(filePath); 
+
     }
 
-    HTTP::HTTPRes HTTP::GenerateHTTPResponse(char* message)
+    HTTPRes HTTP::GenerateHTTPResponse(int contentLength, HTTPReq hReq)
     {
+        // Structs !!!
         HTTPRes httpRes;
-        // memset(&httpRes, 0x00, sizeof(httpRes));
         hGeneral httpGeneral;
-        // memset(&httpGeneral, 0x00, sizeof(httpGeneral));
         hEntity httpEntity;
-        // memset(&httpEntity, 0x00, sizeof(httpEntity));
 
         httpGeneral.Date = httpGeneral.GetCurrentTime();
         httpEntity.contentLength += "Content-Length: ";
         httpGeneral.Connection = "Connection: close";
 
-
-
+        // Set the Response Code + Phrase
         httpRes.statusCode = (int)httpCode;
-        // httpRes.statusCode = 200;
+        // [TODO] Use the Enum to set the phrase corrently
         httpRes.reasonPhrase = "OKAY";
-        // memcpy(&httpRes.httpGeneralHeader, (char*)httpGeneral, sizeof(httpGeneral));
+
+        //  Set the HTTP Entity Header (ignore the cast issue, will be looked into later on)
         httpRes.httpEntityHeader = httpEntity;
 
         // Set the MIME Type correctly        
-        // [TODO] Possibly break into a helper function that is smaller
+        // [TODO] Possibly break into a helper function that is smaller [NOTE] This is really dumb I should consolidate this with HTTP::GetMINEType
         switch (this->MIMETYPE)
         {
         case MimeType::HTML:
@@ -330,6 +381,9 @@ namespace WebX
         case MimeType::JS:
             httpRes.httpEntityHeader.contentType = "Content-Type: text/javascript;";
             break;
+        case MimeType::IMAGE:
+            httpRes.httpEntityHeader.contentType = "Content-Type: image/jpeg;";
+            break;
         default:
             httpRes.httpEntityHeader.contentType = "Content-Type: text/plain;";
             break;
@@ -337,19 +391,35 @@ namespace WebX
 
         httpRes.httpGeneralHeader = httpGeneral;
 
-        httpRes.httpEntityHeader.contentLength = strlen(httpRes.ReturnHeader().c_str());
+        // [NOTE] This should not be hardcoded to deflate, this should work with the Client Ranges
+        if(this->AcceptDeflate(hReq.accept_Encoding))
+        {
+            httpRes.httpEntityHeader.contentEncoding = "Content-Encoding: deflate";
+        }
+        else
+        {
+            httpRes.httpEntityHeader.contentEncoding = "";
+        }
 
-        // [TODO] Debug Printing
+        httpRes.httpEntityHeader.contentLength += std::to_string(strlen(httpRes.ReturnHeader().c_str()) + contentLength);
+
+        // [DEBUG] Debug Printing
         // printf("\n\n%s\n\n", httpRes.ReturnHeader().c_str());
+
 
         return httpRes;
     }
 
+    // [TODO] I should probs change this :P
     enum HTTP::MimeType HTTP::GetMIMEType(std::string filePath)
     {
         // [NOTE] This is the most basic and most likely the worst way of doing this
         std::string fExt = filePath.substr(filePath.rfind('.') + 1, filePath.length());
-        _Log.iLog("[%z] [%q] Detected a MIME Type using file extension [%s]\n", Logarithm::NOTICE, fExt.c_str());
+        
+        // Debug Logging
+        // _Log.iLog("[%z] [%q] Detected a MIME Type using file extension [%s]\n", Logarithm::NOTICE, fExt.c_str());
+        // printf("Detected a MIME Type using file extension [%s] for the file [%s]\n", fExt.c_str(), filePath.c_str());
+        
         if(fExt == std::string("html"))
         {
             _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "HTML");
@@ -365,7 +435,28 @@ namespace WebX
             _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "JS");
             return MimeType::JS;
         }
+        if(fExt == std::string("png") || fExt == std::string("jpg") || fExt == std::string("gif") || fExt == std::string("jpeg") || fExt == std::string("svg"))
+        {
+            _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "IMAGE");
+            return MimeType::IMAGE;
+        }
+        // [TODO] Add favicon support
+
         _Log.iLog("[%z] [%q] Failed to Detected a MIME Type\n", Logarithm::CRITICAL);
         return MimeType::HTML;
+    }
+
+    bool HTTP::AcceptDeflate(std::string accept_encodings)
+    {
+        // [DEBUG]
+        // printf("Deflate Present? [%d]\n", accept_encodings.find("deflate"));
+
+        // Check if deflate is present
+        if(accept_encodings.find("deflate", 0) != std::string::npos)
+        {               
+            return true;            
+        }
+
+        return false;
     }
 };

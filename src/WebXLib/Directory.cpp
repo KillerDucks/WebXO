@@ -1,6 +1,6 @@
 #include "Directory.hpp"
 
-namespace WebX
+namespace WebXO
 {
     Directory::Directory(std::string _baseDirectory) : _Log("Directory")
     {
