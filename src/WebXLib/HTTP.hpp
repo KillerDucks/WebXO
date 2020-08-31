@@ -8,6 +8,7 @@
 #include "Logarithm.hpp"
 #include "Interception.hpp"
 #include "Compression.hpp"
+#include "VirtualHosts.hpp"
 
 #ifndef WEBXO_HTTP_H
 #define WEBXO_HTTP_H
@@ -28,12 +29,16 @@ namespace WebXO
     private:
         // Functions
         void ErrorHandler();
+        bool AcceptDeflate(std::string accept_encodings);
 
         // Logging
         Logarithm _Log;
 
         // Directory Services
         Directory iDirectory;
+
+        // VirtualHost Services
+        VirtualHosts vHosts;
 
         // HTTP Status Codes
         WebXO::HTTPStatusCodes httpCode;
@@ -69,8 +74,7 @@ namespace WebXO
         std::pair<char*, int>   GetRequestedFile(HTTPReq hReq);
 
         // Generate a HTTP Response Header
-        HTTPRes GenerateHTTPResponse();
-
+        HTTPRes GenerateHTTPResponse(int contentLength, HTTPReq hReq);
     };    
 }
 
