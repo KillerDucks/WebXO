@@ -52,6 +52,7 @@ namespace WebXO
         else
         {
             printf("SOURCE BUFFER HAS FAILED !! \n\n");
+            printf("Filename: %s\n", filename);
             std::terminate();
             return CompBuffer((char*)"NULL", -1);
         }
