@@ -47,7 +47,7 @@ moveLib:
 	$(shell  ln -sf /usr/local/lib/libWebX.so.1.0 /usr/local/lib/libWebX.so)
 
 # Make the object files
-$(Objects)/libWebX.so.1.0: $(Objects)/Logarithm.o $(Objects)/HTTP.o $(Objects)/Sockets.o $(Objects)/Directory.o  $(Objects)/Compression.o $(Objects)/Interception.o
+$(Objects)/libWebX.so.1.0: $(Objects)/Logarithm.o $(Objects)/HTTP.o $(Objects)/Sockets.o $(Objects)/Directory.o  $(Objects)/Compression.o $(Objects)/Interception.o $(Objects)/VirtualHosts.o
 	$(Compiler) $(Flags) -shared -Wl,-soname,libWebX.so.1 $^ -o $@ -lstdc++fs
 
 $(Objects)/Logarithm.o: $(WebXLib)/Logarithm.cpp	
@@ -67,6 +67,10 @@ $(Objects)/Compression.o: $(WebXLib)/Compression.cpp
 
 $(Objects)/Interception.o: $(WebXLib)/Interception.cpp
 	$(Compiler) $(Flags) -c -fPIC $^ -o $@
+
+$(Objects)/VirtualHosts.o: $(WebXLib)/VirtualHosts.cpp
+	$(Compiler) $(Flags) -c -fPIC $^ -o $@
+
 
 clean: 
 	@echo "Cleaning Build System..."
