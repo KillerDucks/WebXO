@@ -186,7 +186,7 @@ namespace WebXO
         vBuffer = this->_Http.GetRequestedFile(hReq);
 
         // Generate the HTTP Response Headers (ignore cast error if visible)
-        hRes = this->_Http.GenerateHTTPResponse();    
+        hRes = this->_Http.GenerateHTTPResponse(vBuffer.second, hReq);    
  
         // Construct the HTTP Headers into a string to send back the client (This is done to add the \r\n so the data can follow)
         s_httpHeader += hRes.ReturnHeader();
