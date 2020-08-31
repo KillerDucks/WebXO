@@ -15,7 +15,7 @@ namespace WebXO
         std::string  Date;
         // std::string  Pragma;
         // std::string  Trailer;          
-        // std::string  Transfer_Encoding; Currently not using any kind of encoding to speed up the transmission
+        // std::string  Transfer_Encoding      = "Transfer-Encoding: deflate"; //Currently not using any kind of encoding to speed up the transmission
         // std::string  Upgrade;           Currently we don't need to upgrade the protocols
         // std::string  Via;               We are not using Proxies or gateways in this POC
         // std::string  Warning;           Not used in this POC
@@ -44,10 +44,9 @@ namespace WebXO
     typedef struct hEntity
     {
         std::string      Allow                       = "Allow: GET, POST";
-        // std::string      contentEncoding;         Currently not in use
         std::string      contentEncoding;                
         std::string      contentLanguage             = "Content-Language: en-GB, en-US";
-        std::string      contentLength;
+        std::string      contentLength;              // [NOTE] [FUTURE] Fix the content length
         // std::string      contentLocation;         Currently not in use
         // std::string      contentMD5;              Not yet implemented in the POC
         // std::string      contentRange;            Currently not in use
@@ -70,8 +69,8 @@ namespace WebXO
             t += "\r\n";
             t += contentEncoding;
             t += "\r\n";
-            t += contentLength;
-            t += "\r\n";
+            // t += contentLength;
+            // t += "\r\n";
             t += contentType;
             t += "\r\n";
             return t;
