@@ -6,11 +6,17 @@
 
 * Ability to **Compress** files before transmission using zlib __Done__ [v1.1.0]
 
-* Virtual Hosts __Current__
+* Virtual Hosts __Current__ | __Soon__
+
+* Use Request Accept Ranges __Pending__
 
 * Simple Directory Listings (Like Apache HTTP) __Pending__
 
 * TLS/SSL/HTTPS Support __Pending__
+
+## Components to Impl
+
+* IO Component __Pending__
 
 
 ## Next Major Release Features to Impl
@@ -27,3 +33,4 @@
 * .htaccess Support
 
 
+<!-- Watch how I lose 20 years off my life expectancy with C++ -->
