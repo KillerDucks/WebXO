@@ -1,6 +1,7 @@
 # AWS CodeBuild Build Spec for WebXO
-# Maintainer: KillerDucks (nimesh.patel@bindserver.com)
-# Organization: Bindserver LTD
+# Author: KillerDucks
+# Maintainer: MelissaXO
+# Organization: Null
 
 version: 0.2
 
