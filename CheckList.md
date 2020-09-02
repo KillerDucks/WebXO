@@ -6,7 +6,7 @@
 
 * Ability to **Compress** files before transmission using zlib __Done__ [v1.1.0]
 
-* Virtual Hosts __Current__ | __Soon__
+* Virtual Hosts __Done__ [v1.2.0]
 
 * Use Request Accept Ranges __Pending__
 
