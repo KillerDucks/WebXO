@@ -34,6 +34,14 @@ namespace WebXO
 
             fsFileStreamer.close();
         }
+        else
+        {
+            printf("File Stream HAS FAILED !! \n\n");
+            printf("Filename: %s\n", filename.c_str());
+            std::terminate();
+            return CompBuffer((char*)"NULL", -1);
+        }
+        
 
         // Calculate the deflate size
         uLong cSize = compressBound((uLong) szFileIN);
@@ -43,19 +51,8 @@ namespace WebXO
         dBuffer = new char[cSize];
 
 
-        // Check if the source buffer is not garbage
-        if(strlen(sBuffer) != (szFileIN + 1))
-        {
-            // Deflate the file
-            compress2((Bytef*)dBuffer, &dSize, (Bytef*)sBuffer, szFileIN, Z_BEST_COMPRESSION);
-        }
-        else
-        {
-            printf("SOURCE BUFFER HAS FAILED !! \n\n");
-            printf("Filename: %s\n", filename);
-            std::terminate();
-            return CompBuffer((char*)"NULL", -1);
-        }
+        // Deflate the file
+        compress2((Bytef*)dBuffer, &dSize, (Bytef*)sBuffer, szFileIN, Z_BEST_COMPRESSION);
         
 
         // [DEBUG] [OPTIONAL] Store Compressed files, maybe useful for a cache
