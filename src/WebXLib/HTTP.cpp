@@ -171,26 +171,66 @@ namespace WebXO
         if(vQuery != "-1")
         {
             relativePath += vQuery;
-            relativePath += (file.rfind('/') == 0) ? file : file.substr(0, file.rfind('/'));
+            // relativePath += (file.rfind('/') == 0) ? file : file.substr(0, file.rfind('/'));
+            // relativePath += file;         
             parentPath += vQuery;
             parentPath += file;            
         }
         else
         {
-            relativePath += (file.rfind('/') == 0) ? file : file.substr(0, file.rfind('/'));            
+            // relativePath += (file.rfind('/') == 0) ? file : file.substr(0, file.rfind('/'));   
+            // if(file.rfind('/') != 0)
+            // {
+                
+            // }
+            // relativePath += file;         
             parentPath += file;
         }
+
+        // [TEST] [DEBUG] Relative Path FIX
+        // First see if there is a '.' and assume if there is then its requesting a direct file
+        if(file.find('.') == std::string::npos)
+        {
+            // if so then assume this is a path and append on a '/' to allow the Directory Component to get the index.html
+            // Check that the last character isn't a '/'
+            // [DEBUG] [PRINT]
+            // printf("\nLocation of last '/' and the string length [%ld] / [%ld]\n", file.rfind('/'), file.length());
+            if(file.rfind('/') != file.length() - 1 && file.rfind('/') != std::string::npos)
+            {
+                relativePath += file;
+                relativePath += "/";
+            }
+            if(file.length() && file.rfind('/') == file.length() - 1)
+            {
+                relativePath += file;
+            }
+        }
+        else
+        {
+            relativePath += file;
+        }
+        
 
         // Debug Logging [REMOVE]
         // printf("requested accept: %s\n", hReq.accept.c_str());
         // printf("requested accept encodings: %s\n", hReq.accept_Encoding.c_str());
         // this->AcceptDeflate(hReq.accept_Encoding);
         // std::terminate();
-        printf("requested host: %s\n", hReq.host.c_str());
-        printf("requested file: %s\n", file.c_str());
-        // printf("parent path: %s\n", parentPath.c_str());
+        // printf("requested host: %s\n", hReq.host.c_str());
+        printf("\nrequested file: %s\n", file.c_str());
+        printf("parent path: %s\n", parentPath.c_str());
         // printf("relative path: %s\n", relativePath.c_str());
-        // printf("relative path root: %s\n", relativePath.substr(0, relativePath.rfind('/')).c_str());
+
+        // [CURRENT] [STRING] [FIX] Detect a root path (eg: http://localhost/ or http://localhost/blog/)
+        if(file.rfind('/') == file.length())
+        {
+            printf("relative path root: %s\n", relativePath.substr(0, relativePath.rfind('/')).c_str());
+        }
+        else
+        {
+            printf("relative alt path root: %s\n", relativePath.c_str());
+        }
+        
         
 
         // Debug Logging
@@ -344,6 +384,8 @@ namespace WebXO
         
         // Verbose Logging
         _Log.Log("Returning the Buffer", Logarithm::NOTICE);
+
+        printf("File Path: %s\n", filePath.c_str());
 
         return zippy.DeflateFile(filePath); 
 
