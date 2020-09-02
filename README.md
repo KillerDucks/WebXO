@@ -9,6 +9,8 @@ The server can be installed locally (not recommended) or in a docker container (
 ## Install Script
 This method is not recommended as the server uses a Dynamic Library which means installing it to your ``/usr/local/lib`` and setting your ``LD_LIBRARY_PATH`` to reach the `so` file. This can lead to a broken system if not done correctly (this is not my fault so dont expect an issue regarding this to be resolved).
 
+Below is the manual way to install the Lib and make the files however there is now an install script which is all these commands in one file **without** that does not perform any type of checking and is located in the root of the project at ``/<ProjectPath>/INSTALL.sh``
+
 ```sh
 # Clone the repo
 $> git clone https://github.com/KillerDucks/WebX.git
@@ -25,8 +27,26 @@ $> make
 # (Optional) Set the LD path if not already set
 $> export LD_LIBRARY_PATH=/usr/local/lib
 
-# (Optional) Run the server via make
-$> make exec
+# (Optional) Run the server
+$> ./build/debug/WebXServer --help
+```
+
+## Github (Prebuilt Executable + Library)
+This method is best if you don't want to build the server yourself and you don't have docker to deploy the server. You will need to place the Lib into a path that is on the LDD search list or you can follow these steps (similar to the install script)
+
+```sh
+# Copy the Lib
+$> cp /<Path2Lib>/libWebX.so.1.0 /usr/local/lib
+
+# Create the needed symlinks
+$> ln -sf /usr/local/lib/libWebX.so.1.0 /usr/local/lib/libWebX.so.1
+$> ln -sf /usr/local/lib/libWebX.so.1.0 /usr/local/lib/libWebX.so
+
+# Export the LD Path
+$> export LD_LIBRARY_PATH=/usr/local/lib
+
+# Run the Server
+$> ./<Path2Server>/WebXServer --help
 ```
 
 ## Docker (via Docker Hub)
