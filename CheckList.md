@@ -8,7 +8,7 @@
 
 * Virtual Hosts __Done__ [v1.2.0]
 
-* Use Request Accept Ranges __Pending__
+* Use Request Accept Ranges __Done__ [v1.2.0]
 
 * Simple Directory Listings (Like Apache HTTP) __Pending__
 
@@ -23,7 +23,7 @@
 
 * HTTP/2 Support
 * IPV6 Support
-
+* Working Interception Support (Custom Request Handling)
 
 ## Possible Features to Impl
 

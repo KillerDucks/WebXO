@@ -1,5 +1,6 @@
 # WebXO ![AWS CodeBuild](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiUmt5Wmd0ME94YkVYWkovVyt1UzB2bjVDQ2RXUmVJK2xxYW5vbjJGZmQ0WkpCbHoxTlhFSnRIbjlGb1BhcVZBWGNLRHQvdG04cjBQcFkvT1NHckZ5c0wwPSIsIml2UGFyYW1ldGVyU3BlYyI6ImZGcTZHUjNUMG9Kakt3VVEiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
-A super simple *`but poorly written`* web server written in C++.
+A super simple *`but poorly written`* web server written in C++. 
+> [v1.2.0] Codename VirtualizeEverything
 
 # Installation
 > Note: Currently everything is built with debug support this will be addressed in a future Makefile update, currently you will have to manually change the flags in the Makefile
@@ -7,7 +8,7 @@ A super simple *`but poorly written`* web server written in C++.
 The server can be installed locally (not recommended) or in a docker container (highly recommended).
 
 ## Install Script
-This method is not recommended as the server uses a Dynamic Library which means installing it to your ``/usr/local/lib`` and setting your ``LD_LIBRARY_PATH`` to reach the `so` file. This can lead to a broken system if not done correctly (this is not my fault so dont expect an issue regarding this to be resolved).
+This method is not recommended as the server uses a Dynamic Library which means installing it to your ``/usr/local/lib`` and setting your ``LD_LIBRARY_PATH`` to reach the `so` file. This can lead to a broken system if not done correctly (this is not my fault so don't expect an issue regarding this to be resolved).
 
 Below is the manual way to install the Lib and make the files however there is now an install script which is all these commands in one file **without** that does not perform any type of checking and is located in the root of the project at ``/<ProjectPath>/INSTALL.sh``
 
@@ -38,7 +39,7 @@ This method is best if you don't want to build the server yourself and you don't
 # Copy the Lib
 $> cp /<Path2Lib>/libWebX.so.1.0 /usr/local/lib
 
-# Create the needed symlinks
+# Create the needed symbolic links
 $> ln -sf /usr/local/lib/libWebX.so.1.0 /usr/local/lib/libWebX.so.1
 $> ln -sf /usr/local/lib/libWebX.so.1.0 /usr/local/lib/libWebX.so
 
@@ -50,7 +51,7 @@ $> ./<Path2Server>/WebXServer --help
 ```
 
 ## Docker (via Docker Hub)
-This method is highly recommended and is therefore the prefered way of using the server.
+This method is highly recommended and is therefore the preferred way of using the server.
 
 To get the server up and running run the following commands.
 
@@ -66,7 +67,7 @@ $> docker run -d -v <localfilepath>:/etc/webxo/http -p 8080:8080 killerducks/web
 ```
 
 ## Docker (via self build)
-This method is a better choice over the self make, however using the premade docker image is still the recommended choice.
+This method is a better choice over the self make, however using the pre-made docker image is still the recommended choice.
 
 The shell script options are simple
 ```sh
