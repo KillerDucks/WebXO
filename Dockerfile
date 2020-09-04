@@ -12,6 +12,7 @@ RUN apt-get -y install tzdata
 RUN apt-get update && apt-get install -y \
     git \
     build-essential \
+    zlib1g-dev \
     gdb \ 
     curl
 
