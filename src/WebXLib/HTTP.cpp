@@ -304,21 +304,21 @@ namespace WebXO
         case WebXO::HTTPStatusCodes::NOT_FOUND:            
             {
                 filePath.clear();
-                filePath += iDirectory.GetBasePath();
+                filePath += ERROR_PAGE_DIR;
                 filePath += "/404.html";
                 break;
             }
         case WebXO::HTTPStatusCodes::INTERNAL_SERVER_ERROR:            
             {
                 filePath.clear();
-                filePath += iDirectory.GetBasePath();
+                filePath += ERROR_PAGE_DIR;
                 filePath += "/500.html";
                 break;
             }
         case WebXO::HTTPStatusCodes::NO_CONTENT:            
             {
                 filePath.clear();
-                filePath += iDirectory.GetBasePath();
+                filePath += ERROR_PAGE_DIR;
                 filePath += "/204.html";
                 break;
             }        
@@ -331,7 +331,7 @@ namespace WebXO
         {
             // Invalid file
             filePath.clear();
-            filePath += iDirectory.GetBasePath();
+            filePath += ERROR_PAGE_DIR;
             filePath += "/500.html";
 
             // Set the MIME Type
@@ -364,7 +364,7 @@ namespace WebXO
                 // [TODO] Move the error checking to above the file read
                 _Log.Log("Invalid File Stream", Logarithm::CRITICAL);        
                 filePath.clear();
-                filePath += iDirectory.GetBasePath();
+                filePath += ERROR_PAGE_DIR;
                 filePath += "/500.html";
                 buffer = new char[iDirectory.GetFileSize(filePath)];
                 memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
