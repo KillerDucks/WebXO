@@ -1,0 +1,1 @@
+This folder can be safely ignored and has no real use besides testing zlib (HTTP deflate)
