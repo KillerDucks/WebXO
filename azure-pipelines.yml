@@ -9,7 +9,7 @@ resources:
 - repo: self
 
 variables:
-  tag: '$(Build.BuildId)'
+  tag: 'latest'
 
 stages:
 - stage: Build
@@ -45,5 +45,6 @@ stages:
         deployToSlotOrASE: true
         ResourceGroupName: 'WebXO_RG'
         SlotName: 'production'
-        DockerNamespace: ''
+        DockerNamespace: 'https://index.docker.io'
         DockerRepository: 'killerducks/webxo-server'
+        DockerImageTag: 'latest'    
