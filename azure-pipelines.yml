@@ -34,6 +34,7 @@ stages:
         repository: 'killerducks/webxo-server'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
+        tags: 'latest'        
       
     - task: AzureRmWebAppDeployment@4
       displayName: Deploy to App Services
@@ -45,6 +46,6 @@ stages:
         deployToSlotOrASE: true
         ResourceGroupName: 'WebXO_RG'
         SlotName: 'production'
-        DockerNamespace: 'https://index.docker.io'
+        DockerNamespace: 'index.docker.io'
         DockerRepository: 'killerducks/webxo-server'
         DockerImageTag: 'latest'    
