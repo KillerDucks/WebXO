@@ -45,5 +45,5 @@ stages:
         deployToSlotOrASE: true
         ResourceGroupName: 'WebXO_RG'
         SlotName: 'production'
-        # DockerNamespace: 'https://index.docker.io/v1'
+        DockerNamespace: ''
         DockerRepository: 'killerducks/webxo-server'
