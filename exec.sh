@@ -4,4 +4,4 @@
 cd /home/WebXO-Dev/
 
 # Run the Webserver
-./build/debug/WebXServer $@
+./build/debug/WebXServer "$@"
