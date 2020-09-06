@@ -7,7 +7,8 @@ LABEL vendor="Melissa"
 # Get all of the packages we need to build the app
 RUN apk add --no-cache \
     g++ \
-    make
+    make \
+    zlib-dev
 
 # Set LDD Library Path
 ENV LD_LIBRARY_PATH="/usr/local/lib"

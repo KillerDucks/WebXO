@@ -28,13 +28,21 @@ stages:
         tags: |
           $(tag)
     - task: Docker@2
-      displayName: Push to Docker Hub
+      displayName: Push to Docker Hub (Full Container)
       inputs:
         containerRegistry: 'DockerHub'
         repository: 'killerducks/webxo-server'
         command: 'buildAndPush'
         Dockerfile: '**/Dockerfile'
         tags: 'latest'        
+    - task: Docker@2
+      displayName: Push to Docker Hub (Tiny Container)
+      inputs:
+        containerRegistry: 'DockerHub'
+        repository: 'killerducks/webxo-server'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile.tiny'
+        tags: 'tiny'        
       
     - task: AzureRmWebAppDeployment@4
       displayName: Deploy to App Services
@@ -48,4 +56,4 @@ stages:
         SlotName: 'production'
         DockerNamespace: 'index.docker.io'
         DockerRepository: 'killerducks/webxo-server'
-        DockerImageTag: 'latest'    
+        DockerImageTag: 'tiny'    
