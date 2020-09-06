@@ -1,8 +1,13 @@
-# WebXO ![AWS CodeBuild](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiUmt5Wmd0ME94YkVYWkovVyt1UzB2bjVDQ2RXUmVJK2xxYW5vbjJGZmQ0WkpCbHoxTlhFSnRIbjlGb1BhcVZBWGNLRHQvdG04cjBQcFkvT1NHckZ5c0wwPSIsIml2UGFyYW1ldGVyU3BlYyI6ImZGcTZHUjNUMG9Kakt3VVEiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master)
+# WebXO ![AWS CodeBuild](https://codebuild.us-east-1.amazonaws.com/badges?uuid=eyJlbmNyeXB0ZWREYXRhIjoiUmt5Wmd0ME94YkVYWkovVyt1UzB2bjVDQ2RXUmVJK2xxYW5vbjJGZmQ0WkpCbHoxTlhFSnRIbjlGb1BhcVZBWGNLRHQvdG04cjBQcFkvT1NHckZ5c0wwPSIsIml2UGFyYW1ldGVyU3BlYyI6ImZGcTZHUjNUMG9Kakt3VVEiLCJtYXRlcmlhbFNldFNlcmlhbCI6MX0%3D&branch=master) [![Build Status](https://dev.azure.com/WebXO/WebXO/_apis/build/status/KillerDucks.WebXO?branchName=master)](https://dev.azure.com/WebXO/WebXO/_build/latest?definitionId=1&branchName=master)
 A super simple *`but poorly written`* web server written in C++. 
 
 ``Complete Package (Exec + Library) @ 616K``
 > [v1.2.0] Codename VirtualizeEverything
+
+# Demo
+> This demo will take some time to start as I am using the free tier app services in Azure, however a smaller image is in the works to be used specifically for demonstration purposes
+
+https://webxo.azurewebsites.net
 
 # Installation
 > Note: Currently everything is built with debug support this will be addressed in a future Makefile update, currently you will have to manually change the flags in the Makefile
