@@ -1,2 +1,1 @@
 test.localhost:/test
-test.webxo.azurewebsites.net:/test
