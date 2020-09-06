@@ -64,13 +64,13 @@ To get the server up and running run the following commands.
 
 ```sh
 # Pull the docker image from Docker Hub
-$> docker pull killerducks/webxo-env:latest
+$> docker pull killerducks/webxo-server:latest
 
 # This will run the test page
-$> docker run -d -p 8080:8080 killerducks/webxo-env:latest
+$> docker run -d -p 8080:8080 killerducks/webxo-server:latest
 
 # This way will allow you to attach your http folder to the server
-$> docker run -d -v <localfilepath>:/etc/webxo/http -p 8080:8080 killerducks/webxo-env:latest
+$> docker run -d -v <localfilepath>:/var/webxo/www -p 8080:8080 killerducks/webxo-server:latest --basepath="/var/webxo/www"
 ```
 
 ## Docker (via self build)

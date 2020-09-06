@@ -32,4 +32,4 @@ RUN cd /home/WebXO-Dev/ && make clean && make LibWebX && make
 EXPOSE 8080
 
 # Start the webserver
-CMD [ "./home/WebXO-Dev/exec.sh" ]
+ENTRYPOINT [ "./home/WebXO-Dev/exec.sh" ]

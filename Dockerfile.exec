@@ -43,4 +43,4 @@ RUN  cp /home/WebXO-Dev/build/obj/libWebX.so.1.0 /usr/local/lib && ln -sf /usr/l
 EXPOSE 8080
 
 # Start the webserver
-CMD [ "sh", "./home/WebXO-Dev/exec.sh" ]
+ENTRYPOINT [ "sh", "./home/WebXO-Dev/exec.sh" ]
