@@ -27,6 +27,18 @@ stages:
         dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
         tags: |
           $(tag)
+
+    - task: GitHubRelease@1
+      displayName: Add Github Release
+      inputs:
+        gitHubConnection: 'github.com_KillerDucks'
+        repositoryName: 'KillerDucks/WebXO'
+        action: 'create'
+        target: '$(Build.SourceVersion)'
+        tagSource: 'gitTag'
+        tagPattern: '*'
+        changeLogCompareToRelease: 'lastFullRelease'
+        changeLogType: 'commitBased'
     - task: Docker@2
       displayName: Push to Docker Hub (Full Container)
       inputs:
