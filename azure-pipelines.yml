@@ -35,8 +35,13 @@ stages:
         repositoryName: 'KillerDucks/WebXO'
         action: 'create'
         target: '$(Build.SourceVersion)'
-        tagSource: 'gitTag'
-        tagPattern: '*'
+        tagSource: 'userSpecifiedTag'
+        tag: 'Release'
+        title: 'WebXO Release'
+        releaseNotesSource: 'inline'
+        releaseNotesInline: |
+          # WebXO Release Test
+          This is a test release
         changeLogCompareToRelease: 'lastFullRelease'
         changeLogType: 'commitBased'
     - task: Docker@2
