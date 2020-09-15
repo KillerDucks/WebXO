@@ -1,0 +1,59 @@
+FROM alpine:latest as build-env
+
+# Label
+LABEL come.melissa.version="0.1.0_timy-alpha"
+LABEL vendor="Melissa"
+
+# Get all of the packages we need to build the app
+RUN apk add --no-cache \
+    g++ \
+    make \
+    zlib-dev
+
+# Set LDD Library Path
+ENV LD_LIBRARY_PATH="/usr/local/lib"
+
+# Make a Build Directory
+RUN mkdir -p /home/WebXO-Dev/
+
+# Copy in the build files
+COPY . /home/WebXO-Dev/
+
+# Make the server + lib
+RUN cd /home/WebXO-Dev/ && make clean && make LibWebX && make
+
+# Now build the demo container
+FROM alpine:latest as final-env
+
+# Label
+LABEL come.melissa.version="1.2.1_tiny-alpha"
+LABEL vendor="Melissa"
+
+# Install needed dependancies
+RUN apk add --no-cache \
+        libstdc++ \
+        libc6-compat \
+        zlib-dev
+
+# Set LDD Library Path
+ENV LD_LIBRARY_PATH="/usr/local/lib"
+
+# Make a Build Directory
+RUN mkdir -p /home/WebXO-Dev/build/
+RUN mkdir -p /home/WebXO-Dev/ExampleSite/
+RUN mkdir -p /home/WebXO-Dev/ErrorPages/
+
+COPY --from=build-env /home/WebXO-Dev/  /home/WebXO-Dev/
+
+# Make the server + lib
+RUN  cp /home/WebXO-Dev/build/obj/libWebX.so.1.0 /usr/local/lib && ln -sf /usr/local/lib/libWebX.so.1.0 /usr/local/lib/libWebX.so.1 && ln -sf /usr/local/lib/libWebX.so.1.0 /usr/local/lib/libWebX.so
+
+# DEBUG
+RUN ldd /home/WebXO-Dev/build/debug/WebXServer
+
+# Expose the port
+EXPOSE 8080
+
+# Start the webserver
+ENTRYPOINT [ "sh", "./home/WebXO-Dev/exec.sh" ]
+
