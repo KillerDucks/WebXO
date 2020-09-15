@@ -192,39 +192,18 @@ namespace WebXO
         s_httpHeader += hRes.ReturnHeader();
         s_httpHeader += "\r\n";
 
-        // Write the HTTP Header to the Client Socket
-        cPos = write(cSocket, s_httpHeader.c_str(), s_httpHeader.size());
+        // printf("File Size: [~%dB]\n", vBuffer.second); // [DEBUG] Print
 
-        // // Auto loop over the vector buffer and spit out the content back to the client
-        // for(auto c : vBuffer)
-        // {
-        //     // If there is a space assume this is a null terminator, so send one to the client
-        //     if(c == " ")
-        //     {
-        //         // Write to the Client Socket (size is hardcoded to 1)
-        //         write(cSocket, &"\0", 1);                
-        //     }
-        //     else
-        //     {
-        //         // Write every other line normally to the CLient Socket [NOTE] [DEBUG] [CURRENT] Crashes here during siege load testing
-        //         // write(cSocket, c.c_str(), c.size());             // [NOTE] The program will crash due to any broken pipes
-        //         if(send(cSocket, c.c_str(), c.size(), MSG_NOSIGNAL) == -1)   // [CURRENT] Look into send flags, this flag (MSG_NOSIGNAL) ignores if the pipe is broken or not
-        //         {
-        //             // Oh no, we have an error !!!                    
-        //             _Log.iLog("[%z] [%q] An Error has occurred with send(): [%s]\n",Logarithm::NOTICE, strerror(errno));
-        //         }
-        //     }            
-        // }
-
-        // Write every other line normally to the CLient Socket [NOTE] [DEBUG] [CURRENT] Crashes here during siege load testing
+        // Write the HTTP Header to the Client Socket [PROBLEM] [HALT] The end of the HTTP Header get appended to the next transmission
+        cPos = send(cSocket, s_httpHeader.c_str(), s_httpHeader.size(), MSG_NOSIGNAL);
         
+        // printf("!!\n\n%s\n\n!!", s_httpHeader.c_str());
+
         if(send(cSocket, vBuffer.first, vBuffer.second, MSG_NOSIGNAL) == -1)   // [CURRENT] Look into send flags, this flag (MSG_NOSIGNAL) ignores if the pipe is broken or not
         {
             // Oh no, we have an error !!!                    
             _Log.iLog("[%z] [%q] An Error has occurred with send(): [%s]\n",Logarithm::NOTICE, strerror(errno));
         }
-
-        // send(cSocket, std::string("\r\n").c_str(), std::string("\r\n").size(), MSG_NOSIGNAL);
 
         // Shutdown the Socket (Read & Write)
         shutdown(cSocket, SHUT_RDWR);

@@ -65,14 +65,17 @@ namespace WebXO
             std::string t;
             t += Allow;
             t += "\r\n";
-            t += contentLanguage;
-            t += "\r\n";
-            t += contentEncoding;
-            t += "\r\n";
-            // t += contentLength;
-            // t += "\r\n";
             t += contentType;
             t += "\r\n";
+            t += contentLanguage;
+            t += "\r\n";
+            if(!contentEncoding.empty())
+            {
+                t += contentEncoding;
+                t += "\r\n";
+            }
+            // t += contentLength;
+            // t += "\r\n";            
             return t;
         }
     } HENTITY, *PHENTITY;

@@ -216,9 +216,9 @@ namespace WebXO
         // printf("requested accept encodings: %s\n", hReq.accept_Encoding.c_str());
         // this->AcceptDeflate(hReq.accept_Encoding);
         // std::terminate();
-        // printf("requested host: %s\n", hReq.host.c_str());
-        printf("\nrequested file: %s\n", file.c_str());
-        printf("parent path: %s\n", parentPath.c_str());
+        printf("\nrequested host: %s requested file: %s\n", hReq.host.c_str(), file.c_str());
+        // printf("requested file: %s\n", file.c_str());
+        // printf("parent path: %s\n", parentPath.c_str());
         // printf("relative path: %s\n", relativePath.c_str());
 
         // [CURRENT] [STRING] [FIX] Detect a root path (eg: http://localhost/ or http://localhost/blog/)
@@ -385,7 +385,7 @@ namespace WebXO
         // Verbose Logging
         _Log.Log("Returning the Buffer", Logarithm::NOTICE);
 
-        printf("File Path: %s\n", filePath.c_str());
+        printf("File to Compress [DEFLATE]: %s\n", filePath.c_str());
 
         return zippy.DeflateFile(filePath); 
 
@@ -415,19 +415,22 @@ namespace WebXO
         switch (this->MIMETYPE)
         {
         case MimeType::HTML:
-            httpRes.httpEntityHeader.contentType = "Content-Type: text/html;";
+            httpRes.httpEntityHeader.contentType = "Content-Type: text/html";
             break;
         case MimeType::CSS:
-            httpRes.httpEntityHeader.contentType = "Content-Type: text/css;";
+            httpRes.httpEntityHeader.contentType = "Content-Type: text/css";
             break;
         case MimeType::JS:
-            httpRes.httpEntityHeader.contentType = "Content-Type: text/javascript;";
+            httpRes.httpEntityHeader.contentType = "Content-Type: text/javascript";
             break;
         case MimeType::IMAGE:
-            httpRes.httpEntityHeader.contentType = "Content-Type: image/jpeg;";
+            httpRes.httpEntityHeader.contentType = "Content-Type: image/jpeg";
+            break;
+        case MimeType::VIDEO:
+            httpRes.httpEntityHeader.contentType = "Content-Type: video/mp4";
             break;
         default:
-            httpRes.httpEntityHeader.contentType = "Content-Type: text/plain;";
+            httpRes.httpEntityHeader.contentType = "Content-Type: text/plain";
             break;
         }
 
@@ -446,8 +449,7 @@ namespace WebXO
         httpRes.httpEntityHeader.contentLength += std::to_string(strlen(httpRes.ReturnHeader().c_str()) + contentLength);
 
         // [DEBUG] Debug Printing
-        // printf("\n\n%s\n\n", httpRes.ReturnHeader().c_str());
-
+        // printf("!!\n\n%s\n\n!!", httpRes.ReturnHeader().c_str());
 
         return httpRes;
     }
@@ -481,6 +483,11 @@ namespace WebXO
         {
             _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "IMAGE");
             return MimeType::IMAGE;
+        }
+        if(fExt == std::string("mp4"))
+        {
+            _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "MP4");
+            return MimeType::VIDEO;
         }
         // [TODO] Add favicon support
 

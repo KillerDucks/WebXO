@@ -19,3 +19,12 @@
                     }
                 }
                 ```
++ HTTP / Socket | Resolved in WebXO v1.2.1 PATCH
+    + [RESOLVED] [~~URGENT~~] Solve the video transmission problem
+        + [UPDATE] Problem seem to be with the "Content-Type" header
+            + [UPDATE] Origin of the issue is close/is the point where "Content-Language" is appended
+                + [~~CURRENT~~] [~~INVESTIGATING~~] ~~Working on.~~
+
++ HTTP / HTTP Headers
+    + [LOW] Fix the "Content-Length" issue
+    + [LOW] Impl the "Vary" header to allow future requests to cache the response from the server

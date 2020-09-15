@@ -12,3 +12,6 @@ WebXServer
 Site/
 snipp/
 viz/
+
+*.mp4
+gzip/

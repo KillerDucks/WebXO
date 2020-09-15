@@ -30,10 +30,12 @@ ENV LD_LIBRARY_PATH="/usr/local/lib"
 # Make a Build Directory
 RUN mkdir -p /home/WebXO-Dev/build/
 RUN mkdir -p /home/WebXO-Dev/ExampleSite/
+RUN mkdir -p /home/WebXO-Dev/ErrorPages/
 
 # Copy in the complied files
 COPY ./build/ /home/WebXO-Dev/build/
 COPY ./ExampleSite/ /home/WebXO-Dev/ExampleSite/
+COPY ./ErrorPages/ /home/WebXO-Dev/ErrorPages/
 COPY ./exec.sh /home/WebXO-Dev/
 
 # Make the server + lib

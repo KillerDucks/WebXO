@@ -37,6 +37,3 @@
 	* PHP Support
 
 * .htaccess Support
-
-
-<!-- Watch how I lose 20 years off my life expectancy with C++ -->

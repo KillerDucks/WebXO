@@ -56,7 +56,10 @@ namespace WebXO
             CSS,
 
             // [CHANGE] This is too generic
-            IMAGE 
+            IMAGE,
+
+            // [TESTING]  Video
+            VIDEO
         } MIMETYPE;
 
         // Helper Functions
