@@ -7,6 +7,12 @@ ifeq ($(DEBUG), 1)
 else
     Flags = -Wall -std=c++14 -march=native -O2
 endif
+CLOUD ?= 0
+ifeq ($(CLOUD), 1)
+    Flags = -Wall -std=c++14 -O2
+else
+    Flags = -Wall -std=c++14 -march=native -O2
+endif
 # Flags = -Wall -g -std=c++14 -march=native -O2
 # Flags = -Wall -g -std=c++14 -O2
 

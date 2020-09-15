@@ -20,7 +20,7 @@ RUN mkdir -p /home/WebXO-Dev/
 COPY . /home/WebXO-Dev/
 
 # Make the server + lib
-RUN cd /home/WebXO-Dev/ && make clean && make LibWebX && make
+RUN cd /home/WebXO-Dev/ && make clean && make LibWebX CLOUD=1 && make CLOUD=1
 
 # Now build the demo container
 FROM alpine:latest as final-env
