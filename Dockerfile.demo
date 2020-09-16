@@ -1,7 +1,7 @@
 FROM alpine:latest as build-env
 
 # Label
-LABEL come.melissa.version="0.1.0_timy-alpha"
+LABEL come.melissa.version="1.2.1"
 LABEL vendor="Melissa"
 
 # Get all of the packages we need to build the app
@@ -26,7 +26,7 @@ RUN cd /home/WebXO-Dev/ && make clean && make LibWebX CLOUD=1 && make CLOUD=1
 FROM alpine:latest as final-env
 
 # Label
-LABEL come.melissa.version="1.2.1_tiny-alpha"
+LABEL come.melissa.version="1.2.1"
 LABEL vendor="Melissa"
 
 # Install needed dependancies
@@ -43,13 +43,20 @@ RUN mkdir -p /home/WebXO-Dev/build/
 RUN mkdir -p /home/WebXO-Dev/ExampleSite/
 RUN mkdir -p /home/WebXO-Dev/ErrorPages/
 
-COPY --from=build-env /home/WebXO-Dev/  /home/WebXO-Dev/
+# Copy only the needed files
+COPY --from=build-env /home/WebXO-Dev/build/debug/  /home/WebXO-Dev/build/debug/
+COPY --from=build-env /home/WebXO-Dev/build/obj/libWebX.so.1.0  /home/WebXO-Dev/build/obj/libWebX.so.1.0
+COPY --from=build-env /home/WebXO-Dev/ExampleSite/  /home/WebXO-Dev/ExampleSite/
+COPY --from=build-env /home/WebXO-Dev/ErrorPages/  /home/WebXO-Dev/ErrorPages/
+COPY --from=build-env /home/WebXO-Dev/exec.sh  /home/WebXO-Dev/exec.sh
 
 # Make the server + lib
 RUN  cp /home/WebXO-Dev/build/obj/libWebX.so.1.0 /usr/local/lib && ln -sf /usr/local/lib/libWebX.so.1.0 /usr/local/lib/libWebX.so.1 && ln -sf /usr/local/lib/libWebX.so.1.0 /usr/local/lib/libWebX.so
 
-# DEBUG
-RUN ldd /home/WebXO-Dev/build/debug/WebXServer
+# # DEBUG
+# RUN ldd /home/WebXO-Dev/build/debug/WebXServer
+# RUN du -h /home/WebXO-Dev/
+# RUN ls -la /home/WebXO-Dev/build/obj/
 
 # Expose the port
 EXPOSE 8080

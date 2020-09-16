@@ -1,0 +1,18 @@
+# Ignore folders
+.git
+gzip
+ExampleSite/Blog
+ExampleSite/test
+ExampleSite/img
+
+# Ignore Files
+Dockerfile
+Dockerfile.*
+vhosts.txt
+TODO.md
+ExampleSite/local.html
+
+# Ignore Files Exensions
+*.yml
+*.o
+*.jpg
