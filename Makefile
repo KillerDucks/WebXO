@@ -7,6 +7,8 @@ ifeq ($(DEBUG), 1)
 else
     Flags = -Wall -std=c++14 -march=native -O2
 endif
+
+# This Makefile Flag removes the march optimisation and removes the debug flags
 CLOUD ?= 0
 ifeq ($(CLOUD), 1)
     Flags = -Wall -std=c++14 -O2
