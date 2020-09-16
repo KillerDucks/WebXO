@@ -92,3 +92,9 @@ exec:
 
 gdb:
 	$(gdb runProgram)
+
+build_tests:
+	make -f Tests/Makefile build
+
+run_tests:
+	make -f Tests/Makefile test

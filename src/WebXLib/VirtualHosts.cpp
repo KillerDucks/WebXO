@@ -44,8 +44,9 @@ namespace WebXO
 
         if(strBuffer.find('\n') == std::string::npos)
         {
-            printf("Buffer %s\n", strBuffer.c_str());
-            printf("Host %s | Path %s\n", strBuffer.substr(0, strBuffer.find(":")).c_str(), strBuffer.substr(strBuffer.find(":") + 1, strBuffer.length()).c_str());
+            // [DEBUG] Print Statements
+            // printf("Buffer %s\n", strBuffer.c_str());
+            // printf("Host %s | Path %s\n", strBuffer.substr(0, strBuffer.find(":")).c_str(), strBuffer.substr(strBuffer.find(":") + 1, strBuffer.length()).c_str());
             vHosts[strBuffer.substr(0, strBuffer.find(":"))] = strBuffer.substr(strBuffer.find(":") + 1, strBuffer.length());
             return vHosts;
             
@@ -54,7 +55,8 @@ namespace WebXO
         while(cPos != (int)strBuffer.length())
         {
             std::string s = strBuffer.substr(cPos, strBuffer.find('\n', cPos));
-            printf("Host %s | Path %s\n", s.substr(0, s.find(":")).c_str(), s.substr(s.find(":") + 1, s.length()).c_str());
+            // [DEBUG] Print Statements
+            // printf("Host %s | Path %s\n", s.substr(0, s.find(":")).c_str(), s.substr(s.find(":") + 1, s.length()).c_str());
             vHosts[s.substr(0, s.find(":"))] = s.substr(s.find(":") + 1, s.length());
             if(strBuffer.find('\n', cPos) == std::string::npos)
             {
