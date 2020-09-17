@@ -27,13 +27,19 @@ stages:
           echo DEBUG
           pwd
           ls -la
+          echo Making Build Directory
+          mkdir build
+          cd ./build
+          echo Generating Build Files
+          cmake -G "Unix Makefiles" ../
+          cd ..
 
     - task: CMake@1
       inputs:
-        cmakeArgs: CMakeLists.txt -B ./build
+        cmakeArgs: --build ./build --config Debug --target all -- -j 10
     - task: CmdLine@2
       inputs:
         script: |
-          echo Building WebXO
-          cd build
-          make all
+          echo Testing WebXO
+          cd build/ExE
+          ./WebXOSrv_GTests
