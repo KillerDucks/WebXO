@@ -6,18 +6,18 @@
 // Tests Parsing and Querying of a vhost.txt file
 TEST(Compression, DeflateFile_Size) {
     WebXO::Compression compresstionTest;
-    CompBuffer testBuffer = compresstionTest.DeflateFile("./Tests/assets/deflateME.txt");
+    CompBuffer testBuffer = compresstionTest.DeflateFile("./assets/deflateME.txt");
     EXPECT_EQ(33, testBuffer.second);
 }
 
 TEST(Compression, DeflateFile_CmpFile) {
     WebXO::Compression compresstionTest;
-    CompBuffer testBuffer = compresstionTest.DeflateFile("./Tests/assets/deflateME.txt");
+    CompBuffer testBuffer = compresstionTest.DeflateFile("./assets/deflateME.txt");
 
     char* sBuffer;
     int fLength = 0;
     std::fstream fss;
-    fss.open("./Tests/assets/deflateME.txt.zz");
+    fss.open("./assets/deflateME.txt.zz");
     if(fss.good())
     {
         // File is good
