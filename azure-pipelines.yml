@@ -20,6 +20,14 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
+    
+    - task: CmdLine@2
+      inputs:
+        script: |
+          echo DEBUG
+          pwd
+          ll
+
     - task: CMake@1
       inputs:
         cmakeArgs: CMakeLists.txt -B ./build
