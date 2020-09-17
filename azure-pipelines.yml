@@ -22,7 +22,7 @@ stages:
     steps:
     - task: CMake@1
       inputs:
-        cmakeArgs: -B ./build
+        cmakeArgs: CMakeLists.txt -B ./build
     - task: CmdLine@2
       inputs:
         script: |
