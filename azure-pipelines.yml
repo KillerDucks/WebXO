@@ -32,11 +32,14 @@ stages:
           cd ./build
           echo Generating Build Files
           cmake -G "Unix Makefiles" ../
-          cd ..
+          cd ${System.DefaultWorkingDirectory}
+          echo Current Directory
+          pwd
 
     - task: CMake@1
       inputs:
         cmakeArgs: --build ./build --config Debug --target all -- -j 10
+        workingDirectory: ${System.DefaultWorkingDirectory}
     - task: CmdLine@2
       inputs:
         script: |
