@@ -10,7 +10,7 @@ TEST(Compression, DeflateFile_Size) {
     EXPECT_EQ(33, testBuffer.second);
 }
 
-TEST(Compression, DeflateFile_Buffer) {
+TEST(Compression, DeflateFile_CmpFile) {
     WebXO::Compression compresstionTest;
     CompBuffer testBuffer = compresstionTest.DeflateFile("./Tests/assets/deflateME.txt");
 
@@ -30,5 +30,5 @@ TEST(Compression, DeflateFile_Buffer) {
 
         fss.close();
     }
-    EXPECT_EQ(sBuffer, testBuffer.first);
+    EXPECT_EQ(fLength, testBuffer.second);
 }

@@ -7,7 +7,7 @@ libWebX.so.1.0
 # Complied WebXServer
 WebXServer
 # Compiled Tests
-WebXO_TestSuite
+Tests/build/
 # VS Code files
 .vscode
 # Custom HTML

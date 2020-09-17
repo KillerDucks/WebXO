@@ -21,7 +21,7 @@ ${Build}/$(ProgName): $(Source_Files)
 
 clean: 
 	@echo "Cleaning Build System..."
-	@rm -rf ./build/*
+	@rm -rf ./Tests/build/*
 	@echo "!!! Done Cleaning the TEST System !!!"
 
 test:
