@@ -43,7 +43,7 @@ if (GTEST_FOUND)
     # Add the test directory
     add_subdirectory(Tests)
     # Add CTest support
-    add_custom_target(run_tests ${EXECUTABLE_OUTPUT_PATH}/${CMAKE_PROJECT_NAME}_GTests)
+    add_custom_target(run_tests ${CMAKE_CTEST_COMMAND} -V)
 endif()
 
 set(CPACK_PROJECT_NAME ${PROJECT_NAME})
