@@ -44,5 +44,6 @@ stages:
       inputs:
         script: |
           echo Testing WebXO
-          cd build/ExE
+          cd $(System.DefaultWorkingDirectory)
+          cd build/EXE
           ./WebXOSrv_GTests
