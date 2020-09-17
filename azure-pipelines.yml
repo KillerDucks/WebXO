@@ -22,4 +22,10 @@ stages:
     steps:
     - task: CMake@1
       inputs:
-        cmakeArgs: 
+        cmakeArgs: -B ./build
+    - task: CmdLine@2
+      inputs:
+        script: |
+          echo Building WebXO
+          cd build
+          make all
