@@ -20,40 +20,30 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    - task: Docker@2
-      displayName: Build an image
+    
+    - task: CmdLine@2
       inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-        tags: |
-          $(tag)
-    - task: Docker@2
-      displayName: Push to Docker Hub (Full Container)
+        script: |
+          echo DEBUG
+          pwd
+          ls -la
+          echo Making Build Directory
+          mkdir build
+          cd ./build
+          echo Generating Build Files
+          cmake -G "Unix Makefiles" ../
+          cd $(System.DefaultWorkingDirectory)
+          echo Current Directory
+          pwd
+
+    - task: CMake@1
       inputs:
-        containerRegistry: 'DockerHub'
-        repository: 'killerducks/webxo-server'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile'
-        tags: 'latest'        
-    - task: Docker@2
-      displayName: Push to Docker Hub (Demo Container)
+        cmakeArgs: --build ./build --config Debug --target all -- -j 10
+        workingDirectory: $(System.DefaultWorkingDirectory)
+    - task: CmdLine@2
       inputs:
-        containerRegistry: 'DockerHub'
-        repository: 'killerducks/webxo-server'
-        command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile.demo'
-        tags: 'demo'        
-      
-    - task: AzureRmWebAppDeployment@4
-      displayName: Deploy to App Services
-      inputs:
-        ConnectionType: 'AzureRM'
-        azureSubscription: 'Pay-As-You-Go(186c271c-7ff9-4937-8650-7816105c663c)'
-        appType: 'webAppContainer'
-        WebAppName: 'WebXO'
-        deployToSlotOrASE: true
-        ResourceGroupName: 'WebXO_RG'
-        SlotName: 'production'
-        DockerNamespace: 'index.docker.io'
-        DockerRepository: 'killerducks/webxo-server'
-        DockerImageTag: 'demo'    
+        script: |
+          echo Testing WebXO
+          cd $(System.DefaultWorkingDirectory)
+          cd build/EXE
+          ./WebXOSrv_GTests
