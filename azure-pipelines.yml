@@ -20,10 +20,10 @@ stages:
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-     - task: Docker@2
-        displayName: Build and Run Tests
-        inputs:
-          command: build
-          dockerfile: '$(Build.SourcesDirectory)/Tests/Dockerfile'
-          tags: |
-            $(tag)
+    - task: Docker@2
+      displayName: Build and Run Tests
+      inputs:
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/Tests/Dockerfile'
+        tags: |
+          $(tag)
