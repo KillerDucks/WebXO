@@ -4,6 +4,7 @@ gzip
 ExampleSite/Blog
 ExampleSite/test
 ExampleSite/img
+build
 
 # Ignore Files
 Dockerfile

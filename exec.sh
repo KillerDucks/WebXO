@@ -1,7 +1,8 @@
 #!/bin/bash
 
 # Change into the correct directory
-cd /home/WebXO-Dev/
+# cd /var/WebXO/
 
 # Run the Webserver
-./build/debug/WebXServer "$@"
+# ./build/EXE/WebXOSrv "$@"
+WebXOSrv "$@"
