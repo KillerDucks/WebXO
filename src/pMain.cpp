@@ -9,7 +9,7 @@
 
 typedef struct Options 
 {
-    Options() : basePath("./ExampleSite"), port(8080), nThreads(4), threading(false)
+    Options() : basePath("/var/www/ExampleSite"), port(8080), nThreads(4), threading(false)
     {}
     std::string     basePath;
     int             port;
@@ -64,7 +64,7 @@ Options ParseCLIOptions(std::vector<std::string> const vec)
     // Verbose Printing
     printf("CLI Options\n");
 
-    // Itterate through all the args given
+    // Iterate through all the args given
     for(auto opt : vec)
     {
         // Split the Args and rip out the values + error checking (maybe)
