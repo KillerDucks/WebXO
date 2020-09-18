@@ -6,6 +6,11 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/LIBS")
 # Set the output of the Executable
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/EXE")
 
+# Set Compiler Flags
+set(CMAKE_CXX_FLAGS "-Wall")
+set(CMAKE_CXX_FLAGS_DEBUG "-g")
+set(CMAKE_CXX_FLAGS_RELEASE "-O2")
+
 # Get a list of all CPP Files to use
 file(GLOB WebXOB_LIB_SRC
     src/WebXLib/*.cpp
@@ -31,8 +36,10 @@ add_executable(${PROJECT_NAME} src/pMain.cpp)
 target_link_libraries(${PROJECT_NAME} WebXO)
 
 # Install WebXO to the bin
-
-# TESTING
+install(
+    TARGETS ${PROJECT_NAME}
+    RUNTIME DESTINATION bin
+)
 
 # Look for GTest
 find_package(GTest)
