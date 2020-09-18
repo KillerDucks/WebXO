@@ -9,16 +9,15 @@ file(GLOB WebXOB_TEST_SRC
 add_executable(${BINARY} ${WebXOB_TEST_SRC})
 
 # Add the Test Executable
-add_test(
-    NAME ${BINARY}
-    COMMAND ${BINARY}
-    WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
-)
+
 
 # Link the executable to WebXO 
 target_link_libraries(${BINARY} WebXO gtest)
 
-# gtest_discover_tests(${BINARY})
+gtest_discover_tests(
+    ${BINARY}
+    WORKING_DIRECTORY ${EXECUTABLE_OUTPUT_PATH}
+)
 
 # Copy over the needed test asset Files
 file(

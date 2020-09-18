@@ -43,6 +43,7 @@ install(
 
 # Look for GTest
 find_package(GTest)
+include(CTest)
 
 if (GTEST_FOUND)
     # Enable Testing
