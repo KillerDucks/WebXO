@@ -10,7 +10,7 @@
 
 // Whatever this stuff is O.o
 constexpr char* HTTP_VERSION    = (char*)"HTTP/1.1";
-constexpr char* SERVER_STRING   = (char*)"Server: WebXO/1.2.1";
+constexpr char* SERVER_STRING   = (char*)"Server: WebXO/1.3.2";
 
 constexpr char* ERROR_PAGE_DIR   = (char*)"/var/www/ErrorPages";
 
