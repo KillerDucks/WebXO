@@ -18,11 +18,11 @@
 
 * IO Component __Pending__
 
-# Testing to Impl
+# Testing to Impl [Currently] [Done]
 
-* A testing suite/solution need to be setup __Pending__
-	+ Research into C++ Testing __Pending__
-	+ Research into HTTP Testing __Pending__
+* A testing suite/solution need to be setup __Done__ [v1.3.2] (See HTTPSuite)
+	+ Research into C++ Testing __Done__ [v1.3.2] (See HTTPSuite)
+	+ Research into HTTP Testing __Done__ [v1.3.2] (See HTTPSuite)
 
 
 ## Next Major Release Features to Impl
