@@ -26,5 +26,5 @@
                 + [~~CURRENT~~] [~~INVESTIGATING~~] ~~Working on.~~
 
 + HTTP / HTTP Headers
-    + [LOW] Fix the "Content-Length" issue
+    + [LOW] [CURRENT] Fix the "Content-Length" issue
     + [LOW] Impl the "Vary" header to allow future requests to cache the response from the server
