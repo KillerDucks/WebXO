@@ -74,8 +74,8 @@ namespace WebXO
                 t += contentEncoding;
                 t += "\r\n";
             }
-            // t += contentLength;
-            // t += "\r\n";            
+            t += contentLength;
+            t += "\r\n";            
             return t;
         }
     } HENTITY, *PHENTITY;
