@@ -98,7 +98,7 @@ namespace WebXO
         va_list parameters;
         va_start(parameters, format);
 
-        int written = 0;
+        // int written = 0;
 
         // while (*format != '\0') {
         //     size_t maxrem = INT_MAX - written;
@@ -127,7 +127,7 @@ namespace WebXO
 
         //     switch (*format)
         //     {
-        //         // Chacracters
+        //         // Characters
         //         case 'c':
         //             {
         //                 format++;
@@ -269,7 +269,7 @@ namespace WebXO
         //     }
         // }
 
-        va_end(parameters);
-        return written;
+        // va_end(parameters);
+        // return written;
     }
 };
