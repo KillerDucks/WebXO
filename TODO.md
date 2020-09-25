@@ -1,7 +1,7 @@
 # WebXO Current TODO's
 
 + Logarithm
-    + [FIX] [CURRENT] Fix overhead of print(....)
+    + [HIGH] [FIX] [CURRENT] [URGENT] Fix overhead of print(....)
         + Possible to reduce the overhead by keeping it disabled as calls will be optimised out
         + Another consideration will be to thread the print
             + Queue via a global buffer removing the need to create an instance per class
@@ -26,5 +26,5 @@
                 + [~~CURRENT~~] [~~INVESTIGATING~~] ~~Working on.~~
 
 + HTTP / HTTP Headers
-    + [LOW] [CURRENT] Fix the "Content-Length" issue
+    + [RESOLVED] [~~LOW~~] [~~CURRENT~~] ~~Fix the "Content-Length" issue~~
     + [LOW] Impl the "Vary" header to allow future requests to cache the response from the server
