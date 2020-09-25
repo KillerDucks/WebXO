@@ -74,6 +74,7 @@ namespace WebXO
         return files;
     }
     
+    // [NOTE] This is hardly used, possible to remove this method completely ???
     void Directory::GetWebFiles()
     {
         std::smatch sm;
@@ -95,6 +96,7 @@ namespace WebXO
         }
     }
 
+    // [NOTE] This function has no real place as we are using the `fs` namespace for ease of operation
     char* Directory::ReadFile(std::string filePath)
     {
         std::fstream ssFileReader;
@@ -144,6 +146,7 @@ namespace WebXO
         return nullptr;
     }
 
+    // [NOTE] This method is set for removal in v1.4.X and is superseced by `Directory::szFile`
     size_t  Directory::GetFileSize(std::string filePath)
     {
         size_t fileLength = 0;
@@ -167,6 +170,7 @@ namespace WebXO
         return fileLength;
     }
 
+    // [NOTE] This is possible to change into `fs::is_regular_file` to remove the extra bloat
     bool Directory::isFile(std::string filePath)
     {
         // See if there is an extension via a '.' in the string
@@ -205,13 +209,12 @@ namespace WebXO
 
     size_t Directory::szFile(std::string filePath)
     {
-        // Log for debugging
+        // [DEBUG] Print
         // _Log.iLog("[%z] [%q] szFile() filePath: [%s]\n", filePath.c_str());
-        // printf("[%ld]\n", fs::file_size(filePath));
         return fs::file_size(filePath);
     }
 
-    // @ This function will assist when looking for files that are/not in the root directory
+    // @ This function will assist when looking for files that are/not in the root directory [NOTE] This method is set for removal in v1.4.X
     std::string Directory::getRootPath(std::string filePath)
     {
         return "NYI";
