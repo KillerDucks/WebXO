@@ -148,6 +148,8 @@ namespace WebXO
         //     _interception.HookAsync();
         // }
 
+
+        // [DEBUG] [HIGH] The impl below does not respect the various HTTP Methods and will only work "Correctly" with GET
         // Get the web path request needed from the HTTP Request
         std::string file(hReq.requestType.substr(hReq.requestType.find(' ') + 1, hReq.requestType.size()));
 
