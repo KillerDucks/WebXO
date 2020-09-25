@@ -25,6 +25,9 @@
             + [UPDATE] Origin of the issue is close/is the point where "Content-Language" is appended
                 + [~~CURRENT~~] [~~INVESTIGATING~~] ~~Working on.~~
 
-+ HTTP / HTTP Headers
-    + [RESOLVED] [~~LOW~~] [~~CURRENT~~] ~~Fix the "Content-Length" issue~~
++ HTTP / HTTP Headers    
     + [LOW] Impl the "Vary" header to allow future requests to cache the response from the server
+    + [RESOLVED] [~~LOW~~] [~~CURRENT~~] ~~Fix the "Content-Length" issue~~
+
++ HTTP / Path Detection
+    + [HIGH] [CURRENT] [URGENT] Assets called from non-root folders are not directing to the correct place
