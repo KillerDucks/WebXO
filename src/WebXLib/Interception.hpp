@@ -44,11 +44,11 @@ namespace WebXO
         // Interception(std::vector<HTTPMethodTypes> methods , bool isBlocking = false);           // Multiple Methods to catch
         ~Interception() = default;
 
-        std::tuple<HTTPReq, char*> HookSync(HTTPReq info, std::function<void(HTTPReq&)> func)
+        std::tuple<HTTPReq, CompBuffer> HookSync(HTTPReq info, std::function<void(HTTPReq&)> func)
         {
             // Something
             func(info);
-            return std::tuple<HTTPReq, char*>(info, (char*)"-1");
+            return std::tuple<HTTPReq, CompBuffer>(info, CompBuffer(static_cast<char*>("NULL"), -1));
         }
 
         void HookAsync(std::function<void()> func);
