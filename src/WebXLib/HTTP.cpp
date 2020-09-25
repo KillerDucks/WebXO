@@ -133,10 +133,6 @@ namespace WebXO
         std::vector<std::string> dirLookup;
         std::regex findFile;
 
-        // Virtual Hosts Redirection [TESTING]
-        // printf("\nQuerying %s: %s\n", hReq.host.substr(0, hReq.host.find(':')).c_str(), this->vHosts.Query(hReq.host.substr(0, hReq.host.find(':'))).c_str());
-        std::string vQuery = this->vHosts.Query(hReq.host.substr(0, hReq.host.find(':')));
-
         // Interception Hooking [DEBUG] [NOTE] Might be moved to a different place
         // _interception.HookSync(hReq, _interceptionSettings.callback);
         // if(_interceptionSettings.isBlocking)
@@ -147,6 +143,12 @@ namespace WebXO
         // {
         //     _interception.HookAsync();
         // }
+
+
+        // Virtual Hosts Redirection
+        std::string vQuery = this->vHosts.Query(hReq.host.substr(0, hReq.host.find(':')));
+        // printf("\nQuerying %s: %s\n", hReq.host.substr(0, hReq.host.find(':')).c_str(), this->vHosts.Query(hReq.host.substr(0, hReq.host.find(':'))).c_str());   // [DEBUG] Print
+
 
 
         // [DEBUG] [HIGH] The impl below does not respect the various HTTP Methods and will only work "Correctly" with GET
@@ -328,7 +330,7 @@ namespace WebXO
             break;
         }
 
-        // Final Checks to see if we have a vaild file path
+        // Final Checks to see if we have a valid file path
         if(filePath == "-1")
         {
             // Invalid file
@@ -342,6 +344,7 @@ namespace WebXO
             httpCode = WebXO::HTTPStatusCodes::INTERNAL_SERVER_ERROR; 
         }
         
+        // [HIGH] The file should not be openned here, abstract this out
         if(!this->AcceptDeflate(hReq.accept_Encoding))
         {
             // Open a stream and read the file into the buffer
@@ -355,7 +358,7 @@ namespace WebXO
                 fLength = ssFileReader.tellg();
                 ssFileReader.seekg(0, ssFileReader.beg);
 
-                _Log.iLog("[%z] [%q] File Size: [~%dKB]\n", Logarithm::NOTICE, fLength / 1024); // [DEBUG] Print
+                // _Log.iLog("[%z] [%q] File Size: [~%dKB]\n", Logarithm::NOTICE, fLength / 1024); // [DEBUG] Print
 
                 buffer = new char[fLength + 1];
                 ssFileReader.read(buffer, fLength);
@@ -448,7 +451,8 @@ namespace WebXO
             httpRes.httpEntityHeader.contentEncoding = "";
         }
 
-        httpRes.httpEntityHeader.contentLength += std::to_string(strlen(httpRes.ReturnHeader().c_str()) + contentLength);
+        // This is in octal form so the value will need to be converted
+        httpRes.httpEntityHeader.contentLength += std::to_string(contentLength);
 
         // [DEBUG] Debug Printing
         // printf("!!\n\n%s\n\n!!", httpRes.ReturnHeader().c_str());
