@@ -30,4 +30,12 @@
     + [RESOLVED] [~~LOW~~] [~~CURRENT~~] ~~Fix the "Content-Length" issue~~
 
 + HTTP / Path Detection
-    + [HIGH] [CURRENT] [URGENT] Assets called from non-root folders are not directing to the correct place
+    + [HIGH] [CURRENT] [URGENT] [REVIEW] Assets called from non-root folders are not directing to the correct place
+        + [NOTE] This maybe working as expected
+            + [NOTE] Suppression of sub-domain folders from global root might need to be considered
+
++ HTTP / Compression
+    + [REVIEW] [MEDIUM] Look into converting from deflate into gzip for the main compression method
+
++ Interception / Core
+    + [REVIEW] [LOW] Still need a PoC impl to test out basic functionality !!!!
