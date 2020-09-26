@@ -48,7 +48,7 @@ namespace WebXO
         {
             // Something
             func(info);
-            return std::tuple<HTTPReq, CompBuffer>(info, CompBuffer(static_cast<char*>("NULL"), -1));
+            return std::tuple<HTTPReq, CompBuffer>(info, CompBuffer());
         }
 
         void HookAsync(std::function<void()> func);
