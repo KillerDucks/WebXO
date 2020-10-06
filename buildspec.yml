@@ -38,7 +38,9 @@ phases:
           - cd $RPATH/build/EXE
           -  ./WebXOSrv_GTests --gtest_output="xml:/tmp/WebXOTests.xml"
           - echo Build completed on `date`
-    # reports:
-    #   files:
-    #     - /tmp/WebXOTests.xml
-    #   file-format: JUNITXML
+    reports:
+      WebXOReports:
+        files:  
+          - '**/*'
+          - /tmp/WebXOTests.xml
+        base-directory: 'build/EXE'
