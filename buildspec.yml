@@ -34,5 +34,12 @@ phases:
         - cmake --build $RPATH/build --config Debug --target all -- -j 6
     post_build:
         commands:
+          - echo Running WebXO Tests
+          - cd $RPATH/build/EXE
+          -  ./WebXOSrv_GTests --gtest_output="xml:/tmp/WebXOTests.xml"
           - echo Build completed on `date`
-        
+    reports:
+      WebXO-Reports:
+        files:
+          - /tmp/WebXOTests.xml
+        file-format: JUNITXML
