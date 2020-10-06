@@ -24,12 +24,13 @@ phases:
         - cmake CMakeLists.txt
         - make
         - cp *.a /usr/lib
+        - ls -la /usr/lib
         # Put the runner back into the root folder
         - cd $RPATH
         - echo Pre Build phase completed
     build:
       commands:
-        - cmake --build ./build --config Release --target all -- -j
+        - cmake --build ./build --config Debug --target all -- -j 6
     post_build:
         commands:
           - echo Build completed on `date`
