@@ -6,40 +6,40 @@
 version: 0.2
 
 phases:
-    install:
-      commands:
-        - echo Nothing to do during the install phase
-    pre_build:
-      commands:
-        - echo Running Pre Build phase
-        - apt-get update
-        - apt-get install -y build-essential cmake zlib1g-dev libgtest-dev        
-        - RPATH=$(pwd)
+  install:
+    commands:
+      - echo Nothing to do during the install phase
+  pre_build:
+    commands:
+      - echo Running Pre Build phase
+      - apt-get update
+      - apt-get install -y build-essential cmake zlib1g-dev libgtest-dev        
+      - RPATH=$(pwd)
 
-        - echo Installing GTest
-        - cd /usr/src/gtest
-        - cmake CMakeLists.txt
-        - make
-        - cp *.a /usr/lib
-        - cd $RPATH
+      - echo Installing GTest
+      - cd /usr/src/gtest
+      - cmake CMakeLists.txt
+      - make
+      - cp *.a /usr/lib
+      - cd $RPATH
 
-        - echo Running CMake Build Generator        
-        - mkdir ./build
-        - cd ./build
-        - cmake -G "Unix Makefiles" ../
-        - cd ../
-        - echo Pre Build phase completed
-    build:
+      - echo Running CMake Build Generator        
+      - mkdir ./build
+      - cd ./build
+      - cmake -G "Unix Makefiles" ../
+      - cd ../
+      - echo Pre Build phase completed
+  build:
+    commands:
+      - cmake --build $RPATH/build --config Debug --target all -- -j 6
+  post_build:
       commands:
-        - cmake --build $RPATH/build --config Debug --target all -- -j 6
-    post_build:
-        commands:
-          - echo Running WebXO Tests
-          - cd $RPATH/build/EXE
-          -  ./WebXOSrv_GTests --gtest_output="xml:/tmp/WebXOTests.xml"
-          - echo Build completed on `date`
-    reports:
-      WebXOReports:
-        files:  
-          - '**/*'
-        base-directory: 'build/EXE'
+        - echo Running WebXO Tests
+        - cd $RPATH/build/EXE
+        -  ./WebXOSrv_GTests --gtest_output="xml:/tmp/WebXOTests.xml"
+        - echo Build completed on `date`
+reports:
+  WebXOReports:
+    files:  
+      - '**/*'
+    base-directory: 'build/EXE'
