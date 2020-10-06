@@ -42,5 +42,4 @@ phases:
       WebXOReports:
         files:  
           - '**/*'
-          - /tmp/WebXOTests.xml
         base-directory: 'build/EXE'
