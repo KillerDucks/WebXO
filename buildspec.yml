@@ -21,6 +21,7 @@ phases:
       - cmake CMakeLists.txt
       - make
       - cp *.a /usr/lib
+      - mkdir /tmp/WebXOReports/
       - cd $RPATH
 
       - echo Running CMake Build Generator        
@@ -36,11 +37,11 @@ phases:
       commands:
         - echo Running WebXO Tests
         - cd $RPATH/build/EXE
-        -  ./WebXOSrv_GTests --gtest_output="xml:/tmp/WebXOTests.xml"
+        -  ./WebXOSrv_GTests --gtest_output="xml:/tmp/WebXOReports/WebXOTests.xml"
         - echo Build completed on `date`
 reports:
   WebXOReports:
     files:  
       - '**/*'
-    base-directory: 'build/EXE'
+    base-directory: '/tmp/WebXOReports'
     file-format: JUNITXML
