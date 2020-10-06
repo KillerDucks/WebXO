@@ -15,6 +15,7 @@ phases:
         - apt-get update
         - apt-get install -y build-essential cmake zlib1g-dev libgtest-dev
         - echo Running CMake Build Generator
+        - RPATH=$(pwd)
         - mkdir ./build
         - cd ./build
         - cmake -G "Unix Makefiles" ../
@@ -23,6 +24,8 @@ phases:
         - cmake CMakeLists.txt
         - make
         - cp *.a /usr/lib
+        # Put the runner back into the root folder
+        - cd $RPATH
         - echo Pre Build phase completed
     build:
       commands:
