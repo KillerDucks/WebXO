@@ -31,7 +31,7 @@ phases:
         - echo Pre Build phase completed
     build:
       commands:
-        - cmake --build ./build --config Debug --target all -- -j 6
+        - cmake --build $RPATH/build --config Debug --target all -- -j 6
     post_build:
         commands:
           - echo Build completed on `date`
