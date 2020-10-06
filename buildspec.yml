@@ -13,24 +13,25 @@ phases:
       commands:
         - echo Running Pre Build phase
         - apt-get update
-        - apt-get install -y build-essential cmake zlib1g-dev libgtest-dev
-        - echo Running CMake Build Generator
+        - apt-get install -y build-essential cmake zlib1g-dev libgtest-dev        
         - RPATH=$(pwd)
-        - mkdir ./build
-        - cd ./build
-        - cmake -G "Unix Makefiles" ../
-        - cd ../
+        
+        - echo Installing GTest
         - cd /usr/src/gtest
         - cmake CMakeLists.txt
         - make
         - cp *.a /usr/lib
-        - ls -la /usr/lib
-        # Put the runner back into the root folder
         - cd $RPATH
+
+        - echo Running CMake Build Generator        
+        - mkdir ./build
+        - cd ./build
+        - cmake -G "Unix Makefiles" ../
+        - cd ../
         - echo Pre Build phase completed
     build:
       commands:
-        - cmake --build ./build --config Debug --target all -- -j 6
+        - cmake --build ./build --config Debug --target clean --
     post_build:
         commands:
           - echo Build completed on `date`
