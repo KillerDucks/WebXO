@@ -39,7 +39,6 @@ phases:
           -  ./WebXOSrv_GTests --gtest_output="xml:/tmp/WebXOTests.xml"
           - echo Build completed on `date`
     reports:
-      WebXO-Reports:
-        files:
-          - /tmp/WebXOTests.xml
-        file-format: JUNITXML
+      files:
+        - /tmp/WebXOTests.xml
+      file-format: JUNITXML
