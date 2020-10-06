@@ -41,6 +41,6 @@ phases:
 reports:
   WebXOReports:
     files:  
-      - '*.xml'
+      - '**/*'
     base-directory: 'build/EXE'
     file-format: JUNITXML
