@@ -8,11 +8,22 @@ version: 0.2
 phases:
     install:
       commands:
-        - nohup /usr/local/bin/dockerd --host=unix:///var/run/docker.sock --host=tcp://127.0.0.1:2375 --storage-driver=overlay2&
-        - timeout 15 sh -c "until docker info; do echo .; sleep 1; done"
+        - echo Nothing to do during the install phase
     pre_build:
       commands:
-        - docker build -t webxo-env:latest .
+        - echo Running Pre Build phase
+        - apt-get update
+        - apt-get install -y build-essential cmake zlib1g-dev
+        - echo Running CMake Build Generator
+        - mkdir ./build
+        - cd ./build
+        - cmake -G "Unix Makefiles" ../
+        - cd ../
+        - echo Pre Build phase completed
     build:
       commands:
-        - docker images
+        - cmake --build ./build --config Release --target all -- -j
+    post_build:
+        commands:
+          - echo Build completed on `date`
+        
