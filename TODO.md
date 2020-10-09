@@ -39,5 +39,5 @@
 + HTTP / Compression
     + [REVIEW] [MEDIUM] Look into converting from deflate into gzip for the main compression method
 
-+ Interception / Core
-    + [REVIEW] [LOW] Still need a PoC impl to test out basic functionality !!!!
++ Interception / Core | Resolved int WebXO v1.3.4 PATCH
+    + [~~REVIEW~~] [~~LOW~~] ~~Still need a PoC impl to test out basic functionality !!!!~~
