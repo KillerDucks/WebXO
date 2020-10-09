@@ -134,15 +134,16 @@ namespace WebXO
         std::regex findFile;
 
         // Interception Hooking [DEBUG] [NOTE] Might be moved to a different place
-        // _interception.HookSync(hReq, _interceptionSettings.callback);
+        std::tuple<HTTPReq, CompBuffer> test = _interception.HookSync(hReq, _interceptionSettings.callback);
+        printf("RETURNED INTERCEPTION VALUE [%s] AND SIZE [%d]\n", std::get<1>(test).first, std::get<1>(test).second);
         // if(_interceptionSettings.isBlocking)
         // {
         //     _interception.HookSync();
         // }
-        // else
-        // {
-        //     _interception.HookAsync();
-        // }
+        // // else
+        // // {
+        // //     _interception.HookAsync();
+        // // }
 
 
         // Virtual Hosts Redirection
