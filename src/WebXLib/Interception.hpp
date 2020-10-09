@@ -1,4 +1,6 @@
-// This class will allow the programatic interception of http requests to the server and inspect them
+#pragma once
+
+// This class will allow the programmatic interception of http requests to the server and inspect them
 
 #include <cstdio>
 #include <string>
@@ -9,6 +11,7 @@
 #include "Logarithm.hpp"
 #include "HTTPMethodTypes.hpp"
 #include "HTTPHeaders.hpp"
+#include "Common.hpp"
 
 #ifndef WEBX_INTERCEPTION_H
 #define WEBX_INTERCEPTION_H
@@ -17,12 +20,18 @@ namespace WebXO
 {
     // Interception Settings [TODO] Move into a separate file after testing
     typedef struct InterceptSettings{
-        InterceptSettings() : isBlocking(false), method(HTTPMethodTypes::GET), callback([=](HTTPReq req) { printf ("Requested: %s\n", req.requestType.c_str()); })
+        InterceptSettings():isBlocking(false), method(HTTPMethodTypes::GET), 
+                            callback([=](HTTPReq req) -> CompBuffer 
+                            { 
+                                // This is just a default interception that will do nothing
+                                printf ("Requested: %s\n", req.requestType.c_str());
+                                return CompBuffer((char*)"TEST", -2);
+                            })
         {}
 
         bool isBlocking;
         HTTPMethodTypes method;
-        std::function<void(HTTPReq)> callback;
+        std::function<CompBuffer(HTTPReq)> callback;
     } INTERCEPTIONSETTINGS;
 
     // Interception Class
@@ -44,11 +53,10 @@ namespace WebXO
         // Interception(std::vector<HTTPMethodTypes> methods , bool isBlocking = false);           // Multiple Methods to catch
         ~Interception() = default;
 
-        std::tuple<HTTPReq, CompBuffer> HookSync(HTTPReq info, std::function<void(HTTPReq&)> func)
+        std::tuple<HTTPReq, CompBuffer> HookSync(HTTPReq info, std::function<CompBuffer(HTTPReq&)> func)
         {
             // Something
-            func(info);
-            return std::tuple<HTTPReq, CompBuffer>(info, CompBuffer());
+            return std::tuple<HTTPReq, CompBuffer>(info, func(info));
         }
 
         void HookAsync(std::function<void()> func);
