@@ -3,8 +3,6 @@
 #include "HTTPStatusCodes.hpp"
 #include "Logarithm.hpp"
 
-#include <map>
-
 #ifndef WEBX_VIRTUALHOSTS_H
 #define WEBX_VIRTUALHOSTS_H
 

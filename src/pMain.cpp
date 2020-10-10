@@ -1,11 +1,6 @@
 // Includes
 #include "WebXLib/Sockets.hpp"
 #include "WebXLib/HTTP.hpp"
-#include "WebXLib/Directory.hpp"
-#include "WebXLib/Compression.hpp"
-#include "WebXLib/HTTPHeaders.hpp"
-#include "WebXLib/Interception.hpp"
-#include "WebXLib/VirtualHosts.hpp"
 
 typedef struct Options 
 {
@@ -19,25 +14,11 @@ typedef struct Options
 
 Options ParseCLIOptions(std::vector<std::string> const vec);
 
-void PrintHello(std::map<std::string, char*> info)
-{
-    printf("Hello World\n");
-    printf("MAP Value [ExampleKey]: %s\n", info.at("ExampleKey"));
-}
-
 int main(int argc, char* argv[])
 {
     // [TODO] Parse the CLI Args
     std::vector<std::string> vArgs(argv + 1, argv + argc + ! argc);
     Options optsCLI = ParseCLIOptions(vArgs);
-
-
-    // // [DEBUG] [TESTING] Testing Virtual Hosts
-    // WebXO::VirtualHosts vHosts("./vhosts.txt");
-    // printf("Querying api.site.local: %s\n", vHosts.Query("api.site.local").c_str());
-
-    // [DEBUG] [HALT] Testing
-    // std::terminate();
 
     // Setup the Socket Server Settings
     WebXO::Sockets::Settings sockSettings(optsCLI.threading , optsCLI.nThreads);

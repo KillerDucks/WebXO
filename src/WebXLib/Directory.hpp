@@ -1,21 +1,18 @@
-#include <stdio.h>
-#include <string.h>
-#include <vector>
 #include <regex>
-#include <string>
-
-#include <fstream>
 
 #include <experimental/filesystem>
 #include "Logarithm.hpp"
+#include "Common.hpp"
 
 #ifndef WEBX_DIR_H
 #define WEBX_DIR_H
 
+// [NOTE] Change this when full support is released
 namespace fs = std::experimental::filesystem;
+
+// [NOTE] These should be removed (bad practise)
 using std::string;
 using std::vector;
-// using std::regex;
 
 namespace WebXO
 {

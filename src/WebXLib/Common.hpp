@@ -9,6 +9,7 @@
 #include <cstdio>
 #include <vector>
 #include <fstream>
+#include <map>
 
 // Whatever this stuff is O.o
 constexpr char* HTTP_VERSION        = (char*)"HTTP/1.1";

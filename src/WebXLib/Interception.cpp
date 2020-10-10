@@ -2,6 +2,7 @@
 
 namespace WebXO
 {
+    // [NOTE] Consider removing this as this can fit into the header file
     Interception::Interception(InterceptSettings interceptSettings)
     {
 
@@ -10,15 +11,5 @@ namespace WebXO
     Interception::Interception(HTTPMethodTypes method, bool isBlocking)
     {
         // Some
-    }
-
-    // void Interception::HookSync(std::function<void()> func)
-    // {
-
-    // }
-
-    void Interception::HookAsync(std::function<void()> func)
-    {
-        func();
     }
 };

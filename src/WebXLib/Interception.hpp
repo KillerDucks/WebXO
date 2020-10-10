@@ -2,12 +2,8 @@
 
 // This class will allow the programmatic interception of http requests to the server and inspect them
 
-#include <cstdio>
-#include <string>
-#include <vector>
-#include <string>
 #include <functional>
-#include <map>
+
 #include "Logarithm.hpp"
 #include "HTTPMethodTypes.hpp"
 #include "HTTPHeaders.hpp"
@@ -55,11 +51,14 @@ namespace WebXO
 
         std::tuple<HTTPReq, CompBuffer> HookSync(HTTPReq info, std::function<CompBuffer(HTTPReq&)> func)
         {
-            // Something
             return std::tuple<HTTPReq, CompBuffer>(info, func(info));
         }
 
-        void HookAsync(std::function<void()> func);
+        // [NOTE] Currently this is not async and will need to be altered
+        std::tuple<HTTPReq, CompBuffer> HookAsync(HTTPReq info, std::function<CompBuffer(HTTPReq&)> func)
+        {
+            return std::tuple<HTTPReq, CompBuffer>(info, func(info));
+        }
 
     };    
 }
