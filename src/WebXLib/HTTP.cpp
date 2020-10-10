@@ -176,19 +176,11 @@ namespace WebXO
         if(vQuery != "-1")
         {
             relativePath += vQuery;
-            // relativePath += (file.rfind('/') == 0) ? file : file.substr(0, file.rfind('/'));
-            // relativePath += file;         
             parentPath += vQuery;
             parentPath += file;            
         }
         else
-        {
-            // relativePath += (file.rfind('/') == 0) ? file : file.substr(0, file.rfind('/'));   
-            // if(file.rfind('/') != 0)
-            // {
-                
-            // }
-            // relativePath += file;         
+        {     
             parentPath += file;
         }
 
