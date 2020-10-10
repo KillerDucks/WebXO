@@ -31,7 +31,7 @@ namespace WebXO
 
         bool isBlocking;
         HTTPMethodTypes method;
-        std::function<CompBuffer(HTTPReq)> callback;
+        std::function<CompBuffer(HTTPReq&)> callback;
     } INTERCEPTIONSETTINGS;
 
     // Interception Class
