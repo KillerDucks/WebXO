@@ -29,7 +29,7 @@
 
 * HTTP/2 Support
 * IPV6 Support
-* Working Interception Support (Custom Request Handling)
+* Working Interception Support (Custom Request Handling) __Impl__
 
 ## Possible Features to Impl
 
