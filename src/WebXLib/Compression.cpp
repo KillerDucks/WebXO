@@ -36,9 +36,9 @@ namespace WebXO
         }
         else
         {
-            printf("File Stream HAS FAILED !! \n\n");
-            printf("Filename: %s\n", filename.c_str());
-            std::terminate();
+            printf("[FATAL] [ERROR] File Stream HAS FAILED !! \n\n");
+            printf("[FATAL] [ERROR] Filename: %s\n", filename.c_str());
+            // std::terminate();
             return CompBuffer((char*)"NULL", -1);
         }
         
