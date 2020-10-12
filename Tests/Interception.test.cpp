@@ -22,11 +22,17 @@ TEST(Interception, CompBuffer_Char) {
 
 TEST(Interception, HTTPReq_Manipulation) {
     WebXO::Interception intercept;     
-    std::tuple<WebXO::HTTPReq, CompBuffer> test = intercept.HookSync(WebXO::HTTPReq(), [=](WebXO::HTTPReq &req) -> CompBuffer 
+    WebXO::HTTPReq hReq;
+    // Set the connection key to something else
+    hReq.host = std::string("NOTTHIS");
+    // Run the interceptor and alter the key via a lambda
+    std::tuple<WebXO::HTTPReq, CompBuffer> test = intercept.HookSync(hReq, [=](WebXO::HTTPReq &req) -> CompBuffer 
                             { 
-                                // Manipulate the request
+                                // Manipulate the request to something we can look for (aka the host)
                                 req.host = std::string("googletest");
+                                // Return a dummy CompBuffer as we dont need it
                                 return CompBuffer((char*)"TEST", -2);
                             });
+    // Compare the result
     EXPECT_EQ(std::string("googletest"), std::get<0>(test).host);
 }
