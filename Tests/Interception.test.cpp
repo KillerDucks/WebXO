@@ -24,7 +24,7 @@ TEST(Interception, HTTPReq_Manipulation) {
     WebXO::Interception intercept;     
     WebXO::HTTPReq hReq;
     // Set the connection key to something else
-    hReq.host = std::string("NOTTHIS");
+    hReq.host = std::string("CHANGE_ME");
     // Run the interceptor and alter the key via a lambda
     std::tuple<WebXO::HTTPReq, CompBuffer> test = intercept.HookSync(hReq, [=](WebXO::HTTPReq &req) -> CompBuffer 
                             { 
