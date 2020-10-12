@@ -28,11 +28,11 @@ int main(int argc, char* argv[])
     WebXO::Sockets socks(http, optsCLI.port, sockSettings);
 
     // Start the Socket Server
-    socks.Listen();
+    // socks.Listen();
 
-    // [TODO] Break this out into a thread so the CLI is still usable to perfrom admin activies
-    // std::thread th_serverThread(WebX::Sockets::Listen, &socks);
-    // th_serverThread.join();
+    // [TODO] [CURRENT] [TESTING] Break this out into a thread so the CLI is still usable to perfrom admin activies
+    std::thread th_serverThread(&WebXO::Sockets::Listen, std::ref(socks));
+    th_serverThread.join();
 
     return 0;
 }
