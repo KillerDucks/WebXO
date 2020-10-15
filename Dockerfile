@@ -30,7 +30,7 @@ RUN cd /var/WebXO/ && mkdir build && cd build && cmake -G "Unix Makefiles" ../ &
 FROM alpine:latest as final-env
 
 # Label
-LABEL come.melissa.version="1.3.0"
+LABEL come.melissa.version="1.3.4"
 LABEL vendor="Melissa"
 
 # Install needed dependancies
