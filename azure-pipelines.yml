@@ -3,27 +3,47 @@
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
 trigger:
-- master
-
-resources:
-- repo: self
-
-variables:
-  tag: 'tests'
-
-stages:
-- stage: Build
-  displayName: Build image
-  jobs:  
-  - job: Build
-    displayName: Build
-    pool:
-      vmImage: 'ubuntu-latest'
-    steps:
-    - task: Docker@2
-      displayName: Build and Run Tests
-      inputs:
-        command: build
-        dockerfile: '$(Build.SourcesDirectory)/Tests/Dockerfile'
-        tags: |
-          $(tag)
+  - master
+  
+  resources:
+  - repo: self
+  
+  variables:
+    tag: '$(Build.BuildId)'
+  
+  stages:
+  - stage: Build
+    displayName: Build image
+    jobs:  
+    - job: Build
+      displayName: Build
+      pool:
+        vmImage: 'ubuntu-latest'
+      steps:
+      - task: Docker@2
+        displayName: Build an image
+        inputs:
+          command: build
+          dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+          tags: |
+            $(tag)
+      - task: Docker@2
+        displayName: Push to Docker Hub
+        inputs:
+          containerRegistry: 'DockerHub'
+          repository: 'killerducks/webxo-server'
+          command: 'buildAndPush'
+          Dockerfile: '**/Dockerfile'
+  
+      - task: AzureRmWebAppDeployment@4
+        displayName: Deploy to App Services
+        inputs:
+          ConnectionType: 'AzureRM'
+          azureSubscription: 'Pay-As-You-Go(186c271c-7ff9-4937-8650-7816105c663c)'
+          appType: 'webAppContainer'
+          WebAppName: 'WebXO'
+          deployToSlotOrASE: true
+          ResourceGroupName: 'WebXO_RG'
+          SlotName: 'production'
+          DockerNamespace: ''
+          DockerRepository: 'killerducks/webxo-server'
