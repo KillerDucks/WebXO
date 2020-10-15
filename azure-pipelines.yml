@@ -41,7 +41,7 @@ stages:
         containerRegistry: 'DockerHub'
         repository: 'killerducks/webxo-server'
         command: 'buildAndPush'
-        Dockerfile: '**/Dockerfile.demo'
+        Dockerfile: '**/Dockerfile'
         tags: 'demo'        
       
     - task: AzureRmWebAppDeployment@4
