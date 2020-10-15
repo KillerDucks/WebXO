@@ -5,55 +5,55 @@
 trigger:
   - master
   
-  resources:
-  - repo: self
+resources:
+- repo: self
   
-  variables:
-    tag: 'latest'
+variables:
+  tag: 'latest'
   
-  stages:
-  - stage: Build
-    displayName: Build image
-    jobs:  
-    - job: Build
-      displayName: Build
-      pool:
-        vmImage: 'ubuntu-latest'
-      steps:
-      - task: Docker@2
-        displayName: Build an image
-        inputs:
-          command: build
-          dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
-          tags: |
-            $(tag)
-      - task: Docker@2
-        displayName: Push to Docker Hub (Full Container)
-        inputs:
-          containerRegistry: 'DockerHub'
-          repository: 'killerducks/webxo-server'
-          command: 'buildAndPush'
-          Dockerfile: '**/Dockerfile'
-          tags: 'latest'        
-      - task: Docker@2
-        displayName: Push to Docker Hub (Demo Container)
-        inputs:
-          containerRegistry: 'DockerHub'
-          repository: 'killerducks/webxo-server'
-          command: 'buildAndPush'
-          Dockerfile: '**/Dockerfile.demo'
-          tags: 'demo'        
-        
-      - task: AzureRmWebAppDeployment@4
-        displayName: Deploy to App Services
-        inputs:
-          ConnectionType: 'AzureRM'
-          azureSubscription: 'Pay-As-You-Go(186c271c-7ff9-4937-8650-7816105c663c)'
-          appType: 'webAppContainer'
-          WebAppName: 'WebXO'
-          deployToSlotOrASE: true
-          ResourceGroupName: 'WebXO_RG'
-          SlotName: 'production'
-          DockerNamespace: 'index.docker.io'
-          DockerRepository: 'killerducks/webxo-server'
-          DockerImageTag: 'demo'    
+stages:
+- stage: Build
+  displayName: Build image
+  jobs:  
+  - job: Build
+    displayName: Build
+    pool:
+      vmImage: 'ubuntu-latest'
+    steps:
+    - task: Docker@2
+      displayName: Build an image
+      inputs:
+        command: build
+        dockerfile: '$(Build.SourcesDirectory)/Dockerfile'
+        tags: |
+          $(tag)
+    - task: Docker@2
+      displayName: Push to Docker Hub (Full Container)
+      inputs:
+        containerRegistry: 'DockerHub'
+        repository: 'killerducks/webxo-server'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile'
+        tags: 'latest'        
+    - task: Docker@2
+      displayName: Push to Docker Hub (Demo Container)
+      inputs:
+        containerRegistry: 'DockerHub'
+        repository: 'killerducks/webxo-server'
+        command: 'buildAndPush'
+        Dockerfile: '**/Dockerfile.demo'
+        tags: 'demo'        
+      
+    - task: AzureRmWebAppDeployment@4
+      displayName: Deploy to App Services
+      inputs:
+        ConnectionType: 'AzureRM'
+        azureSubscription: 'Pay-As-You-Go(186c271c-7ff9-4937-8650-7816105c663c)'
+        appType: 'webAppContainer'
+        WebAppName: 'WebXO'
+        deployToSlotOrASE: true
+        ResourceGroupName: 'WebXO_RG'
+        SlotName: 'production'
+        DockerNamespace: 'index.docker.io'
+        DockerRepository: 'killerducks/webxo-server'
+        DockerImageTag: 'demo'    
