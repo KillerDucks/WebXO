@@ -4,6 +4,7 @@ A super simple *`but poorly written`* web server written in C++.
 ``Complete Package (Exec + Library) @ ~ 616K``
 
 ``AWS Badge is for Testing Builds / Azure Badge is for CI/CD``
+
 > [v1.3.4] Codename MakeWebXO
 
 # Demo
