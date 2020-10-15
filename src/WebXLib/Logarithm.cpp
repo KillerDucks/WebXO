@@ -68,10 +68,6 @@ namespace WebXO
         const unsigned char* bytes = (const unsigned char*) data;
         for (size_t i = 0; i < length; i++)
         {
-            // if (putchar(bytes[i]) == EOF)
-            // {
-            //     return false;
-            // }
             if(printf("%c", bytes[i]) == -1)
             {
                 return false;
