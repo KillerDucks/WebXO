@@ -19,6 +19,8 @@
                     }
                 }
                 ```
+        + Another idea is to write the logs to memory and then batch flush the buffer to disk
+                
 + HTTP / Socket | Resolved in WebXO v1.2.1 PATCH
     + [RESOLVED] [~~URGENT~~] ~~Solve the video transmission problem~~
         + [~~UPDATE~~] ~~Problem seem to be with the "Content-Type" header~~
@@ -41,3 +43,7 @@
 
 + Interception / Core | Resolved in WebXO v1.3.4 PATCH
     + [~~REVIEW~~] [~~LOW~~] ~~Still need a PoC impl to test out basic functionality !!!!~~
+
++ CMake
+    + [REVIEW] [LOW] The installation of supporting assets should be considered
+        + [NOTE] Minimal is just adding auto install for ``ErrorPages``
