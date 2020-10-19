@@ -244,6 +244,27 @@ namespace WebXO
             }
             else
             {
+                // Check if the folder is a FolderView folder
+                FolderView fView;
+                if(fView.isFolderViewer(relativePath.substr(0, relativePath.rfind('/'))))
+                {
+                    // This is a compatable folder
+                    printf("FOLDER VIEW DETECTED !!!!\n");
+                    std::string buffer = fView.GeneratePage(fView.GetFiles(relativePath.substr(0, relativePath.rfind('/'))));
+
+                    httpCode = WebXO::HTTPStatusCodes::OK;
+                    this->MIMETYPE = MimeType::HTML;
+
+                    // Compression Instance
+                    Compression zippy;
+                    
+                    // Verbose Logging
+                    _Log.Log("Returning the Buffer", Logarithm::NOTICE);
+
+                    printf("File to Compress [DEFLATE]: FolderView Dynamic Buffer\n");
+
+                    return zippy.DeflateBuffer((char*)buffer.c_str(), buffer.size()); 
+                }
                 // There is no '.' found, assume this is a root path of a sub/directory
                 std::regex rgx("(index.html)");
                 // Log for debugging
