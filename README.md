@@ -8,7 +8,7 @@ A super simple *`but poorly written`* web server written in C++.
 > [v1.4.0] Codename FolderView
 
 # Demo
-> This demo will take some time to start as I am using the free tier app services in Azure, however a smaller image is in the works to be used specifically for demonstration purposes
+> This demo will take some time to start as I am using the free tier app services in Azure but should take no longer than ``40 seconds``
 
 https://webxo.azurewebsites.net
 
