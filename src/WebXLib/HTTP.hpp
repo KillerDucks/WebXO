@@ -9,6 +9,7 @@
 #include "Interception.hpp"
 #include "Compression.hpp"
 #include "VirtualHosts.hpp"
+#include "FolderView.hpp"
 
 #ifndef WEBXO_HTTP_H
 #define WEBXO_HTTP_H
