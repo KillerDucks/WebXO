@@ -76,4 +76,24 @@ namespace WebXO
 
         return CompBuffer(dBuffer, dSize);
     }
+
+    CompBuffer Compression::DeflateBuffer(char* sBuffer, size_t szFileIN)
+    {
+        // Variables !!!
+        char* dBuffer;
+
+        // Calculate the deflate size
+        uLong cSize = compressBound((uLong) szFileIN);
+        uLong dSize = cSize;
+
+        // Allocate the Destination Buffer
+        dBuffer = new char[cSize];
+
+
+        // Deflate the file
+        compress2((Bytef*)dBuffer, &dSize, (Bytef*)sBuffer, szFileIN, Z_BEST_COMPRESSION);
+
+
+        return CompBuffer(dBuffer, dSize);
+    }
 }
