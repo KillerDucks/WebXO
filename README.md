@@ -5,7 +5,7 @@ A super simple *`but poorly written`* web server written in C++.
 
 ``AWS Badge is for Testing Builds / Azure Badge is for CI/CD``
 
-> [v1.3.4] Codename MakeWebXO
+> [v1.4.0] Codename FolderView
 
 # Demo
 > This demo will take some time to start as I am using the free tier app services in Azure, however a smaller image is in the works to be used specifically for demonstration purposes
