@@ -3,13 +3,14 @@
 // Include in the Class to test
 #include "../src/WebXLib/Compression.hpp"
 
-// Tests Parsing and Querying of a vhost.txt file
+// Tests the compression of a file [SIZE]
 TEST(Compression, DeflateFile_Size) {
     WebXO::Compression compresstionTest;
     CompBuffer testBuffer = compresstionTest.DeflateFile("./assets/deflateME.txt");
     EXPECT_EQ(33, testBuffer.second);
 }
 
+// Tests the compression of a file [BUFFER]
 TEST(Compression, DeflateFile_CmpFile) {
     WebXO::Compression compresstionTest;
     CompBuffer testBuffer = compresstionTest.DeflateFile("./assets/deflateME.txt");
@@ -31,4 +32,12 @@ TEST(Compression, DeflateFile_CmpFile) {
         fss.close();
     }
     EXPECT_EQ(fLength, testBuffer.second);
+}
+
+// Tests the compression of a Buffer
+TEST(Compression, DelfateBuffer) {
+    std::string sBuffer("THIS IS A TEST STRING BUFFER");
+    WebXO::Compression compresstionTest;
+    CompBuffer testBuffer = compresstionTest.DeflateBuffer((char*)sBuffer.c_str(), sBuffer.length());
+    EXPECT_EQ(34, testBuffer.second);
 }
