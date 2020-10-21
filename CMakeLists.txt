@@ -41,6 +41,12 @@ install(
     RUNTIME DESTINATION bin
 )
 
+# Install any relevant assets
+install(
+    FILES ../ErrorPages
+    DESTINATION /var/www/ErrorPages
+)
+
 # Look for GTest
 find_package(GTest)
 include(CTest)
