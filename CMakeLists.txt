@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.10.0)
 project(WebXOSrv)
 
+OPTION(DEMO "Install Demo Files." OFF)
+
 # Set the output of the Library
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/LIBS")
 # Set the output of the Executable
@@ -43,9 +45,17 @@ install(
 
 # Install any relevant assets
 install(
-    FILES ../ErrorPages
+    DIRECTORY ${PROJECT_SOURCE_DIR}/ErrorPages/
     DESTINATION /var/www/ErrorPages
 )
+
+# Install the ExampleSite if the demo flag is set
+if(DEMO)
+    install(
+        DIRECTORY ${PROJECT_SOURCE_DIR}/ExampleSite/
+        DESTINATION /var/www/ExampleSite
+    )
+endif()
 
 # Look for GTest
 find_package(GTest)
