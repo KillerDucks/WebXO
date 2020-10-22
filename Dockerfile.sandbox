@@ -1,0 +1,32 @@
+FROM alpine:latest as build-env
+
+# Label
+LABEL come.melissa.version="0.1.0_timy-alpha"
+LABEL vendor="Melissa"
+
+# Get all of the packages we need to build the app
+RUN apk add --no-cache \
+    gtest \
+    gtest-dev \
+    g++ \
+    cmake \
+    make \
+    zlib-dev
+
+# Make a Build Directory
+RUN mkdir -p /var/WebXO/
+
+# Copy in the build files
+COPY . /var/WebXO/
+
+# Make the server + lib
+RUN cd /var/WebXO/ && mkdir build && cd build && cmake -DDEMO:BOOL=true -G "Unix Makefiles" ../ && cd ../ && cmake --build /var/WebXO/build --config Release --target all -- -j && cd /var/WebXO/build && make install
+
+# Run the Tests and generate the report
+RUN cd /var/WebXO/build/EXE/ && ./WebXOSrv_GTests --gtest_output="xml:/tmp/WebXOReports/WebXOTests.xml"
+
+# Expose the port
+EXPOSE 8080
+
+# Start the webserver
+ENTRYPOINT [ "sh", "/var/WebXO/exec.sh" ]
