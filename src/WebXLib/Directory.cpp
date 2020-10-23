@@ -48,9 +48,14 @@ namespace WebXO
             // Run the file against the regex
             if(std::regex_search(fPath, sm, searchCriteria))
             {
+                // [DEBUG] Print
+                // printf("File: [%s]\tParent Path [%s]\n", file.path().c_str(), file.path().parent_path().c_str());
+                
                 // Check if the file needs to be from the root
                 if(directoryLevel == file.path().parent_path())
                 {
+                    
+                    // printf("File: [%s]\tParent Path [%s]\n", file.path().c_str(), file.path().parent_path().c_str());
                     // Log for debugging
                     // _Log.iLog("[%z] [%q] Directory Base Path: [%s]\n",Logarithm::INFO, this->basePath.c_str());
                     // _Log.iLog("[%z] [%q] Requested File Parent Path: [%s]\n",Logarithm::INFO, file.path().parent_path().c_str());

@@ -41,6 +41,10 @@
 + HTTP / Compression
     + [REVIEW] [MEDIUM] Look into converting from deflate into gzip for the main compression method
 
++ HTTP / Interception
+    + [HIGH] Current impl does not comply to the accept ranges from the client
+        + [NOTE] The buffer should be loaded and the file path set to ``-1`` or similar, this will allow the current control flow to be used
+
 + Interception / Core | Resolved in WebXO v1.3.4 PATCH
     + [~~REVIEW~~] [~~LOW~~] ~~Still need a PoC impl to test out basic functionality !!!!~~
 

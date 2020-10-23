@@ -15,8 +15,13 @@ TEST(Interception, CompBuffer_Int) {
 TEST(Interception, CompBuffer_Char) {
     WebXO::InterceptSettings _iSetting = WebXO::InterceptSettings();
     WebXO::Interception intercept;     
-    std::tuple<WebXO::HTTPReq, CompBuffer> test = intercept.HookSync(WebXO::HTTPReq(), _iSetting.callback);
-    EXPECT_EQ((char*)"TEST", std::get<1>(test).first);
+    std::tuple<WebXO::HTTPReq, CompBuffer> test = intercept.HookSync(WebXO::HTTPReq(), [=](WebXO::HTTPReq req) -> CompBuffer 
+                            {
+                                // Return a dummy CompBuffer as we dont need it
+                                return CompBuffer((char*)"TEST", -2);
+                            });
+    // printf("Expected: [TEST] [%ld], Generated: [%s] [%ld]\n", strlen((char*)"TEST"), std::get<1>(test).first, strlen(std::get<1>(test).first));
+    ASSERT_LE((char*)"TEST", std::get<1>(test).first);
 }
 
 

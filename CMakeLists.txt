@@ -7,7 +7,7 @@ set(CMAKE_LIBRARY_OUTPUT_DIRECTORY "${CMAKE_BINARY_DIR}/LIBS")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_BINARY_DIR}/EXE")
 
 # Set Compiler Flags
-set(CMAKE_CXX_FLAGS "-Wall")
+set(CMAKE_CXX_FLAGS "-Wall -std=c++0x")
 set(CMAKE_CXX_FLAGS_DEBUG "-g")
 set(CMAKE_CXX_FLAGS_RELEASE "-O2")
 
@@ -39,6 +39,12 @@ target_link_libraries(${PROJECT_NAME} WebXO)
 install(
     TARGETS ${PROJECT_NAME}
     RUNTIME DESTINATION bin
+)
+
+# Install any relevant assets
+install(
+    FILES ../ErrorPages
+    DESTINATION /var/www/ErrorPages
 )
 
 # Look for GTest
