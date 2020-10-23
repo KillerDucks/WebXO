@@ -20,7 +20,7 @@ namespace WebXO
                             callback([=](HTTPReq req) -> CompBuffer 
                             { 
                                 // This is just a default interception that will do nothing
-                                printf ("Requested: %s\n", req.requestType.c_str());
+                                // printf ("Requested: %s\n", req.requestType.c_str());
                                 return CompBuffer((char*)"TEST", -2);
                             })
         {}

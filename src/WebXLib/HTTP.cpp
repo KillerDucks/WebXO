@@ -135,7 +135,7 @@ namespace WebXO
 
         // Interception Hooking [DEBUG] [NOTE] Might be moved to a different place
         std::tuple<HTTPReq, CompBuffer> test = _interception.HookSync(hReq, _interceptionSettings.callback);
-        printf("RETURNED INTERCEPTION VALUE [%s] AND SIZE [%d]\n", std::get<1>(test).first, std::get<1>(test).second);
+        // printf("RETURNED INTERCEPTION VALUE [%s] AND SIZE [%d]\n", std::get<1>(test).first, std::get<1>(test).second);
         // if(_interceptionSettings.isBlocking)
         // {
         //     _interception.HookSync();
@@ -213,20 +213,20 @@ namespace WebXO
         // printf("requested accept encodings: %s\n", hReq.accept_Encoding.c_str());
         // this->AcceptDeflate(hReq.accept_Encoding);
         // std::terminate();
-        printf("\nrequested host: %s requested file: %s\n", hReq.host.c_str(), file.c_str());
+        // printf("\nrequested host: %s requested file: %s\n", hReq.host.c_str(), file.c_str());
         // printf("requested file: %s\n", file.c_str());
         // printf("parent path: %s\n", parentPath.c_str());
         // printf("relative path: %s\n", relativePath.c_str());
 
         // [CURRENT] [STRING] [FIX] Detect a root path (eg: http://localhost/ or http://localhost/blog/)
-        if(file.rfind('/') == file.length())
-        {
-            printf("relative path root: %s\n", relativePath.substr(0, relativePath.rfind('/')).c_str());
-        }
-        else
-        {
-            printf("relative alt path root: %s\n", relativePath.c_str());
-        }
+        // if(file.rfind('/') == file.length())
+        // {
+        //     printf("relative path root: %s\n", relativePath.substr(0, relativePath.rfind('/')).c_str());
+        // }
+        // else
+        // {
+        //     printf("relative alt path root: %s\n", relativePath.c_str());
+        // }
         
         
 
@@ -249,7 +249,6 @@ namespace WebXO
                 if(fView.isFolderViewer(relativePath.substr(0, relativePath.rfind('/'))))
                 {
                     // This is a compatable folder
-                    printf("FOLDER VIEW DETECTED !!!!\n");
                     std::string buffer = fView.GeneratePage(fView.GetFiles(relativePath.substr(0, relativePath.rfind('/'))));
 
                     httpCode = WebXO::HTTPStatusCodes::OK;
