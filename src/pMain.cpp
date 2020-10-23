@@ -87,7 +87,7 @@ Options ParseCLIOptions(std::vector<std::string> const vec)
         }
     }
 
-    printf("Threads: %s\n", (optsCLI.threading) ? "Enabled" : "Disabled");
+    // printf("Threads: %s\n", (optsCLI.threading) ? "Enabled" : "Disabled");
     printf("Number of Threads: %d\n", optsCLI.nThreads);
     printf("Base Path: %s\n", optsCLI.basePath.c_str());
     printf("Server Listen Port: %d\n", optsCLI.port);

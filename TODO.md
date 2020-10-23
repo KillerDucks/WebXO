@@ -51,3 +51,7 @@
 + CMake
     + [REVIEW] [LOW] The installation of supporting assets should be considered
         + [NOTE] Minimal is just adding auto install for ``ErrorPages``
+
++ EntryPoint / CLI Options + Sockets / Threading
+    + [LOW] The dis/enable thread option currently does nothing
+        + [NOTE] This requires a restructure of the ``WebXO::Sockets::Listen`` method
