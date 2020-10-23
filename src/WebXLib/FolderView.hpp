@@ -39,6 +39,8 @@ namespace WebXO
                 </body> \
             </html> \
         ";
+
+        std::string currentFolder = "";
     public:
         FolderView();
         ~FolderView() = default;
