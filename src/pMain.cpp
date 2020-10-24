@@ -22,6 +22,7 @@ int main(int argc, char* argv[])
 
     // Setup the Socket Server Settings
     WebXO::Sockets::Settings sockSettings(optsCLI.threading , optsCLI.nThreads);
+
     // Init the HTTP class + Set the base path of the HTTP Files
     WebXO::HTTP http(optsCLI.basePath);
     // Init the Sockets class
