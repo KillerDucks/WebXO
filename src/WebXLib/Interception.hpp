@@ -15,12 +15,13 @@
 namespace WebXO
 {
     // Interception Settings [TODO] Move into a separate file after testing
-    typedef struct InterceptSettings{
+    struct InterceptSettings{
         InterceptSettings():method(HTTPMethodTypes::GET), 
                             callback([=](HTTPReq req) -> CompBuffer 
-                            { 
+                            {
+                                // Make sure we are targetting the correct method [TODO]
+                                std::string sHTTPMethod(req.requestType.substr(0, req.requestType.find(' ')));
                                 // This is just a default interception that will do nothing
-                                // printf ("Requested: %s\n", req.requestType.c_str());
                                 return CompBuffer((char*)"TEST", -2);
                             })
         {}
@@ -28,7 +29,7 @@ namespace WebXO
         bool isBlocking;
         HTTPMethodTypes method;
         std::function<CompBuffer(HTTPReq&)> callback;
-    } INTERCEPTIONSETTINGS;
+    };
 
     // Interception Class
     class Interception
