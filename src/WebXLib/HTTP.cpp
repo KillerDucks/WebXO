@@ -135,6 +135,27 @@ namespace WebXO
 
         // Interception Hooking [DEBUG] [NOTE] Might be moved to a different place
         std::tuple<HTTPReq, CompBuffer> test = _interception.HookSync(hReq, _interceptionSettings.callback);
+        if(std::get<0>(test).requestType == std::string("-1"))
+        {
+            // This interception is a direct buffer
+            if(this->AcceptDeflate(hReq.accept_Encoding))
+            {
+                // Compress The interception buffer
+                Compression zippy;
+
+                printf("File to Compress [DEFLATE]: %s\n", filePath.c_str());
+
+                return zippy.DeflateBuffer(std::get<1>(test).first, (size_t)std::get<1>(test).second); 
+            }
+            else
+            {
+                return std::get<1>(test);
+            }            
+        }
+        // This will update the HTTP Request based off the Interception callback [TODO] Possible make this conditional
+        hReq = std::get<0>(test);
+
+        printf("HTTP::GETREQUESTEDFILE HTTP Req Type [%s]\n", hReq.requestType.c_str());
         // printf("RETURNED INTERCEPTION VALUE [%s] AND SIZE [%d]\n", std::get<1>(test).first, std::get<1>(test).second);
 
         // Virtual Hosts Redirection
