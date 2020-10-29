@@ -155,18 +155,18 @@ namespace WebXO
         // This will update the HTTP Request based off the Interception callback [TODO] Possible make this conditional
         hReq = std::get<0>(test);
 
-        printf("HTTP::GETREQUESTEDFILE HTTP Req Type [%s]\n", hReq.requestType.c_str());
         // printf("RETURNED INTERCEPTION VALUE [%s] AND SIZE [%d]\n", std::get<1>(test).first, std::get<1>(test).second);
 
         // Virtual Hosts Redirection
         std::string vQuery = this->vHosts.Query(hReq.host.substr(0, hReq.host.find(':')));
         // printf("\nQuerying %s: %s\n", hReq.host.substr(0, hReq.host.find(':')).c_str(), this->vHosts.Query(hReq.host.substr(0, hReq.host.find(':'))).c_str());   // [DEBUG] Print
 
+        printf("Method: [%s]\tFile [%s]\n", hReq.method().c_str(), hReq.file().c_str());
 
 
         // [DEBUG] [HIGH] The impl below does not respect the various HTTP Methods and will only work "Correctly" with GET
         // Get the web path request needed from the HTTP Request
-        std::string file(hReq.requestType.substr(hReq.requestType.find(' ') + 1, hReq.requestType.size()));
+        std::string file(hReq.file());
 
         // Decode any URL parameters if any
         if(file.find('?') != std::string::npos)
@@ -220,6 +220,7 @@ namespace WebXO
         }
         
 
+        {
         // Debug Logging [REMOVE]
         // printf("requested accept: %s\n", hReq.accept.c_str());
         // printf("requested accept encodings: %s\n", hReq.accept_Encoding.c_str());
@@ -238,8 +239,8 @@ namespace WebXO
         // else
         // {
         //     printf("relative alt path root: %s\n", relativePath.c_str());
-        // }
-        
+        // }        
+        }
         
 
         // Debug Logging
@@ -372,41 +373,43 @@ namespace WebXO
         // [HIGH] The file should not be openned here, abstract this out
         if(!this->AcceptDeflate(hReq.accept_Encoding))
         {
-            // Open a stream and read the file into the buffer
-            ssFileReader.open(filePath, std::ios::binary | std::ios::in);
+            // // Open a stream and read the file into the buffer
+            // ssFileReader.open(filePath, std::ios::binary | std::ios::in);
 
-            // Check if the stream is okay to work with
-            if(ssFileReader.good())
-            {
-                // Get the file length
-                ssFileReader.seekg(0, ssFileReader.end);
-                fLength = ssFileReader.tellg();
-                ssFileReader.seekg(0, ssFileReader.beg);
+            // // Check if the stream is okay to work with
+            // if(ssFileReader.good())
+            // {
+            //     // Get the file length
+            //     ssFileReader.seekg(0, ssFileReader.end);
+            //     fLength = ssFileReader.tellg();
+            //     ssFileReader.seekg(0, ssFileReader.beg);
 
-                // _Log.iLog("[%z] [%q] File Size: [~%dKB]\n", Logarithm::NOTICE, fLength / 1024); // [DEBUG] Print
+            //     // _Log.iLog("[%z] [%q] File Size: [~%dKB]\n", Logarithm::NOTICE, fLength / 1024); // [DEBUG] Print
 
-                buffer = new char[fLength + 1];
-                ssFileReader.read(buffer, fLength);
-                ssFileReader.close();
-            }
-            else
-            {
-                // [TODO] Move the error checking to above the file read
-                _Log.Log("Invalid File Stream", Logarithm::CRITICAL);        
-                filePath.clear();
-                filePath += ERROR_PAGE_DIR;
-                filePath += "/500.html";
-                buffer = new char[iDirectory.GetFileSize(filePath)];
-                memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
-                memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.szFile(filePath));
-                // Set the MIME Type
-                this->MIMETYPE = MimeType::HTML;
-                // Set the HTTP status code
-                httpCode = WebXO::HTTPStatusCodes::INTERNAL_SERVER_ERROR;
-                ssFileReader.close();
-            }
+            //     buffer = new char[fLength + 1];
+            //     ssFileReader.read(buffer, fLength);
+            //     ssFileReader.close();
+            // }
+            // else
+            // {
+            //     // [TODO] Move the error checking to above the file read
+            //     _Log.Log("Invalid File Stream", Logarithm::CRITICAL);        
+            //     filePath.clear();
+            //     filePath += ERROR_PAGE_DIR;
+            //     filePath += "/500.html";
+            //     buffer = new char[iDirectory.GetFileSize(filePath)];
+            //     memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
+            //     memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.szFile(filePath));
+            //     // Set the MIME Type
+            //     this->MIMETYPE = MimeType::HTML;
+            //     // Set the HTTP status code
+            //     httpCode = WebXO::HTTPStatusCodes::INTERNAL_SERVER_ERROR;
+            //     ssFileReader.close();
+            // }
 
-            return std::pair<char*, int>(buffer, fLength);
+            // return std::pair<char*, int>(buffer, fLength);
+
+            return IO::ReadFile(filePath);
         }
 
         // Compression Instance

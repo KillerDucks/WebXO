@@ -96,6 +96,23 @@ namespace WebXO
         std::string   sec_Fetch_Mode;
         std::string   accept_Encoding;
         std::string   accept_Languages;
+
+        std::string file()
+        {
+            if(requestType.size() != 0)
+            {
+                return requestType.substr(requestType.find(' ') + 1, requestType.size());
+            }
+            return std::string("-1");
+        }
+        std::string method()
+        {
+            if(requestType.size() != 0)
+            {
+                return requestType.substr(0, requestType.find(' '));
+            }
+            return std::string("-1");
+        }
     } HTTPREQ, *PHTTPREQ;
 
 

@@ -1,3 +1,5 @@
+#pragma once
+
 #include <regex>
 #include <ctime>
 
@@ -10,6 +12,8 @@
 #include "Compression.hpp"
 #include "VirtualHosts.hpp"
 #include "FolderView.hpp"
+
+#include "IO.hpp"
 
 #ifndef WEBXO_HTTP_H
 #define WEBXO_HTTP_H

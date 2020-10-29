@@ -17,6 +17,8 @@ namespace WebXO
         
         // Set the default log level
         this->_default_log_Level = defaultLevel; // [TODO] Do some sort of error checking ???
+
+        this->print(std::string("\0").c_str(), std::string("\0").size());
     }
 
     Logarithm::~Logarithm()
@@ -61,20 +63,6 @@ namespace WebXO
 
         // // Use a printf function to visually log our message [TODO] Change to the internal printf finction `iLog()`
         // printf("[%s] [%s] %s\n",this->_program_name.c_str(), strFactory.c_str(), message.c_str());
-    }
-
-    // Interception
-    static bool print(const char* data, size_t length) {
-        const unsigned char* bytes = (const unsigned char*) data;
-        for (size_t i = 0; i < length; i++)
-        {
-            if(printf("%c", bytes[i]) == -1)
-            {
-                return false;
-            }
-            
-        }            
-        return true;
     }
 
     // [TODO] Possible future use
@@ -267,5 +255,6 @@ namespace WebXO
 
         // va_end(parameters);
         // return written;
+        return 0;
     }
 };

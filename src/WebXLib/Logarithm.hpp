@@ -20,6 +20,20 @@ namespace WebXO
         // char       _pName[4] = {"LOG"};
         int         _default_log_Level;
 
+        // Interception
+        static bool print(const char* data, size_t length) {
+            const unsigned char* bytes = (const unsigned char*) data;
+            for (size_t i = 0; i < length; i++)
+            {
+                if(printf("%c", bytes[i]) == -1)
+                {
+                    return false;
+                }
+                
+            }            
+            return true;
+        }
+
     public:
         Logarithm(std::string progName = (std::string)"Logarithm", int defaultLevel = 0);
         ~Logarithm();
