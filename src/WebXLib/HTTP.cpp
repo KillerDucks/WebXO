@@ -76,11 +76,12 @@ namespace WebXO
                 tmp.clear();
             }
 
-            printf("\n\nFORM DATA CAPTURED !!!\n");
-            for(auto d : hRequest.form_data)
-            {
-                printf("Key %s, Value: %s\n", d.first.c_str(), d.second.c_str());
-            }
+            // [DEBUG] Print
+            // printf("\n\nFORM DATA CAPTURED !!!\n");
+            // for(auto d : hRequest.form_data)
+            // {
+            //     printf("Key %s, Value: %s\n", d.first.c_str(), d.second.c_str());
+            // }
         }
 
 
