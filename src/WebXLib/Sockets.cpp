@@ -174,34 +174,21 @@ namespace WebXO
         // Read in the data from the socket
         int cPos = read(cSocket, buffer, 2048 - 1);
         buffer[cPos] = '\0';                    
-        
-        // Parse the Incoming HTTP Request (ignore cast error if visible)
-        hReq = this->_Http.ParseRequest(buffer);
 
-        // printf("RAW SOCKET REQYEST BUFFER:\n\n%s\n", buffer);
-
-        // Verbose Logging
-        _Log.iLog("[%z] [%q] Serving Client @ [%s] with User-Agent [%s]\n",Logarithm::NOTICE, hReq.host.c_str(), hReq.user_Agent.c_str());
-        _Log.iLog("[%z] [%q] Client is requesting [%s]\n",Logarithm::NOTICE, hReq.requestType.c_str());
-        
-        // Get the requested file and store into a local container
-        vBuffer = this->_Http.GetRequestedFile(hReq);
-
-        // Generate the HTTP Response Headers (ignore cast error if visible)
-        hRes = this->_Http.GenerateHTTPResponse(vBuffer.second, hReq);    
- 
-        // Construct the HTTP Headers into a string to send back the client (This is done to add the \r\n so the data can follow)
-        s_httpHeader += hRes.ReturnHeader();
-        s_httpHeader += "\r\n";
+        // Generate the Reponse to the Request
+        std::pair<CompBuffer, std::string> response = this->_Http.Response(buffer);
 
         // printf("File Size: [~%dB]\n", vBuffer.second); // [DEBUG] Print
 
         // Write the HTTP Header to the Client Socket [PROBLEM] [HALT] The end of the HTTP Header get appended to the next transmission
-        cPos = send(cSocket, s_httpHeader.c_str(), s_httpHeader.size(), MSG_NOSIGNAL);
+        if(!response.second.empty())
+        {
+            cPos = send(cSocket, response.second.c_str(), response.second.size(), MSG_NOSIGNAL);
+        }
         
         // printf("!!\n\n%s\n\n!!", s_httpHeader.c_str());
 
-        if(send(cSocket, vBuffer.first, vBuffer.second, MSG_NOSIGNAL) == -1)   // [CURRENT] Look into send flags, this flag (MSG_NOSIGNAL) ignores if the pipe is broken or not
+        if(send(cSocket, response.first.first, response.first.second, MSG_NOSIGNAL) == -1)   // [CURRENT] Look into send flags, this flag (MSG_NOSIGNAL) ignores if the pipe is broken or not
         {
             // Oh no, we have an error !!!                    
             _Log.iLog("[%z] [%q] An Error has occurred with send(): [%s]\n",Logarithm::NOTICE, strerror(errno));
