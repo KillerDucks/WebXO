@@ -136,7 +136,7 @@ namespace WebXO
     int Sockets::RequestHandler(ThreadID const &tID)
     {
         // Variables !!
-        char buffer[2048];
+        char buffer[REQUEST_BUFFER];
         HTTPReq hReq;
         HTTPRes hRes;
         std::string s_httpHeader;
@@ -177,6 +177,8 @@ namespace WebXO
         
         // Parse the Incoming HTTP Request (ignore cast error if visible)
         hReq = this->_Http.ParseRequest(buffer);
+
+        // printf("RAW SOCKET REQYEST BUFFER:\n\n%s\n", buffer);
 
         // Verbose Logging
         _Log.iLog("[%z] [%q] Serving Client @ [%s] with User-Agent [%s]\n",Logarithm::NOTICE, hReq.host.c_str(), hReq.user_Agent.c_str());
