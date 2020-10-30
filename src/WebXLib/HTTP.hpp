@@ -48,6 +48,9 @@ namespace WebXO
         // HTTP Status Codes
         WebXO::HTTPStatusCodes httpCode;
 
+        // HTTP Methods
+        WebXO::HTTPMethodTypes httpMethod;
+
         // Interception
         bool isIntercept;
         InterceptSettings _interceptionSettings = InterceptSettings();
@@ -97,6 +100,25 @@ namespace WebXO
 
         // Generate a HTTP Response Header
         HTTPRes GenerateHTTPResponse(int contentLength, HTTPReq hReq);
+
+        // Responder
+        std::pair<CompBuffer, std::string> Response(char* buffer)
+        {
+            HTTPReq httpRequest = ParseRequest(buffer);
+            CompBuffer body = GetRequestedFile(httpRequest);
+            HTTPRes httpResponse = GenerateHTTPResponse(body.second, httpRequest);
+
+            std::string sReponseHeaders = httpResponse.ReturnHeader();
+            sReponseHeaders += "\r\n";
+
+            if(this->httpMethod == HTTPMethodTypes::HEAD)
+            {
+                // Dont send the body
+                return {CompBuffer((char*)"NULL", -1), sReponseHeaders};
+            }
+
+            return {body, sReponseHeaders};
+        };
     };    
 }
 
