@@ -51,6 +51,39 @@ namespace WebXO
             
         }
 
+        // Detect any data left over (possible POST data)
+        if(!t.empty())
+        {
+            std::string tmp;
+            // Data still exists, parse the data
+            for(char c : t)
+            {
+                if(c != '&')
+                {
+                    tmp += c;
+                }
+                else
+                {
+                    hRequest.form_data.insert(std::pair<std::string, std::string>(tmp.substr(0, tmp.find('=')), tmp.substr(tmp.find('=') + 1, tmp.size())));
+                    tmp.clear();
+                }
+                
+            }
+
+            if(!tmp.empty())
+            {
+                hRequest.form_data.insert(std::pair<std::string, std::string>(tmp.substr(0, tmp.find('=')), tmp.substr(tmp.find('=') + 1, tmp.size())));
+                tmp.clear();
+            }
+
+            printf("\n\nFORM DATA CAPTURED !!!\n");
+            for(auto d : hRequest.form_data)
+            {
+                printf("Key %s, Value: %s\n", d.first.c_str(), d.second.c_str());
+            }
+        }
+
+
         // [TODO] Debugging Print
         // for(auto o : reqOpts)
         // {
@@ -164,7 +197,31 @@ namespace WebXO
         printf("Method: [%s]\tFile [%s]\n", hReq.method().c_str(), hReq.file().c_str());
 
 
-        // [DEBUG] [HIGH] The impl below does not respect the various HTTP Methods and will only work "Correctly" with GET
+        // [CURRENT] [DEBUG] [HIGH] The impl below does not respect the various HTTP Methods and will only work "Correctly" with GET
+        // Get the Method
+        HTTPMethodTypes rType;
+        auto it = HTTPMethodTypesTable.find(hReq.method());
+        if (it != HTTPMethodTypesTable.end()) {
+            rType = it->second;
+        } else { printf("\nHTTP Method Deduction ERROR !!!\n"); }
+
+        // [DEBUG]
+        switch (rType)
+        {
+        case HTTPMethodTypes::GET:
+            printf("HTTP Detected Method: GET\n");
+            break;
+        case HTTPMethodTypes::POST:
+            printf("HTTP Detected Method: POST\n");
+            break;
+        case HTTPMethodTypes::HEAD:
+            printf("HTTP Detected Method: HEAD\n");
+            break;
+        
+        default:
+            break;
+        }
+
         // Get the web path request needed from the HTTP Request
         std::string file(hReq.file());
 
