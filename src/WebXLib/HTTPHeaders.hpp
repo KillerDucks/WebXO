@@ -97,6 +97,8 @@ namespace WebXO
         std::string   accept_Encoding;
         std::string   accept_Languages;
 
+        std::map<std::string, std::string> form_data;
+
         std::string file()
         {
             if(requestType.size() != 0)
