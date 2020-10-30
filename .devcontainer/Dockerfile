@@ -12,5 +12,3 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
                                                     zlib1g \
                                                     zlib1g-dev \
     && echo Installing GTest && cd /usr/src/gtest && cmake CMakeLists.txt && make && cp *.a /usr/lib
-
-# Generate CMake build files for WebXO
