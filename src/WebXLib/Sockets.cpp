@@ -188,10 +188,14 @@ namespace WebXO
         
         // printf("!!\n\n%s\n\n!!", s_httpHeader.c_str());
 
-        if(send(cSocket, response.first.first, response.first.second, MSG_NOSIGNAL) == -1)   // [CURRENT] Look into send flags, this flag (MSG_NOSIGNAL) ignores if the pipe is broken or not
+        // Check if the buffer needs to be sent
+        if(response.first.second != -1)
         {
-            // Oh no, we have an error !!!                    
-            _Log.iLog("[%z] [%q] An Error has occurred with send(): [%s]\n",Logarithm::NOTICE, strerror(errno));
+            if(send(cSocket, response.first.first, response.first.second, MSG_NOSIGNAL) == -1)   // [CURRENT] Look into send flags, this flag (MSG_NOSIGNAL) ignores if the pipe is broken or not
+            {
+                // Oh no, we have an error !!!                    
+                _Log.iLog("[%z] [%q] An Error has occurred with send(): [%s]\n",Logarithm::NOTICE, strerror(errno));
+            }
         }
 
         // Shutdown the Socket (Read & Write)
