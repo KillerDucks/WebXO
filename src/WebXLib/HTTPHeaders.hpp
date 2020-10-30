@@ -45,7 +45,7 @@ namespace WebXO
 
     typedef struct hEntity
     {
-        std::string      Allow                       = "Allow: GET, POST";
+        std::string      Allow                       = "Allow: GET, POST, HEAD";
         std::string      contentEncoding;                
         std::string      contentLanguage             = "Content-Language: en-GB, en-US";
         std::string      contentLength;              // [NOTE] [FUTURE] Fix the content length
