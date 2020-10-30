@@ -214,6 +214,11 @@ namespace WebXO
             break;
         case HTTPMethodTypes::POST:
             printf("HTTP Detected Method: POST\n");
+            // Check if we have any form data to handle
+            if(!hReq.form_data.empty())
+            {
+                // Handle the data
+            }
             break;
         case HTTPMethodTypes::HEAD:
             printf("HTTP Detected Method: HEAD\n");
