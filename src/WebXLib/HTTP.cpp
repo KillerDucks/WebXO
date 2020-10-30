@@ -156,10 +156,6 @@ namespace WebXO
 
     std::pair<char*, int> HTTP::GetRequestedFile(HTTPReq hReq)
     {
-        // [DEBUG] [IMPL] [TEST] Will compress all files regardless of Client Accept Ranges
-        char* buffer;
-        int fLength = 0;
-
 
         std::string filePath;
         std::string urlData;                        // [NOTE] This should be put through a decoder to remove HTTP special chars
@@ -200,14 +196,13 @@ namespace WebXO
 
         // [CURRENT] [DEBUG] [HIGH] The impl below does not respect the various HTTP Methods and will only work "Correctly" with GET
         // Get the Method
-        HTTPMethodTypes rType;
         auto it = HTTPMethodTypesTable.find(hReq.method());
         if (it != HTTPMethodTypesTable.end()) {
-            rType = it->second;
+            this->httpMethod = it->second;
         } else { printf("\nHTTP Method Deduction ERROR !!!\n"); }
 
         // [DEBUG]
-        switch (rType)
+        switch (this->httpMethod)
         {
         case HTTPMethodTypes::GET:
             printf("HTTP Detected Method: GET\n");
