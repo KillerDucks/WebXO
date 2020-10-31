@@ -52,14 +52,14 @@ namespace WebXO
         }
 
         // Internal Thread Handler
-        typedef struct ThreadID
+        struct ThreadID
         {
             ThreadID() : friendlyName("NOT_SET"), id(random_string(5)), done(false), moveOut(false) {}
             std::string     friendlyName;
             std::string     id;
             bool            done;
             bool            moveOut;
-        } THREADID;
+        };
 
         // Data
         int port = 0;
@@ -73,7 +73,7 @@ namespace WebXO
 
     public:
         // Settings Structure
-        typedef struct Settings
+        struct Settings
         {
             // Constructor
             Settings() : thread(false), max_threads(2) {}
@@ -84,7 +84,7 @@ namespace WebXO
             }
             bool    thread          = false;      // Enable Threading ? [DEFAULT] FALSE
             int     max_threads     = 2;          // Maximum Threads [DEFAULT] 2
-        } SETTINGS, *PSETTINGS;
+        };
 
         // Public Variables
         Settings _Settings = Settings();
