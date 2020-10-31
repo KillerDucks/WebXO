@@ -154,14 +154,11 @@ namespace WebXO
         return hRequest;
     }
 
-    std::pair<char*, int> HTTP::GetRequestedFile(HTTPReq hReq)
+    CompBuffer HTTP::GetRequestedFile(HTTPReq hReq)
     {
-
+        // Scratch Variables
         std::string filePath;
         std::string urlData;                        // [NOTE] This should be put through a decoder to remove HTTP special chars
-        std::fstream ssFileReader;
-        std::vector<std::string> dirLookup;         // [NOTE] This has/will become redundant in future versions
-        std::regex findFile;                        // [NOTE] This has/will become redundant in future versions
 
         // Interception Hooking [DEBUG] [NOTE] Might be moved to a different place
         std::tuple<HTTPReq, CompBuffer> test = _interception.HookSync(hReq, _interceptionSettings.callback);
