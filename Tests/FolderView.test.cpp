@@ -7,7 +7,7 @@
 TEST(FolderView, GetFiles) {
     using namespace WebXO;
     FolderView fViewer;
-    EXPECT_EQ(3, fViewer.GetFiles(std::string("./assets")).size());
+    EXPECT_EQ(4, fViewer.GetFiles(std::string("./assets")).size());
 }
 
 // This test will check to see if the page is getting generated (sort of)
