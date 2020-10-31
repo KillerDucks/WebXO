@@ -6,7 +6,7 @@
 // Tests the basic core HTTP Header Generation
 TEST(HTTPHeaders, General_Header) {
     using namespace WebXO;
-    HGENERAL gHeader;
+    hGeneral gHeader;
     gHeader.Date = gHeader.GetCurrentTime();
     EXPECT_EQ("Connection: close", gHeader.Connection);
 }
