@@ -190,8 +190,6 @@ namespace WebXO
 
         printf("Method: [%s]\tFile [%s]\n", hReq.method().c_str(), hReq.file().c_str());
 
-
-        // [CURRENT] [DEBUG] [HIGH] The impl below does not respect the various HTTP Methods and will only work "Correctly" with GET
         // Get the Method
         auto it = HTTPMethodTypesTable.find(hReq.method());
         if (it != HTTPMethodTypesTable.end()) {
@@ -236,12 +234,9 @@ namespace WebXO
         }
 
         // Convert the requested web path into a meaningful file path
-
         // Determine the Path of the requested file    
         std::string relativePath(iDirectory.GetBasePath());
-        // relativePath += (file.rfind('/') == 0) ? file : file.substr(0, file.rfind('/'));
         std::string parentPath(iDirectory.GetBasePath());
-        // parentPath += file;
 
         if(vQuery != "-1")
         {
@@ -288,16 +283,6 @@ namespace WebXO
         // printf("requested file: %s\n", file.c_str());
         // printf("parent path: %s\n", parentPath.c_str());
         // printf("relative path: %s\n", relativePath.c_str());
-
-        // [CURRENT] [STRING] [FIX] Detect a root path (eg: http://localhost/ or http://localhost/blog/)
-        // if(file.rfind('/') == file.length())
-        // {
-        //     printf("relative path root: %s\n", relativePath.substr(0, relativePath.rfind('/')).c_str());
-        // }
-        // else
-        // {
-        //     printf("relative alt path root: %s\n", relativePath.c_str());
-        // }        
         }
         
 
