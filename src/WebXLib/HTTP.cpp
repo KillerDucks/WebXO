@@ -434,55 +434,15 @@ namespace WebXO
         // [HIGH] The file should not be openned here, abstract this out
         if(!this->AcceptDeflate(hReq.accept_Encoding))
         {
-            // // Open a stream and read the file into the buffer
-            // ssFileReader.open(filePath, std::ios::binary | std::ios::in);
-
-            // // Check if the stream is okay to work with
-            // if(ssFileReader.good())
-            // {
-            //     // Get the file length
-            //     ssFileReader.seekg(0, ssFileReader.end);
-            //     fLength = ssFileReader.tellg();
-            //     ssFileReader.seekg(0, ssFileReader.beg);
-
-            //     // _Log.iLog("[%z] [%q] File Size: [~%dKB]\n", Logarithm::NOTICE, fLength / 1024); // [DEBUG] Print
-
-            //     buffer = new char[fLength + 1];
-            //     ssFileReader.read(buffer, fLength);
-            //     ssFileReader.close();
-            // }
-            // else
-            // {
-            //     // [TODO] Move the error checking to above the file read
-            //     _Log.Log("Invalid File Stream", Logarithm::CRITICAL);        
-            //     filePath.clear();
-            //     filePath += ERROR_PAGE_DIR;
-            //     filePath += "/500.html";
-            //     buffer = new char[iDirectory.GetFileSize(filePath)];
-            //     memset(buffer, 0x00, iDirectory.GetFileSize(filePath));
-            //     memcpy(buffer, iDirectory.ReadFile(filePath), iDirectory.szFile(filePath));
-            //     // Set the MIME Type
-            //     this->MIMETYPE = MimeType::HTML;
-            //     // Set the HTTP status code
-            //     httpCode = WebXO::HTTPStatusCodes::INTERNAL_SERVER_ERROR;
-            //     ssFileReader.close();
-            // }
-
-            // return std::pair<char*, int>(buffer, fLength);
-
             return IO::ReadFile(filePath);
         }
 
         // Compression Instance
         Compression zippy;
         
-        // Verbose Logging
-        _Log.Log("Returning the Buffer", Logarithm::NOTICE);
-
         printf("File to Compress [DEFLATE]: %s\n", filePath.c_str());
 
         return zippy.DeflateFile(filePath); 
-
     }
 
     HTTPRes HTTP::GenerateHTTPResponse(int contentLength, HTTPReq hReq)
@@ -513,7 +473,7 @@ namespace WebXO
         case HTTPStatusCodes::INTERNAL_SERVER_ERROR:
             httpRes.reasonPhrase = "Internal Server Error";
             break;
-        
+        // Let all other Status Codes fall through
         default:
             break;
         }
@@ -609,15 +569,11 @@ namespace WebXO
 
     bool HTTP::AcceptDeflate(std::string accept_encodings)
     {
-        // [DEBUG]
-        // printf("Deflate Present? [%d]\n", accept_encodings.find("deflate"));
-
         // Check if deflate is present
         if(accept_encodings.find("deflate", 0) != std::string::npos)
         {               
             return true;            
         }
-
         return false;
     }
 };
