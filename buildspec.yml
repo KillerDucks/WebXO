@@ -32,7 +32,9 @@ phases:
       - echo Pre Build phase completed
   build:
     commands:
-      - cmake --build $RPATH/build --config Debug --target all -- -j 6
+      - cmake --build $RPATH/build --config Release --target all -- -j 6
+      - cd $RPATH/build
+      - make install
   post_build:
       commands:
         - echo Running WebXO Tests
