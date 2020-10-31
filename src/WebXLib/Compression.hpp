@@ -11,19 +11,13 @@
 
 namespace WebXO
 {
-    class Compression
-    {
-    private:
-        /* data */
-    public:
-        Compression(/* args */);
-        ~Compression();
-        
+    namespace Compression
+    {        
         // Deflate a buffer via a ptr
         CompBuffer DeflateFile(std::string filename);
 
         CompBuffer DeflateBuffer(char* sBuffer, size_t szFileIN);
-    };    
+    };
 }
 
 #endif //WEBX_COMPRESSION_H
