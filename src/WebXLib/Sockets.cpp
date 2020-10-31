@@ -137,11 +137,7 @@ namespace WebXO
     {
         // Variables !!
         char buffer[REQUEST_BUFFER];
-        HTTPReq hReq;
-        HTTPRes hRes;
-        std::string s_httpHeader;
-        // std::vector<std::string> vBuffer;
-        std::pair<char*, int> vBuffer;
+        CompBuffer vBuffer;
 
         // Extract the thread id
         ThreadID &a_thread = const_cast<ThreadID&>(tID);
