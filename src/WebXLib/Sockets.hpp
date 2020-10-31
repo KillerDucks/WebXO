@@ -69,7 +69,7 @@ namespace WebXO
         int iSockets = 0;
 
         // Options Sockets
-        int option = 1;
+        const int option = 1;
 
     public:
         // Settings Structure
