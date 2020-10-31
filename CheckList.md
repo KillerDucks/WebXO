@@ -10,13 +10,13 @@
 
 * Use Request Accept Ranges __Done__ [v1.2.0]
 
-* Simple Directory Listings (Like Apache HTTP) __Pending__
+* Simple Directory Listings (Like Apache HTTP) __Done__ [v1.5.0] (See FolderViewer)
 
 * TLS/SSL/HTTPS Support __Pending__
 
 ## Components to Impl
 
-* IO Component __Pending__
+* IO Component __Done__ [v1.5.0]
 
 # Testing to Impl [Currently] [Done]
 
