@@ -104,7 +104,7 @@ namespace WebXO
         void    Listen();
         
         // Request Handling
-        int     RequestHandler(ThreadID const &tID);
+        void    RequestHandler(ThreadID const &tID);
 
         // Internal Thread Handler
         std::vector<std::pair<ThreadID, std::thread>> vThread;

@@ -133,7 +133,7 @@ namespace WebXO
         return;
     }
 
-    int Sockets::RequestHandler(ThreadID const &tID)
+    void Sockets::RequestHandler(ThreadID const &tID)
     {
         // Variables !!
         char buffer[REQUEST_BUFFER];
@@ -163,7 +163,7 @@ namespace WebXO
             _Log.Log("Could not accept a Client Socket, FATAL !!!", Logarithm::FATAL);
             // Fallback printf
             printf("Oh dear, something went wrong with accept()! %s\n", strerror(errno));
-            return -1;
+            return;
         }
         _Log.iLog("[%z] [%q] Connected to Client Socket using FD [%d]\n", Logarithm::INFO, cSocket);
 
@@ -203,8 +203,5 @@ namespace WebXO
         _Log.iLog("[%z] [%q] [%s] Returning thread back to the main thread !!\n", Logarithm::NOTICE, this_thread_id.c_str());    
         // Tell the master thread we are done
         this->vThread.at(GetThreadVector(a_thread.id)).first.done = true;
-
-        // Return a 1 (i don't know why this cant be void but oh well)
-        return 1;
     }
 };
