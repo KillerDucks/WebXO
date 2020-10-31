@@ -80,7 +80,14 @@ namespace WebXO
             Settings(bool enThread, int noTheads)
             {
                 this->thread = enThread;
-                this->max_threads = noTheads;
+                if(!this->thread)
+                {
+                    this->max_threads = noTheads;
+                }
+                else
+                {
+                    this->max_threads = 1;
+                }
             }
             bool    thread          = false;      // Enable Threading ? [DEFAULT] FALSE
             int     max_threads     = 2;          // Maximum Threads [DEFAULT] 2
