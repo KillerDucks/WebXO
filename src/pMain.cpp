@@ -2,7 +2,7 @@
 #include "WebXLib/Sockets.hpp"
 #include "WebXLib/HTTP.hpp"
 
-typedef struct Options 
+struct Options 
 {
     Options() : basePath("/var/www/ExampleSite"), port(8080), nThreads(4), threading(false)
     {}
@@ -10,7 +10,7 @@ typedef struct Options
     int             port;
     int             nThreads;
     bool            threading;    
-} OPTIONS;
+};
 
 Options ParseCLIOptions(std::vector<std::string> const vec);
 

@@ -10,7 +10,7 @@
 namespace WebXO
 {
 
-    typedef struct hGeneral
+    struct hGeneral
     {
         // string  Cache_Control;      Whats caching????
         std::string  Connection              = "Connection: close";
@@ -40,10 +40,10 @@ namespace WebXO
             // t += "\r\n";
             return t;
         }
-    } HGENERAL, *PHGENERAL;
+    };
 
 
-    typedef struct hEntity
+    struct hEntity
     {
         std::string      Allow                       = "Allow: GET, POST, HEAD";
         std::string      contentEncoding;                
@@ -80,9 +80,9 @@ namespace WebXO
             t += "\r\n";            
             return t;
         }
-    } HENTITY, *PHENTITY;
+    };
 
-    typedef struct HTTPReq
+    struct HTTPReq
     {
         std::string   requestType;
         std::string   host;
@@ -115,59 +115,59 @@ namespace WebXO
             }
             return std::string("-1");
         }
-    } HTTPREQ, *PHTTPREQ;
+    };
 
 
-    typedef struct HTTPRes
+    struct HTTPRes
+    {
+        // Status Header
+        std::string      httpVersion             = HTTP_VERSION;
+        int              statusCode;
+        std::string      reasonPhrase;
+        // General Header
+        hGeneral    httpGeneralHeader;
+        // Response Header
+        std::string      acceptRanges            = "Accept-Ranges: none";
+        std::string      age                     = "Age : 0";
+        // std::string      eTag;                We currently dont need to use the entity tag
+        // std::string      location;            We currently dont need to use location
+        // std::string      proxyAuthenticate;   We currently dont need to use Proxy Authentication
+        // std::string      retryAfter;          We currently dont need to use Retry-After
+        std::string      server                  = SERVER_STRING;
+        // string      vary;                Not needed as we are not using cache-control
+        // string      wwwAuthenticate;     Not currently implementing Status Code 401 so this is not needed
+        hEntity     httpEntityHeader;
+        // Helper Functions
+        std::string      GenerateStatusLine()
         {
-            // Status Header
-            std::string      httpVersion             = HTTP_VERSION;
-            int              statusCode;
-            std::string      reasonPhrase;
-            // General Header
-            hGeneral    httpGeneralHeader;
-            // Response Header
-            std::string      acceptRanges            = "Accept-Ranges: none";
-            std::string      age                     = "Age : 0";
-            // std::string      eTag;                We currently dont need to use the entity tag
-            // std::string      location;            We currently dont need to use location
-            // std::string      proxyAuthenticate;   We currently dont need to use Proxy Authentication
-            // std::string      retryAfter;          We currently dont need to use Retry-After
-            std::string      server                  = SERVER_STRING;
-            // string      vary;                Not needed as we are not using cache-control
-            // string      wwwAuthenticate;     Not currently implementing Status Code 401 so this is not needed
-            hEntity     httpEntityHeader;
-            // Helper Functions
-            std::string      GenerateStatusLine()
-            {
-                std::string t;
-                t += httpVersion;
-                t +=  " ";
-                t += std::to_string(statusCode);
-                t += " ";
-                t += reasonPhrase;
-                t += "\r\n";
-                return t;
-            }
+            std::string t;
+            t += httpVersion;
+            t +=  " ";
+            t += std::to_string(statusCode);
+            t += " ";
+            t += reasonPhrase;
+            t += "\r\n";
+            return t;
+        }
 
-            std::string      ReturnHeader()
-            {
-                std::string t;
-                t += GenerateStatusLine();
-                // t += "\r\n";
-                t += httpGeneralHeader.ReturnHeader();
-                // t += "\r\n";
-                t += acceptRanges;
-                t += "\r\n";
-                t += age;
-                t += "\r\n";
-                t += server;
-                t += "\r\n";
-                t += httpEntityHeader.ReturnHeader();
-                // t += "\r\n";
-                return t;
-            }
-        } HTTPRES, *PHTTPRES;
+        std::string      ReturnHeader()
+        {
+            std::string t;
+            t += GenerateStatusLine();
+            // t += "\r\n";
+            t += httpGeneralHeader.ReturnHeader();
+            // t += "\r\n";
+            t += acceptRanges;
+            t += "\r\n";
+            t += age;
+            t += "\r\n";
+            t += server;
+            t += "\r\n";
+            t += httpEntityHeader.ReturnHeader();
+            // t += "\r\n";
+            return t;
+        }
+    };
 }
 
 #endif
