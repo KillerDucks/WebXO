@@ -20,7 +20,7 @@
 // Standard Lib
 #include <string>
 
-// LibWebX
+// LibWebXO
 #include "HTTP.hpp"
 #include "Logarithm.hpp"
 
