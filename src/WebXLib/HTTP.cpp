@@ -168,11 +168,9 @@ namespace WebXO
             if(this->AcceptDeflate(hReq.accept_Encoding))
             {
                 // Compress The interception buffer
-                Compression zippy;
-
                 printf("File to Compress [DEFLATE]: %s\n", filePath.c_str());
 
-                return zippy.DeflateBuffer(std::get<1>(test).first, (size_t)std::get<1>(test).second); 
+                return Compression::DeflateBuffer(std::get<1>(test).first, (size_t)std::get<1>(test).second); 
             }
             else
             {
@@ -309,16 +307,13 @@ namespace WebXO
 
                     httpCode = WebXO::HTTPStatusCodes::OK;
                     this->MIMETYPE = MimeType::HTML;
-
-                    // Compression Instance
-                    Compression zippy;
                     
                     // Verbose Logging
                     _Log.Log("Returning the Buffer", Logarithm::NOTICE);
 
                     printf("File to Compress [DEFLATE]: FolderView Dynamic Buffer\n");
 
-                    return zippy.DeflateBuffer((char*)buffer.c_str(), buffer.size()); 
+                    return Compression::DeflateBuffer((char*)buffer.c_str(), buffer.size()); 
                 }
                 // There is no '.' found, assume this is a root path of a sub/directory
                 std::regex rgx("(index.html)");
@@ -418,13 +413,10 @@ namespace WebXO
         {
             return IO::ReadFile(filePath);
         }
-
-        // Compression Instance
-        Compression zippy;
         
         printf("File to Compress [DEFLATE]: %s\n", filePath.c_str());
 
-        return zippy.DeflateFile(filePath); 
+        return Compression::DeflateFile(filePath); 
     }
 
     HTTPRes HTTP::GenerateHTTPResponse(int contentLength, HTTPReq hReq)
