@@ -14,6 +14,7 @@ https://webxo.azurewebsites.net
 
 # Features
 + Serves Static Pages
+    + Supported HTTP Methods [GET, HEAD, POST]
 + zlib deflate compression
 + Interception
     + Programatically intercept specific HTTP Requests and manipulate them
