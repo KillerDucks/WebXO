@@ -17,7 +17,6 @@ namespace WebXO
     {
     private:
         std::string _program_name = "Logarithm";
-        // char       _pName[4] = {"LOG"};
         int         _default_log_Level;
 
         // Interception
