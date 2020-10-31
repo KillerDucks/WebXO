@@ -73,20 +73,6 @@ namespace WebXO
         // Helper Functions
         enum MimeType   GetMIMEType(std::string filePath);
 
-        // Simple Functions to save time
-        int dec2oct(int decNum)
-        {
-            int rem, i = 1, octalNumber = 0;
-            while (decNum != 0)
-            {
-                rem = decNum % 8;
-                decNum /= 8;
-                octalNumber += rem * i;
-                i *= 10;
-            }
-            return octalNumber;
-        }
-
     public:
         // Constructors
         HTTP(std::string httpPath, InterceptSettings interceptSettings = InterceptSettings());
@@ -96,7 +82,7 @@ namespace WebXO
         HTTPReq ParseRequest(char* request);
 
         // Handle page Requests
-        std::pair<char*, int>   GetRequestedFile(HTTPReq hReq);
+        CompBuffer GetRequestedFile(HTTPReq hReq);
 
         // Generate a HTTP Response Header
         HTTPRes GenerateHTTPResponse(int contentLength, HTTPReq hReq);
