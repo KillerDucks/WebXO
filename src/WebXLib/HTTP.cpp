@@ -201,24 +201,27 @@ namespace WebXO
             this->httpMethod = it->second;
         } else { printf("\nHTTP Method Deduction ERROR !!!\n"); }
 
-        // [DEBUG]
+        // [DEBUG] [NOTE] This should be removed after testing
         switch (this->httpMethod)
         {
         case HTTPMethodTypes::GET:
-            printf("HTTP Detected Method: GET\n");
             break;
         case HTTPMethodTypes::POST:
-            printf("HTTP Detected Method: POST\n");
             // Check if we have any form data to handle
             if(!hReq.form_data.empty())
             {
                 // Handle the data
+                printf("\n[Form Data]:\n");
+                for(auto kVal : hReq.form_data)
+                {
+                    printf("\tKey [%s]\tValue [%s]\n", kVal.first.c_str(), kVal.second.c_str());
+                }
+                printf("\n");
             }
             break;
         case HTTPMethodTypes::HEAD:
-            printf("HTTP Detected Method: HEAD\n");
             break;
-        
+
         default:
             break;
         }
@@ -496,7 +499,24 @@ namespace WebXO
         // Set the Response Code + Phrase
         httpRes.statusCode = (int)httpCode;
         // [TODO] Use the Enum to set the phrase corrently
-        httpRes.reasonPhrase = "OKAY";
+        switch (this->httpCode)
+        {
+        case HTTPStatusCodes::OK:
+            httpRes.reasonPhrase = "OK";
+            break;
+        case HTTPStatusCodes::NOT_FOUND:
+            httpRes.reasonPhrase = "Not Found";
+            break;
+        case HTTPStatusCodes::NO_CONTENT:
+            httpRes.reasonPhrase = "No Content";
+            break;
+        case HTTPStatusCodes::INTERNAL_SERVER_ERROR:
+            httpRes.reasonPhrase = "Internal Server Error";
+            break;
+        
+        default:
+            break;
+        }
 
         //  Set the HTTP Entity Header (ignore the cast issue, will be looked into later on)
         httpRes.httpEntityHeader = httpEntity;
