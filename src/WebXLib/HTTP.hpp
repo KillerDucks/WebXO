@@ -76,7 +76,7 @@ namespace WebXO
     public:
         // Constructors
         HTTP(std::string httpPath, InterceptSettings interceptSettings = InterceptSettings());
-        ~HTTP();
+        ~HTTP() = default;
 
         // Parse HTTP Requests
         HTTPReq ParseRequest(char* request);

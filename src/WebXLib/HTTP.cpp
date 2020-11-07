@@ -4,8 +4,6 @@ namespace WebXO
 {
     HTTP::HTTP(std::string httpPath, InterceptSettings interceptSettings) : _Log("HTTP"), iDirectory(httpPath), vHosts("./vhosts.txt"), httpCode(WebXO::HTTPStatusCodes::OK), _interceptionSettings(interceptSettings), MIMETYPE(MimeType::HTML)
     {}
-    HTTP::~HTTP()
-    {}
 
     HTTPReq HTTP::ParseRequest(char* request)
     {
