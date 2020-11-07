@@ -193,6 +193,12 @@ namespace WebXO
                 _Log.iLog("[%z] [%q] An Error has occurred with send(): [%s]\n",Logarithm::NOTICE, strerror(errno));
             }
         }
+        else
+        {
+            printf("\n\nFATAL ERROR: Buffer Returned as NULL -1\n\n");
+            exit(-1);
+        }
+        
 
         // Shutdown the Socket (Read & Write)
         shutdown(cSocket, SHUT_RDWR);
