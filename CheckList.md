@@ -12,7 +12,7 @@
 
 * Simple Directory Listings (Like Apache HTTP) __Done__ [v1.5.0] (See FolderViewer)
 
-* TLS/SSL/HTTPS Support __Pending__
+* TLS/SSL/HTTPS Support __Pending__ __Note__ This is fucking hard maybe do this in the next version :(
 
 ## Components to Impl
 
