@@ -64,7 +64,6 @@ namespace WebXO
         // Data
         int port = 0;
         HTTP _Http;
-        Logarithm _Log;
         int socketID = 0;
         int iSockets = 0;
 

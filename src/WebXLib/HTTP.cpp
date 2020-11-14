@@ -2,7 +2,7 @@
 
 namespace WebXO
 {
-    HTTP::HTTP(std::string httpPath, InterceptSettings interceptSettings) : _Log("HTTP"), iDirectory(httpPath), vHosts("./vhosts.txt"), httpCode(WebXO::HTTPStatusCodes::OK), _interceptionSettings(interceptSettings), MIMETYPE(MimeType::HTML)
+    HTTP::HTTP(std::string httpPath, InterceptSettings interceptSettings) : iDirectory(httpPath), vHosts("./vhosts.txt"), httpCode(WebXO::HTTPStatusCodes::OK), _interceptionSettings(interceptSettings), MIMETYPE(MimeType::HTML)
     {}
 
     HTTPReq HTTP::ParseRequest(char* request)
@@ -307,16 +307,14 @@ namespace WebXO
                     this->MIMETYPE = MimeType::HTML;
                     
                     // Verbose Logging
-                    _Log.Log("Returning the Buffer", Logarithm::NOTICE);
+                    Logarithm::Log(std::string("HTTP"), "[%z] [%q] File to Compress [DEFLATE]: FolderView Dynamic Buffer\n", Logarithm::NOTICE);       
 
-                    printf("File to Compress [DEFLATE]: FolderView Dynamic Buffer\n");
+                    // printf("File to Compress [DEFLATE]: FolderView Dynamic Buffer\n");
 
                     return Compression::DeflateBuffer((char*)buffer.c_str(), buffer.size()); 
                 }
                 // There is no '.' found, assume this is a root path of a sub/directory
                 std::regex rgx("(index.html)");
-                // Log for debugging
-                _Log.Log("Root path detected", Logarithm::INFO);
                 // Set the MIME Type
                 this->MIMETYPE = MimeType::HTML;
                 // Scan the directories for this file
@@ -333,7 +331,7 @@ namespace WebXO
             if(!iDirectory.doesExist(parentPath))
             {
                 // Log for debugging
-                _Log.iLog("[%z] [%q] File [%s] does not exist\n",Logarithm::CRITICAL, file.c_str());
+                Logarithm::Log(std::string("HTTP"), "[%z] [%q] File [%s] does not exist\n",Logarithm::CRITICAL, file.c_str());       
                 // Set the MIME Type
                 this->MIMETYPE = MimeType::HTML;
                 // Set the HTTP Status code
@@ -346,7 +344,7 @@ namespace WebXO
                 {
                     // filePath = "-1";
                     // Log for debugging
-                    _Log.iLog("[%z] [%q] File [%s] is empty\n",Logarithm::CRITICAL, file.c_str());
+                    Logarithm::Log(std::string("HTTP"), "[%z] [%q] File [%s] is empty\n",Logarithm::CRITICAL, file.c_str());
                     // Set the HTTP Status Code
                     httpCode = WebXO::HTTPStatusCodes::NO_CONTENT;
                 }
@@ -510,32 +508,32 @@ namespace WebXO
         
         if(fExt == std::string("html"))
         {
-            _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "HTML");
+            Logarithm::Log(std::string("HTTP"), "[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "HTML");
             return MimeType::HTML;
         }
         if(fExt == std::string("css"))
         {
-            _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "CSS");
+            Logarithm::Log(std::string("HTTP"), "[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "CSS");
             return MimeType::CSS;
         }
         if(fExt == std::string("js"))
         {
-            _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "JS");
+            Logarithm::Log(std::string("HTTP"), "[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "JS");
             return MimeType::JS;
         }
         if(fExt == std::string("png") || fExt == std::string("jpg") || fExt == std::string("gif") || fExt == std::string("jpeg") || fExt == std::string("svg"))
         {
-            _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "IMAGE");
+            Logarithm::Log(std::string("HTTP"), "[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "IMAGE");
             return MimeType::IMAGE;
         }
         if(fExt == std::string("mp4"))
         {
-            _Log.iLog("[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "MP4");
+            Logarithm::Log(std::string("HTTP"), "[%z] [%q] Detected a MIME Type of [%s]\n", Logarithm::NOTICE, "MP4");
             return MimeType::VIDEO;
         }
         // [TODO] Add favicon support
 
-        _Log.iLog("[%z] [%q] Failed to Detected a MIME Type\n", Logarithm::CRITICAL);
+        Logarithm::Log(std::string("HTTP"), "[%z] [%q] Failed to Detected a MIME Type\n", Logarithm::CRITICAL);
         return MimeType::HTML;
     }
 

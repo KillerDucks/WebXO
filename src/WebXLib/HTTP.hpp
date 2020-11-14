@@ -36,9 +36,6 @@ namespace WebXO
         void ErrorHandler();
         bool AcceptDeflate(std::string accept_encodings);
 
-        // Logging
-        Logarithm _Log;
-
         // Directory Services
         Directory iDirectory;
 

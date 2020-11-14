@@ -38,8 +38,6 @@ namespace WebXO
         // Functions
         void ErrorHandler();
 
-        // Logger
-        Logarithm _Log;
     public:
         // De/Constructors
         Interception(InterceptSettings interceptSettings)                                           // Single Method to catch

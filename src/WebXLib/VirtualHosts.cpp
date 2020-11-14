@@ -4,7 +4,7 @@ namespace WebXO
 {
     // Essentially this will look at the "Host" request parameter and then serve the files out of the folder
 
-    VirtualHosts::VirtualHosts(std::string filename) : _Log("VirtualHosts")
+    VirtualHosts::VirtualHosts(std::string filename)
     {
         this->vHosts = std::move(this->Parse(filename));
     }
