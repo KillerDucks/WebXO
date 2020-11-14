@@ -2,7 +2,7 @@
 
 namespace WebXO
 {
-    HTTP::HTTP(std::string httpPath, InterceptSettings interceptSettings) : iDirectory(httpPath), vHosts("./vhosts.txt"), httpCode(WebXO::HTTPStatusCodes::OK), _interceptionSettings(interceptSettings), MIMETYPE(MimeType::HTML)
+    HTTP::HTTP(std::string httpPath, InterceptSettings interceptSettings) : iDirectory(httpPath), vHosts("./vhosts.txt"), httpCode(HTTPStatusCodes::OK), _interceptionSettings(interceptSettings), MIMETYPE(MimeType::HTML)
     {}
 
     HTTPReq HTTP::ParseRequest(char* request)
@@ -292,7 +292,7 @@ namespace WebXO
             if(!iDirectory.doesExist(parentPath))
             {
                 // Set the HTTP Status code
-                httpCode = WebXO::HTTPStatusCodes::NOT_FOUND;
+                httpCode = HTTPStatusCodes::NOT_FOUND;
             }
             else
             {
@@ -303,7 +303,7 @@ namespace WebXO
                     // This is a compatable folder
                     std::string buffer = fView.GeneratePage(fView.GetFiles(relativePath.substr(0, relativePath.rfind('/'))));
 
-                    httpCode = WebXO::HTTPStatusCodes::OK;
+                    httpCode = HTTPStatusCodes::OK;
                     this->MIMETYPE = MimeType::HTML;
                     
                     // Verbose Logging
@@ -320,7 +320,7 @@ namespace WebXO
                 // Scan the directories for this file
                 filePath = iDirectory.ScanDir(rgx, relativePath.substr(0, relativePath.rfind('/')) ).at(0); // [CHANGE] Assume this is the first given file
                 // Set the HTTP Status code
-                httpCode = WebXO::HTTPStatusCodes::OK;
+                httpCode = HTTPStatusCodes::OK;
             }            
         }
         else
@@ -335,7 +335,7 @@ namespace WebXO
                 // Set the MIME Type
                 this->MIMETYPE = MimeType::HTML;
                 // Set the HTTP Status code
-                httpCode = WebXO::HTTPStatusCodes::NOT_FOUND;
+                httpCode = HTTPStatusCodes::NOT_FOUND;
             }
             else
             {
@@ -346,13 +346,13 @@ namespace WebXO
                     // Log for debugging
                     Logarithm::Log(std::string("HTTP"), "[%z] [%q] File [%s] is empty\n",Logarithm::CRITICAL, file.c_str());
                     // Set the HTTP Status Code
-                    httpCode = WebXO::HTTPStatusCodes::NO_CONTENT;
+                    httpCode = HTTPStatusCodes::NO_CONTENT;
                 }
                 else
                 {
                     filePath = parentPath;
                     // Set the HTTP Status Code
-                    httpCode = WebXO::HTTPStatusCodes::OK;
+                    httpCode = HTTPStatusCodes::OK;
                     // Set the MIME Type
                     this->MIMETYPE = this->GetMIMEType(filePath);          
                 }                
@@ -365,21 +365,21 @@ namespace WebXO
         // Check if any HTTP Error codes have been raised
         switch (httpCode)
         {
-        case WebXO::HTTPStatusCodes::NOT_FOUND:            
+        case HTTPStatusCodes::NOT_FOUND:            
             {
                 filePath.clear();
                 filePath += ERROR_PAGE_DIR;
                 filePath += "/404.html";
                 break;
             }
-        case WebXO::HTTPStatusCodes::INTERNAL_SERVER_ERROR:            
+        case HTTPStatusCodes::INTERNAL_SERVER_ERROR:            
             {
                 filePath.clear();
                 filePath += ERROR_PAGE_DIR;
                 filePath += "/500.html";
                 break;
             }
-        case WebXO::HTTPStatusCodes::NO_CONTENT:            
+        case HTTPStatusCodes::NO_CONTENT:            
             {
                 filePath.clear();
                 filePath += ERROR_PAGE_DIR;
@@ -401,7 +401,7 @@ namespace WebXO
             // Set the MIME Type
             this->MIMETYPE = MimeType::HTML;         
             // Set the HTTP status code
-            httpCode = WebXO::HTTPStatusCodes::INTERNAL_SERVER_ERROR; 
+            httpCode = HTTPStatusCodes::INTERNAL_SERVER_ERROR; 
         }
         
         // [HIGH] The file should not be openned here, abstract this out
@@ -410,7 +410,8 @@ namespace WebXO
             return IO::ReadFile(filePath);
         }
         
-        printf("File to Compress [DEFLATE]: %s\n", filePath.c_str());
+        // printf("File to Compress [DEFLATE]: %s\n", filePath.c_str());
+        Logarithm::Log(std::string("HTTP"), "[%z] [%q] File to Compress [DEFLATE]: %s\n",Logarithm::NOTICE, filePath.c_str());
 
         return Compression::DeflateFile(filePath); 
     }
