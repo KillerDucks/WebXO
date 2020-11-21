@@ -8,9 +8,9 @@ struct Options
     Options() : basePath("/var/www/ExampleSite"), port(8080), nThreads(4), threading(false)
     {}
     std::string     basePath;
-    int             port;
-    int             nThreads;
-    bool            threading;    
+    int             port            = 8080;
+    int             nThreads        = 4;
+    bool            threading       = false;    
 };
 
 Options ParseCLIOptions(std::vector<std::string> const vec);
@@ -19,7 +19,7 @@ int main(int argc, char* argv[])
 {
     // [TODO] Parse the CLI Args
     std::vector<std::string> vArgs(argv + 1, argv + argc + ! argc);
-    Options optsCLI = ParseCLIOptions(vArgs);
+    auto optsCLI = ParseCLIOptions(vArgs);
 
     // Setup the Socket Server Settings
     WebXO::Sockets::Settings sockSettings(optsCLI.threading , optsCLI.nThreads);
@@ -39,7 +39,7 @@ int main(int argc, char* argv[])
 Options ParseCLIOptions(std::vector<std::string> const vec)
 {
     // Variables !!!
-    Options optsCLI = Options();
+    auto optsCLI = Options();
 
     // Verbose Printing
     printf("CLI Options\n");

@@ -177,8 +177,7 @@ namespace WebXO
             }
         }
 
-        // va_end(parameters);
-        // return written;
-        return 0;
+        va_end(parameters);
+        return written;
     }
 };

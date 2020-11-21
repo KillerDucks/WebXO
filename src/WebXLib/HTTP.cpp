@@ -181,10 +181,10 @@ namespace WebXO
         // printf("RETURNED INTERCEPTION VALUE [%s] AND SIZE [%d]\n", std::get<1>(test).first, std::get<1>(test).second);
 
         // Virtual Hosts Redirection
-        std::string vQuery = this->vHosts.Query(hReq.host.substr(0, hReq.host.find(':')));
+        const std::string vQuery = this->vHosts.Query(hReq.host.substr(0, hReq.host.find(':')));
         // printf("\nQuerying %s: %s\n", hReq.host.substr(0, hReq.host.find(':')).c_str(), this->vHosts.Query(hReq.host.substr(0, hReq.host.find(':'))).c_str());   // [DEBUG] Print
 
-        printf("Method: [%s]\tFile [%s]\n", hReq.method().c_str(), hReq.file().c_str());
+        Logarithm::Log(std::string("HTTP"), "[%z] [%q] Method: [%s]\tFile [%s]\n", Logarithm::NOTICE, hReq.method().c_str(), hReq.file().c_str());   
 
         // Get the Method
         auto it = HTTPMethodTypesTable.find(hReq.method());
@@ -269,17 +269,17 @@ namespace WebXO
         }
         
 
-        {
-        // Debug Logging [REMOVE]
-        // printf("requested accept: %s\n", hReq.accept.c_str());
-        // printf("requested accept encodings: %s\n", hReq.accept_Encoding.c_str());
-        // this->AcceptDeflate(hReq.accept_Encoding);
-        // std::terminate();
-        // printf("\nrequested host: %s requested file: %s\n", hReq.host.c_str(), file.c_str());
-        // printf("requested file: %s\n", file.c_str());
-        // printf("parent path: %s\n", parentPath.c_str());
-        // printf("relative path: %s\n", relativePath.c_str());
-        }
+        // {
+            // Debug Logging [REMOVE]
+            // printf("requested accept: %s\n", hReq.accept.c_str());
+            // printf("requested accept encodings: %s\n", hReq.accept_Encoding.c_str());
+            // this->AcceptDeflate(hReq.accept_Encoding);
+            // std::terminate();
+            // printf("\nrequested host: %s requested file: %s\n", hReq.host.c_str(), file.c_str());
+            // printf("requested file: %s\n", file.c_str());
+            // printf("parent path: %s\n", parentPath.c_str());
+            // printf("relative path: %s\n", relativePath.c_str());
+        // }
         
 
         // Debug Logging
@@ -301,7 +301,7 @@ namespace WebXO
                 if(fView.isFolderViewer(relativePath.substr(0, relativePath.rfind('/'))))
                 {
                     // This is a compatable folder
-                    std::string buffer = fView.GeneratePage(fView.GetFiles(relativePath.substr(0, relativePath.rfind('/'))));
+                    const std::string buffer = fView.GeneratePage(fView.GetFiles(relativePath.substr(0, relativePath.rfind('/'))));
 
                     httpCode = HTTPStatusCodes::OK;
                     this->MIMETYPE = MimeType::HTML;
@@ -314,7 +314,7 @@ namespace WebXO
                     return Compression::DeflateBuffer((char*)buffer.c_str(), buffer.size()); 
                 }
                 // There is no '.' found, assume this is a root path of a sub/directory
-                std::regex rgx("(index.html)");
+                const std::regex rgx("(index.html)");
                 // Set the MIME Type
                 this->MIMETYPE = MimeType::HTML;
                 // Scan the directories for this file
@@ -501,7 +501,7 @@ namespace WebXO
     enum HTTP::MimeType HTTP::GetMIMEType(std::string filePath)
     {
         // [NOTE] This is the most basic and most likely the worst way of doing this
-        std::string fExt = filePath.substr(filePath.rfind('.') + 1, filePath.length());
+        const std::string fExt = filePath.substr(filePath.rfind('.') + 1, filePath.length());
         
         // Debug Logging
         // _Log.iLog("[%z] [%q] Detected a MIME Type using file extension [%s]\n", Logarithm::NOTICE, fExt.c_str());

@@ -63,7 +63,6 @@ namespace WebXO
             // [CHANGE] This is too generic
             IMAGE,
 
-            // [TESTING]  Video
             VIDEO
         } MIMETYPE;
 
