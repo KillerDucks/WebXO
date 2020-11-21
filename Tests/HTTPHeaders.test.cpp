@@ -6,7 +6,7 @@
 // Tests the basic core HTTP Header Generation
 TEST(HTTPHeaders, General_Header) {
     using namespace WebXO;
-    HGENERAL gHeader;
+    hGeneral gHeader;
     gHeader.Date = gHeader.GetCurrentTime();
     EXPECT_EQ("Connection: close", gHeader.Connection);
 }
@@ -15,7 +15,7 @@ TEST(HTTPHeaders, General_Header) {
 TEST(HTTPHeaders, Entity_Header) {
     using namespace WebXO;
     hEntity eHeader;    
-    EXPECT_EQ("Allow: GET, POST\r\nContent-Type: text/html;\r\nContent-Language: en-GB, en-US\r\n\r\n", eHeader.ReturnHeader());
+    EXPECT_EQ("Allow: GET, POST, HEAD\r\nContent-Type: text/html;\r\nContent-Language: en-GB, en-US\r\n\r\n", eHeader.ReturnHeader());
 }
 
 // [TODO] Tests the basic HTTP Reponse Header Generation

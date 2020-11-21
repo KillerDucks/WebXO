@@ -26,9 +26,7 @@ namespace WebXO
         string basePath = "./";
         std::regex fileExts;
         vector<string> fVector;
-
-        // Logger
-        Logarithm _Log;
+    
     public:
         // Constructors
         Directory(std::string _baseDirectory);

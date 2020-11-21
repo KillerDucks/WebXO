@@ -13,8 +13,6 @@ namespace WebXO
     private:
         // Functions
         std::map<std::string, std::string> Parse(std::string filename);
-        // Logging
-        Logarithm _Log;
 
         // Variables
         std::map<std::string, std::string> vHosts;

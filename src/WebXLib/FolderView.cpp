@@ -8,7 +8,7 @@ namespace WebXO
     std::vector<string> FolderView::GetFiles(std::string folderPath)
     {
         Directory dir(folderPath);
-        std::regex rgx("[^]*");
+        const std::regex rgx("[^]*");
         auto files = dir.ScanDir(rgx, folderPath);
 
         this->currentFolder = folderPath.substr(folderPath.rfind('/'), folderPath.length());

@@ -5,7 +5,7 @@ A super simple *`but poorly written`* web server written in C++.
 
 ``AWS Badge is for Testing Builds / Azure Badge is for CI/CD``
 
-> [v1.5.0] Codename HiSpeedInterceptor
+> [v1.6.0] Codename SpookyMethod
 
 # Demo
 > This demo will take some time to start as I am using the free tier app services in Azure but should take approximately ``40 seconds``
@@ -14,6 +14,7 @@ https://webxo.azurewebsites.net
 
 # Features
 + Serves Static Pages
+    + Supported HTTP Methods [GET, HEAD, POST]
 + zlib deflate compression
 + Interception
     + Programatically intercept specific HTTP Requests and manipulate them

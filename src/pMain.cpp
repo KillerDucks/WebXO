@@ -1,16 +1,17 @@
 // Includes
 #include "WebXLib/Sockets.hpp"
 #include "WebXLib/HTTP.hpp"
+#include "WebXLib/Common.hpp"
 
-typedef struct Options 
+struct Options 
 {
     Options() : basePath("/var/www/ExampleSite"), port(8080), nThreads(4), threading(false)
     {}
     std::string     basePath;
-    int             port;
-    int             nThreads;
-    bool            threading;    
-} OPTIONS;
+    int             port            = 8080;
+    int             nThreads        = 4;
+    bool            threading       = false;    
+};
 
 Options ParseCLIOptions(std::vector<std::string> const vec);
 
@@ -18,7 +19,7 @@ int main(int argc, char* argv[])
 {
     // [TODO] Parse the CLI Args
     std::vector<std::string> vArgs(argv + 1, argv + argc + ! argc);
-    Options optsCLI = ParseCLIOptions(vArgs);
+    auto optsCLI = ParseCLIOptions(vArgs);
 
     // Setup the Socket Server Settings
     WebXO::Sockets::Settings sockSettings(optsCLI.threading , optsCLI.nThreads);
@@ -29,9 +30,6 @@ int main(int argc, char* argv[])
     WebXO::Sockets socks(http, optsCLI.port, sockSettings);
 
     // Start the Socket Server
-    // socks.Listen();
-
-    // [TODO] [CURRENT] [TESTING] Break this out into a thread so the CLI is still usable to perfrom admin activies
     std::thread th_serverThread(&WebXO::Sockets::Listen, std::ref(socks));
     th_serverThread.join();
 
@@ -41,7 +39,7 @@ int main(int argc, char* argv[])
 Options ParseCLIOptions(std::vector<std::string> const vec)
 {
     // Variables !!!
-    Options optsCLI = Options();
+    auto optsCLI = Options();
 
     // Verbose Printing
     printf("CLI Options\n");
@@ -54,7 +52,12 @@ Options ParseCLIOptions(std::vector<std::string> const vec)
         std::string tmpValue = opt.substr(opt.find("=")  + 1, opt.size());
 
         // Check if we have any options
-        if(opt == "--thread")
+        if(opt == "--version")
+        {
+            printf("Version: [%s]\n", SERVER_STRING);
+            exit(1);
+        }
+        else if(opt == "--thread")
         {
             optsCLI.threading = true;
         }
@@ -82,6 +85,8 @@ Options ParseCLIOptions(std::vector<std::string> const vec)
             printf("\t\tIf set this will see the root path to server HTTP requests from\n");
             printf("\n\t--port\n");
             printf("\t\tSets the port of the server to listen for clients on, (Default: 8080)\n");
+            printf("\n\t--version\n");
+            printf("\t\tShows the version info\n");
             printf("\n\t--help\n");
             printf("\t\tShows this message :P\n");
             exit(1);

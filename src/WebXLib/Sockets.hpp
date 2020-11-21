@@ -20,7 +20,7 @@
 // Standard Lib
 #include <string>
 
-// LibWebX
+// LibWebXO
 #include "HTTP.hpp"
 #include "Logarithm.hpp"
 
@@ -52,39 +52,45 @@ namespace WebXO
         }
 
         // Internal Thread Handler
-        typedef struct ThreadID
+        struct ThreadID
         {
             ThreadID() : friendlyName("NOT_SET"), id(random_string(5)), done(false), moveOut(false) {}
             std::string     friendlyName;
             std::string     id;
             bool            done;
             bool            moveOut;
-        } THREADID;
+        };
 
         // Data
         int port = 0;
         HTTP _Http;
-        Logarithm _Log;
         int socketID = 0;
         int iSockets = 0;
 
         // Options Sockets
-        int option = 1;
+        const int option = 1;
 
     public:
         // Settings Structure
-        typedef struct Settings
+        struct Settings
         {
             // Constructor
             Settings() : thread(false), max_threads(2) {}
             Settings(bool enThread, int noTheads)
             {
                 this->thread = enThread;
-                this->max_threads = noTheads;
+                if(!this->thread)
+                {
+                    this->max_threads = noTheads;
+                }
+                else
+                {
+                    this->max_threads = 1;
+                }
             }
             bool    thread          = false;      // Enable Threading ? [DEFAULT] FALSE
             int     max_threads     = 2;          // Maximum Threads [DEFAULT] 2
-        } SETTINGS, *PSETTINGS;
+        };
 
         // Public Variables
         Settings _Settings = Settings();
@@ -97,7 +103,7 @@ namespace WebXO
         void    Listen();
         
         // Request Handling
-        int     RequestHandler(ThreadID const &tID);
+        void    RequestHandler(ThreadID const &tID);
 
         // Internal Thread Handler
         std::vector<std::pair<ThreadID, std::thread>> vThread;

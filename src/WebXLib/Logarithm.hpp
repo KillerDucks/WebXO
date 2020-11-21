@@ -1,11 +1,9 @@
-#include <climits>
+#pragma once
+
+#include "Common.hpp"
+
 #include <cstdarg>
-#include <cstring>
-#include <algorithm>
-
-// [DEBUG]
-#include <iostream>
-
+#include <climits>
 #include <stdlib.h>
 
 #ifndef LOGARITHM_H
@@ -13,15 +11,10 @@
 
 namespace WebXO
 {
-    class Logarithm
+    namespace Logarithm
     {
-    private:
-        std::string _program_name = "Logarithm";
-        // char       _pName[4] = {"LOG"};
-        int         _default_log_Level;
-
         // Interception
-        static bool print(const char* data, size_t length) {
+        inline bool print(const char* data, size_t length) {
             const unsigned char* bytes = (const unsigned char*) data;
             for (size_t i = 0; i < length; i++)
             {
@@ -33,10 +26,6 @@ namespace WebXO
             }            
             return true;
         }
-
-    public:
-        Logarithm(std::string progName = (std::string)"Logarithm", int defaultLevel = 0);
-        ~Logarithm();
 
         // Log Levels
         enum LogLevels
@@ -52,9 +41,9 @@ namespace WebXO
         };
 
         // Log functions
-        void        Log(std::string message, LogLevels ll);
-        int         iLog(const char* format, ...);
+        int         Log(std::string _program_name, const char* format, ...);       
     };
+        
 };
 
 #endif // LOGARITHM_H

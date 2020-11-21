@@ -17,7 +17,7 @@ namespace WebXO
     // Interception Settings [TODO] Move into a separate file after testing
     struct InterceptSettings{
         InterceptSettings():method(HTTPMethodTypes::GET), 
-                            callback([=](HTTPReq req) -> CompBuffer 
+                            callback([=](HTTPReq &req) -> CompBuffer 
                             {
                                 // Make sure we are targetting the correct method [TODO]
                                 std::string sHTTPMethod(req.requestType.substr(0, req.requestType.find(' ')));
@@ -38,8 +38,6 @@ namespace WebXO
         // Functions
         void ErrorHandler();
 
-        // Logger
-        Logarithm _Log;
     public:
         // De/Constructors
         Interception(InterceptSettings interceptSettings)                                           // Single Method to catch

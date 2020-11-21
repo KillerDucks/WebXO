@@ -1,40 +1,16 @@
 #include "Compression.hpp"
+#include "IO.hpp"
 
 namespace WebXO
 {
-    Compression::Compression(/* args */)
-    {
-    }
-    
-    Compression::~Compression()
-    {
-    }
-
     CompBuffer Compression::DeflateFile(std::string filename)
     {
         // Variables !!!
-        char* sBuffer;
-        char* dBuffer;
-        std::fstream fsFileStreamer;
-        size_t szFileIN = 0;
- 
-        // Open a File Stream
-        // printf("Opening File to Compress\n");
-        fsFileStreamer.open(filename, std::ios::binary | std::ios::in);
-        if(fsFileStreamer.good())
-        {
-            // printf("File to Compress is good !!!\n");
-            // File Stream is good
-            fsFileStreamer.seekg(0, fsFileStreamer.end);
-            szFileIN = fsFileStreamer.tellg();
-            fsFileStreamer.seekg(0, fsFileStreamer.beg); 
-            
-            sBuffer = new char[szFileIN + 1];
-            fsFileStreamer.read(sBuffer, szFileIN);
+        char* dBuffer;        
 
-            fsFileStreamer.close();
-        }
-        else
+        CompBuffer sBuffer = IO::ReadFile(filename);
+
+        if(sBuffer.second == -1)
         {
             printf("[FATAL] [ERROR] File Stream HAS FAILED !! \n\n");
             printf("[FATAL] [ERROR] Filename: %s\n", filename.c_str());
@@ -44,7 +20,7 @@ namespace WebXO
         
 
         // Calculate the deflate size
-        uLong cSize = compressBound((uLong) szFileIN);
+        uLong cSize = compressBound((uLong) sBuffer.second);
         uLong dSize = cSize;
 
         // Allocate the Destination Buffer
@@ -52,7 +28,7 @@ namespace WebXO
 
 
         // Deflate the file
-        compress2((Bytef*)dBuffer, &dSize, (Bytef*)sBuffer, szFileIN, Z_BEST_COMPRESSION);
+        compress2((Bytef*)dBuffer, &dSize, (Bytef*)sBuffer.first, sBuffer.second, Z_BEST_COMPRESSION);
         
 
         // [DEBUG] [OPTIONAL] Store Compressed files, maybe useful for a cache
@@ -88,7 +64,6 @@ namespace WebXO
 
         // Allocate the Destination Buffer
         dBuffer = new char[cSize];
-
 
         // Deflate the file
         compress2((Bytef*)dBuffer, &dSize, (Bytef*)sBuffer, szFileIN, Z_BEST_COMPRESSION);

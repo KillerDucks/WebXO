@@ -10,15 +10,15 @@
 
 * Use Request Accept Ranges __Done__ [v1.2.0]
 
-* Simple Directory Listings (Like Apache HTTP) __Pending__
+* Simple Directory Listings (Like Apache HTTP) __Done__ [v1.5.0] (See FolderViewer)
 
-* TLS/SSL/HTTPS Support __Pending__
+* TLS/SSL/HTTPS Support __Pending__ | __Note__ This is fucking hard maybe do this in the next version :(
 
 ## Components to Impl
 
-* IO Component __Pending__
+* IO Component __Done__ [v1.5.0]
 
-# Testing to Impl [Currently] [Done]
+## Testing to Impl
 
 * A testing suite/solution need to be setup __Done__ [v1.3.2] (See HTTPSuite)
 	+ Research into C++ Testing __Done__ [v1.3.2] (See HTTPSuite)
@@ -29,7 +29,7 @@
 
 * HTTP/2 Support
 * IPV6 Support
-* Working Interception Support (Custom Request Handling) __Impl__
+* Working Interception Support (Custom Request Handling) __Basic__ (PoC is Ready See Interceptor)
 
 ## Possible Features to Impl
 

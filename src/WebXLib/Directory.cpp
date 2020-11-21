@@ -2,7 +2,7 @@
 
 namespace WebXO
 {
-    Directory::Directory(std::string _baseDirectory) : _Log("Directory")
+    Directory::Directory(std::string _baseDirectory)
     {
         if(!_baseDirectory.empty())
         {
@@ -10,7 +10,7 @@ namespace WebXO
         }
     }
 
-    Directory::Directory(char* _baseDirectory, std::regex _fileExtensions) : _Log("Directory")
+    Directory::Directory(char* _baseDirectory, std::regex _fileExtensions)
     {
         if(strlen(_baseDirectory) != 0)
         {
@@ -38,8 +38,8 @@ namespace WebXO
         std::smatch sm;
         vector<string> files;
         bool root = this->isRoot(directoryLevel);
-        _Log.iLog("[%z] [%q] Directory Path is Root? : [%d]\n",Logarithm::INFO, root);
-        _Log.iLog("[%z] [%q] Directory Level Path: [%s]\n\n",Logarithm::INFO, directoryLevel.c_str());
+        Logarithm::Log(std::string("Directory"), "[%z] [%q] Directory Path is Root? : [%d]\n",Logarithm::INFO, root);
+        Logarithm::Log(std::string("Directory"), "[%z] [%q] Directory Level Path: [%s]\n\n",Logarithm::INFO, directoryLevel.c_str());
 
         for(auto file : fs::recursive_directory_iterator(directoryLevel))
         {
@@ -63,7 +63,7 @@ namespace WebXO
                     // _Log.iLog("[%z] [%q] Requested File Stem: [%s]\n",Logarithm::INFO, file.path().stem().c_str());
                     // _Log.iLog("[%z] [%q] Requested File Extension: [%s]\n",Logarithm::INFO, file.path().extension().c_str());
                     files.push_back(file.path());
-                    _Log.iLog("[%z] [%q] Requested File was found @ [%s]\n\n",Logarithm::INFO, file.path().c_str());
+                    Logarithm::Log(std::string("Directory"), "[%z] [%q] Requested File was found @ [%s]\n\n",Logarithm::INFO, file.path().c_str());                            
                 }
             }
         }
@@ -73,7 +73,7 @@ namespace WebXO
         {
             // There are no files
             files.push_back((std::string)"-1");
-            _Log.Log("There are no files found, returning -1", Logarithm::CRITICAL);
+            Logarithm::Log(std::string("Directory"), "[%z] [%q] There are no files found, returning -1\n", Logarithm::CRITICAL);
         }
 
         return files;
@@ -142,8 +142,8 @@ namespace WebXO
             }
         }
         else
-        {
-            _Log.Log("Invalid File Stream", Logarithm::CRITICAL);            
+        {            
+            Logarithm::Log(std::string("Directory"), "[%z] [%q] Invalid File Stream\n", Logarithm::CRITICAL);        
             ssFileReader.close();
             return nullptr;
         }
@@ -168,8 +168,8 @@ namespace WebXO
 
         }
         else
-        {
-            _Log.Log("Invalid File Stream", Logarithm::CRITICAL);            
+        {  
+            Logarithm::Log(std::string("Directory"), "[%z] [%q] Invalid File Stream\n", Logarithm::CRITICAL);        
             ssFileReader.close();            
         }
         return fileLength;
