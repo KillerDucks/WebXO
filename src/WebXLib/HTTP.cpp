@@ -162,6 +162,10 @@ namespace WebXO
         std::tuple<HTTPReq, CompBuffer> test = _interception.HookSync(hReq, _interceptionSettings.callback);
         if(std::get<0>(test).requestType == std::string("-1"))
         {
+            // This will update the HTTP Request based off the Interception callback [TODO] Possible make this conditional
+            hReq = std::get<0>(test);
+            printf("HTTP Data: [%s], Length: [%d]\n", std::get<1>(test).first, std::get<1>(test).second );
+            
             // This interception is a direct buffer
             if(this->AcceptDeflate(hReq.accept_Encoding))
             {
@@ -171,12 +175,10 @@ namespace WebXO
                 return Compression::DeflateBuffer(std::get<1>(test).first, (size_t)std::get<1>(test).second); 
             }
             else
-            {
+            {                
                 return std::get<1>(test);
             }            
         }
-        // This will update the HTTP Request based off the Interception callback [TODO] Possible make this conditional
-        hReq = std::get<0>(test);
 
         // printf("RETURNED INTERCEPTION VALUE [%s] AND SIZE [%d]\n", std::get<1>(test).first, std::get<1>(test).second);
 
