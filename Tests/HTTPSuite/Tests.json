@@ -2,7 +2,7 @@
     {
         "name": "[Headers] WebXO HTTPSuite Test #1",
         "path": {
-            "url": "http://localhost:8081/",
+            "url": "http://localhost:8080/",
             "override": true
         },
         "expect": {
@@ -15,7 +15,7 @@
     {
         "name": "[Content] WebXO HTTPSuite Test #2",
         "path": {
-            "url": "http://localhost:8081/HTTPSuite/",
+            "url": "http://localhost:8080/HTTPSuite/",
             "override": true
         },
         "expect": {
@@ -27,7 +27,7 @@
     {
         "name": "[Content] [Assert] WebXO HTTPSuite Test #3",
         "path": {
-            "url": "http://localhost:8081/HTTPSuite/img/anime.jpg",
+            "url": "http://localhost:8080/HTTPSuite/img/anime.jpg",
             "override": true
         },
         "expect": {
@@ -39,7 +39,7 @@
     {
         "name": "[StatusCode] WebXO HTTPSuite Test #4",
         "path": {
-            "url": "http://localhost:8081/HTTPSuite/",
+            "url": "http://localhost:8080/HTTPSuite/",
             "override": true
         },
         "expect": {
