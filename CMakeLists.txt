@@ -57,6 +57,9 @@ if(DEMO)
     )
 endif()
 
+
+add_subdirectory(Examples)
+
 # Look for GTest
 find_package(GTest)
 include(CTest)
