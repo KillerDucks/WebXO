@@ -23,3 +23,9 @@ TEST(Compression, DelfateBuffer) {
     CompBuffer testBuffer = WebXO::Compression::DeflateBuffer((char*)sBuffer.c_str(), sBuffer.length());
     EXPECT_EQ(34, testBuffer.second);
 }
+
+// Tests the decompression of a file into a CompBuffer
+TEST(Compression, InflateFile) {
+    int inflateSz = WebXO::Compression::InflateBuffer( WebXO::IO::ReadFile("./assets/deflateME.txt.zz"), 27).second;
+    EXPECT_EQ(27, inflateSz);
+}
