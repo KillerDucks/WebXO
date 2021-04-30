@@ -174,6 +174,8 @@ namespace WebXO
         // Generate the Reponse to the Request
         std::pair<CompBuffer, std::string> response = this->_Http.Response(buffer);
 
+        Utils::Memory::Print_Memory(response.first, 10);
+
         // printf("File Size: [~%dB]\n", vBuffer.second); // [DEBUG] Print
 
         // Write the HTTP Header to the Client Socket [PROBLEM] [HALT] The end of the HTTP Header get appended to the next transmission
@@ -195,8 +197,9 @@ namespace WebXO
         }
         else
         {
-            printf("\n\nFATAL ERROR: Buffer Returned as NULL -1\n\n");
-            exit(-1);
+            // [DEBUG] This does not mean a error has occurred as a HEAD request can be made requireing no body to be sent
+            // printf("\n\nFATAL ERROR: Buffer Returned as NULL -1\n\n");
+            // exit(-1);
         }
         
 

@@ -23,6 +23,7 @@
 // LibWebXO
 #include "HTTP.hpp"
 #include "Logarithm.hpp"
+#include "Memory.hpp"
 
 #ifndef WEBX_SOCKS_H
 #define WEBX_SOCKS_H
