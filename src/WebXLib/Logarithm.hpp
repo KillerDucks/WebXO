@@ -15,15 +15,15 @@ namespace WebXO
     {
         // Interception
         inline bool print(const char* data, size_t length) {
-            const unsigned char* bytes = (const unsigned char*) data;
-            for (size_t i = 0; i < length; i++)
-            {
-                if(printf("%c", bytes[i]) == -1)
-                {
-                    return false;
-                }
+            // const unsigned char* bytes = (const unsigned char*) data;
+            // for (size_t i = 0; i < length; i++)
+            // {
+            //     if(printf("%c", bytes[i]) == -1)
+            //     {
+            //         return false;
+            //     }
                 
-            }            
+            // }            
             return true;
         }
 
