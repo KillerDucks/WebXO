@@ -52,5 +52,26 @@ namespace WebXO
 
             return false;
         }
+
+        inline bool WriteFile(std::string filename, int cursor_position, CompBuffer comBuffer)
+        {
+            std::fstream fileStream;
+
+            fileStream.open(filename, std::ios::binary | std::ios::out);
+
+            if(fileStream.good())
+            {
+                fileStream.seekg(cursor_position, fileStream.beg);
+                
+                fileStream.write(comBuffer.first, comBuffer.second);
+
+                fileStream.close();
+
+                return true;
+            }
+            fileStream.close();
+
+            return false;
+        }
     };
 };
