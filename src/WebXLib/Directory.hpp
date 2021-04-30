@@ -1,3 +1,5 @@
+#pragma once
+
 #include <regex>
 
 #include <experimental/filesystem>
@@ -31,7 +33,7 @@ namespace WebXO
         // Constructors
         Directory(std::string _baseDirectory);
         Directory(char* _baseDirectory = (char*)"./", std::regex _fileExtensions = (std::regex)"\\(.png|.html|.js|.css)\\W");
-        ~Directory();
+        ~Directory() = default;
 
         // Directory Operations
         void ScanDir();
@@ -43,7 +45,6 @@ namespace WebXO
         size_t  GetFileSize(std::string filePath);
 
         // Helpers
-        bool isFile(std::string filePath);        // [TODO] Made redundant via fs std
         bool isDirectory(std::string filePath);
         bool isRoot(std::string filePath);
         bool doesExist(std::string filePath);

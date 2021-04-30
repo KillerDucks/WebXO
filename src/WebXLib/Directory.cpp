@@ -20,10 +20,7 @@ namespace WebXO
             this->fileExts = _fileExtensions;
         }
     }
-
-    Directory::~Directory()
-    {}
-
+    
     void Directory::ScanDir()
     {
         for(auto file : fs::recursive_directory_iterator(this->basePath))
@@ -173,19 +170,6 @@ namespace WebXO
             ssFileReader.close();            
         }
         return fileLength;
-    }
-
-    // [NOTE] This is possible to change into `fs::is_regular_file` to remove the extra bloat
-    bool Directory::isFile(std::string filePath)
-    {
-        // See if there is an extension via a '.' in the string
-        if(filePath.find_last_of('/', 1) == filePath.length() || filePath.find('.', 1) == std::string::npos)
-        {
-            // This is not a file
-            return false;
-        }
-        // This is a file return true
-        return true;
     }
 
     bool Directory::isDirectory(std::string filePath)
