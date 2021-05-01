@@ -5,7 +5,7 @@ A super simple *`but poorly written`* web server written in C++.
 
 ``AWS Badge is for Testing Builds / Azure Badge is for CI/CD``
 
-> [v1.6.0] Codename SpookyMethod
+> [v1.6.0] Codename Examples
 
 # Demo
 > This demo will take some time to start as I am using the free tier app services in Azure but should take approximately ``40 seconds``
@@ -24,14 +24,27 @@ https://webxo.azurewebsites.net
     + Placing a ``.FolderViewer`` file in a directory enables the feature
 
 # Installation
-> Note: Currently everything is built with debug support this will be addressed in a future Makefile update, currently you will have to manually change the flags in the Makefile
+> Note: Currently everything is built with debug support this will be addressed in a future CMake update, currently you will have to manually change the flags in the CMake
 
 The server can be installed locally (not recommended) or in a docker container (highly recommended).
 
-## Install Script
-This is not advised for this build of WebXO as the CMake components have not been fully tested thus it may have undesired effects on your system. Docker is the only way to install this build of WebXO 
+## CMake
+This project relies on the CMake build system to be install on your system, it may be possible to update the ``Makefile.old`` in the project root directory if really necessary. If you are not using a IDE with a CMake addon you can run the following shell commands to setup CMake and then to use CMake to build the system.
 
-## Github (Prebuilt Executable + Library)
+```shell
+# Sets up the build folder and CMake files 
+mkdir ./build
+cd ./build
+cmake -G "Unix Makefiles" ../
+cd ../
+
+# Builds the Server
+cmake --build ./build --config Debug --target all -- -j 6
+```
+
+## Github (Prebuilt Executable + Library) ~ OLD
+> This is an old method using an old version of WebXO, its still usable but not recommend
+
 This method is best if you don't want to build the server yourself and you don't have docker to deploy the server. You will need to place the Lib into a path that is on the LDD search list or you can follow these steps (similar to the install script)
 
 ```sh
@@ -80,9 +93,12 @@ $> ./makeDocker_env.sh -e
 
 > Note: The '-e' option requires you to build the binaries locally via make as shown in [Install Script](#Install-Script) and then build the docker image.
 
-# Notes
+# Examples
 
 ## Interceptor
+
+> New: In the project root you can find the ``Examples`` directory, this folder contains full examples of how to use the interceptor. **The Examples are built by default**
+
 The interception system is still in its early days but provides the basic support to manipulate HTTP Requests and serve the client something different to what they requested. 
 
 This would be done for various reasons, you could add a layer of security to specific pages and use the interceptor to catch all requests and force the client to authenticate.
@@ -113,3 +129,16 @@ Another example can be:
 ```
 
 As long as the function signature matches then the implementation does not matter.
+
+
+# Notes
+
+## CompBuffer Debugging
+To debug a CompBuffer you can use the **new** ``Utils::Memory::Print_Memory()`` function, the method can print out the buffer to stdout for further debugging without running a debugger (``gdb`` or similar).
+
+To use the new util you can simply call the method by:
+```cpp
+Utils::Memory::Print_Memory(CompBuffer, Rows_to_print);
+```
+
+The first parameter is the CompBuffer to print out and the second is the rows to print, if not set the whole buffer will be printed.
