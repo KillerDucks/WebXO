@@ -107,7 +107,7 @@ namespace WebXO
         void    RequestHandler(ThreadID const &tID);
 
         // Internal Thread Handler
-        std::vector<std::pair<ThreadID, std::thread>> vThread;
+        std::vector<std::pair<ThreadID, std::thread>> vThread;          // [TODO] Convert this into a set as they have uniq values
 
 
         // Helper Function
