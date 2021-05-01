@@ -124,7 +124,7 @@ Another example can be:
     interceptorSettings.callback = [=](WebXO::HTTPReq &hReq) -> CompBuffer
     {
         // Example dummy direct buffer
-        return Compbuffer((char*)"NULL", -1);
+        return CompBuffer((char*)"NULL", -1);
     };
 ```
 
