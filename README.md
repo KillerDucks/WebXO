@@ -130,6 +130,13 @@ Another example can be:
 
 As long as the function signature matches then the implementation does not matter.
 
+## InterceptThis | ``./Examples/InterceptThis``
+> This example requires NodeJS to be installed and for the ``server.js`` file to be ran.
+
+The example code allows for the NodeJS server to intercept and manipulate all HTTP requests and to attach a new payload to be sent back to the client.
+
+
+
 
 # Notes
 
