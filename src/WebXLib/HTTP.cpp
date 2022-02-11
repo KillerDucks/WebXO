@@ -3,7 +3,13 @@
 namespace WebXO
 {
     HTTP::HTTP(std::string httpPath, InterceptSettings interceptSettings) : iDirectory(httpPath), vHosts("./vhosts.txt"), httpCode(HTTPStatusCodes::OK), _interceptionSettings(interceptSettings), MIMETYPE(MimeType::HTML)
-    {}
+    {
+        // Create a OneAgent WebApp Handle
+        this->web_application_info_handle = onesdk_webapplicationinfo_create(
+            onesdk_asciistr("localhost"),         /* name of the web server that hosts your application */
+            onesdk_asciistr("WebXO HTTP Server"),    /* unique name for your web application               */
+            onesdk_asciistr("/ExampleSite/")         /* context root of your web application               */ );
+    }
 
     HTTPReq HTTP::ParseRequest(char* request)
     {

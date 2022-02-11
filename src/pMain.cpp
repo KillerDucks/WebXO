@@ -3,6 +3,9 @@
 #include "WebXLib/HTTP.hpp"
 #include "WebXLib/Common.hpp"
 
+// OneAgent SDK
+#include <onesdk/onesdk.h>
+
 struct Options 
 {
     Options() : basePath("/var/www/ExampleSite"), port(8080), nThreads(4), threading(false)
@@ -15,8 +18,23 @@ struct Options
 
 Options ParseCLIOptions(std::vector<std::string> const vec);
 
+static void OneAgentCB(const char* message) {
+    printf("[OneAgent] [Debug] %s\n", message);
+}
+
 int main(int argc, char* argv[])
 {
+    // Setup OneAgent before Parseing Arguments
+    onesdk_stub_process_cmdline_args(argc, argv, 1);  /* optional: let the SDK process command line arguments   */
+    onesdk_stub_strip_sdk_cmdline_args(&argc, argv);  /* optional: remove SDK command line arguments from argv  */
+
+    /* Initialize SDK */
+    onesdk_result_t const onesdk_init_result = onesdk_initialize();
+
+    /* optional: Set logging callbacks. */
+    onesdk_agent_set_warning_callback(OneAgentCB); /* Highly recommended. */
+    onesdk_agent_set_verbose_callback(OneAgentCB); /* Recommended for development & debugging. */
+
     // [TODO] Parse the CLI Args
     std::vector<std::string> vArgs(argv + 1, argv + argc + ! argc);
     auto optsCLI = ParseCLIOptions(vArgs);
@@ -32,6 +50,10 @@ int main(int argc, char* argv[])
     // Start the Socket Server
     std::thread th_serverThread(&WebXO::Sockets::Listen, std::ref(socks));
     th_serverThread.join();
+
+    /* Shut down SDK */
+    if (onesdk_init_result == ONESDK_SUCCESS)
+        onesdk_shutdown();
 
     return 0;
 }

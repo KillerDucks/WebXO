@@ -13,10 +13,7 @@ namespace WebXO
         Logarithm::Log(std::string("Socket"), "[%z] [%q] Socket Server Setting: Num of Thread [%d]\n", Logarithm::NOTICE, _Settings.max_threads);        
     }
 
-    Sockets::~Sockets()
-    {
-        // Nothing to clean up for now :P
-    }
+    Sockets::~Sockets() = default;
 
     void Sockets::Listen()
     {

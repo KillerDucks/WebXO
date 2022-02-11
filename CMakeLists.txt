@@ -22,8 +22,11 @@ file(GLOB WebXOB_LIB_SRC
 # Build the Dynamic Library
 add_library(WebXO SHARED ${WebXOB_LIB_SRC})
 
+#Include Dynatrace OneAgentSDK
+include("../OneAgent-SDK-for-C-1.6.1/onesdk-config.cmake")
+
 # Link the Library to needed libs
-target_link_libraries(WebXO stdc++fs pthread z)
+target_link_libraries(WebXO stdc++fs pthread z onesdk_static)
 
 # Install the WebXO Library
 install(
