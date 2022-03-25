@@ -20,6 +20,9 @@
 // Standard Lib
 #include <string>
 
+// Polling
+#include <poll.h>
+
 // LibWebXO
 #include "HTTP.hpp"
 #include "Logarithm.hpp"
