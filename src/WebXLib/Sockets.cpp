@@ -63,7 +63,28 @@ namespace WebXO
         Logarithm::Log(std::string("Socket"), "[%z] [%q] Fistening for Clients\n", Logarithm::INFO);
 
         while (true)
-        {            
+        {        
+
+            // Polling Support
+            struct pollfd fds[1];
+
+            fds[0].fd = this->socketID;
+            fds[0].events = POLLIN;
+
+            const int poll_res = poll(fds, sizeof(fds) / sizeof(struct pollfd), -1);
+
+            if(poll_res == 0 || poll_res == -1){
+                printf("Error on Polling %d | %d\n", poll_res, fds[0].revents);
+                exit(1);
+            }
+
+            const int pollin_exist = fds[0].revents & POLLIN;
+
+            if(!pollin_exist) {
+                printf("Error on Polling Response Events");
+                exit(1);
+            }
+    
             // Create as many threads as the user requested
             if(this->vThread.size() != (size_t)this->_Settings.max_threads)
             {
