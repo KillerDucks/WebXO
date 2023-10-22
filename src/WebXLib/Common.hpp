@@ -19,7 +19,7 @@ constexpr char* AUTHOR_STRING       = (char*)"melissa<melissa@noreply-hyperlxc.c
 constexpr char* ERROR_PAGE_DIR      = (char*)"/var/www/ErrorPages";
 
 constexpr int MAX_MSG_BUFFER        = 50;
-constexpr int REQUEST_BUFFER        = 2048;
+constexpr int REQUEST_BUFFER        = 200000;
 
 // Typedefs to save time
 typedef std::pair<char*, int> CompBuffer;

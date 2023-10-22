@@ -60,7 +60,7 @@ namespace WebXO
             printf("Oh dear, something went wrong with listen()! %s\n", strerror(errno));
             return;
         }
-        Logarithm::Log(std::string("Socket"), "[%z] [%q] Fistening for Clients\n", Logarithm::INFO);
+        Logarithm::Log(std::string("Socket"), "[%z] [%q] Listening for Clients\n", Logarithm::INFO);
 
         while (true)
         {        
@@ -189,13 +189,16 @@ namespace WebXO
         Logarithm::Log(std::string("Socket"), "[%z] [%q] Connected to Client Socket using FD [%d]\n", Logarithm::INFO, cSocket);
 
         // Read in the data from the socket
-        int cPos = read(cSocket, buffer, 2048 - 1);
+        int cPos = read(cSocket, buffer, REQUEST_BUFFER - 1);
         buffer[cPos] = '\0';                    
+
+        // Do a Print_Memory on the buffer
+        Utils::Memory::Print_Memory(CompBuffer(buffer, 2048), 50);
 
         // Generate the Reponse to the Request
         std::pair<CompBuffer, std::string> response = this->_Http.Response(buffer);
 
-        Utils::Memory::Print_Memory(response.first, 10);
+        // Utils::Memory::Print_Memory(response.first, 50);
 
         // printf("File Size: [~%dB]\n", vBuffer.second); // [DEBUG] Print
 

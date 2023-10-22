@@ -1,4 +1,5 @@
 #include "HTTP.hpp"
+#include "TLS.hpp"
 
 namespace WebXO
 {
@@ -11,6 +12,16 @@ namespace WebXO
         string t;
         bool requestLine = true;
         HTTPReq hRequest;
+
+        // Check for TLS ClientHello
+        if(request[0] == 0x16)
+        {
+            // This is a TLS ClientHello
+            printf("TLS ClientHello Detected\n");
+            // Call TLS::RecvClientHello
+            TLS tls;
+            tls.RecvClientHello(CompBuffer(request, REQUEST_BUFFER));
+        }
 
         // Look through the request and fill in the struct
         for (size_t i = 0; i < strlen(request); i++)
@@ -48,6 +59,13 @@ namespace WebXO
             }
             
         }
+
+        // __debug__ Print
+        for(auto o : reqOpts)
+        {
+            printf("HTTP Request [%s] => [%s]\n", o.first.c_str(), o.second.c_str());
+        }
+
 
         // Detect any data left over (possible POST data)
         if(!t.empty())
